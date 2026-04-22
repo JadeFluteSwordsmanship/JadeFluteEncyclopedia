@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <style>
+@page {
+    size: A4;
+    margin: 25mm 20mm 20mm 20mm;
+
+    @top-center {
+        content: "CPO（Co-Packaged Optics）  |  横纵分析法深度研究报告";
+        font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
+        font-size: 8pt;
+        color: #95a5a6;
+        border-bottom: 0.5pt solid #ecf0f1;
+        padding-bottom: 3mm;
+    }
+
+    @bottom-center {
+        content: "第 " counter(page) " 页";
+        font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
+        font-size: 8pt;
+        color: #95a5a6;
+        border-top: 0.8pt solid #1a5276;
+        padding-top: 2mm;
+    }
+}
+
+@page :first {
+    @top-center { content: none; }
+    @bottom-center { content: none; }
+}
+
+body {
+    font-family: "Droid Sans Fallback", Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.75;
+    color: #2c3e50;
+    text-align: justify;
+}
+
+/* 封面 */
+.cover {
+    page-break-after: always;
+    text-align: center;
+    padding-top: 45%;
+}
+.cover h1 {
+    font-size: 28pt;
+    color: #1a5276;
+    margin-bottom: 8mm;
+    font-weight: bold;
+    letter-spacing: 2pt;
+}
+.cover .subtitle {
+    font-size: 14pt;
+    color: #95a5a6;
+    margin-bottom: 6mm;
+}
+.cover .meta {
+    font-size: 11pt;
+    color: #95a5a6;
+    margin-bottom: 4mm;
+}
+.cover .divider {
+    width: 60%;
+    margin: 8mm auto;
+    border: none;
+    border-top: 1.5pt solid #1a5276;
+}
+
+/* 一级标题 */
+h1 {
+    font-size: 20pt;
+    color: #1a5276;
+    margin-top: 16mm;
+    margin-bottom: 6mm;
+    padding-bottom: 3mm;
+    border-bottom: 2pt solid #1a5276;
+    page-break-before: always;
+    font-weight: bold;
+}
+
+/* 二级标题 */
+h2 {
+    font-size: 14pt;
+    color: #1e8449;
+    margin-top: 10mm;
+    margin-bottom: 5mm;
+    font-weight: bold;
+}
+
+/* 三级标题 */
+h3 {
+    font-size: 12pt;
+    color: #2e86c1;
+    margin-top: 6mm;
+    margin-bottom: 3mm;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 11pt;
+    color: #5b2c6f;
+    margin-top: 5mm;
+    margin-bottom: 2mm;
+    font-weight: bold;
+}
+
+/* 段落 */
+p {
+    margin-top: 1.5mm;
+    margin-bottom: 1.5mm;
+    orphans: 3;
+    widows: 3;
+}
+
+/* 引用块 */
+blockquote {
+    margin: 4mm 0;
+    padding: 4mm 4mm 4mm 10mm;
+    background: #f8f9fa;
+    border-left: 3pt solid #1a5276;
+    color: #5d6d7e;
+    font-size: 10pt;
+}
+blockquote p {
+    margin: 1mm 0;
+}
+
+/* 粗体 */
+strong, b {
+    font-weight: bold;
+    color: #1a252f;
+}
+
+/* 行内代码 */
+code {
+    font-family: "Courier New", Courier, monospace;
+    background: #fdf2e9;
+    color: #c0392b;
+    padding: 0.5mm 1.5mm;
+    border-radius: 2pt;
+    font-size: 9.5pt;
+}
+
+/* 表格 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+}
+thead th {
+    background: #1a5276;
+    color: white;
+    padding: 3mm;
+    text-align: left;
+    font-weight: bold;
+}
+tbody td {
+    padding: 2.5mm 3mm;
+    border-bottom: 0.5pt solid #bdc3c7;
+}
+tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+/* 分隔线 */
+hr {
+    border: none;
+    border-top: 0.5pt solid #bdc3c7;
+    margin: 4mm 0;
+}
+
+/* 列表 */
+ul, ol {
+    margin: 2mm 0;
+    padding-left: 8mm;
+}
+li {
+    margin-bottom: 1mm;
+}
+
+/* 链接 */
+a {
+    color: #2e86c1;
+    text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+    <div class="cover">
+        <h1 style="page-break-before: avoid; border: none;">CPO（Co-Packaged Optics）</h1>
+        <div class="subtitle">横纵分析法深度研究报告</div>
+        <div class='meta'>研究时间：2026年4月21日 | 所属领域：AI算力基础设施·光互联 | 研究对象类型：技术概念/产业</div>
+        <hr class="divider">
+        <div class="meta">作者: 派蒙 × 横纵分析法</div>
+    </div>
+    
+
+<blockquote>
+<p>研究时间：2026年4月21日 | 所属领域：AI算力基础设施·光互联 | 研究对象类型：技术概念/产业</p>
+</blockquote>
+<hr>
+<h2>一句话定义</h2>
+<p>CPO，全称 Co-Packaged Optics（共封装光学），是一种将光引擎直接与交换芯片封装在同一基板上的新型互连技术。它不是在造更强的芯片，而是在重构芯片与网络之间的连接方式——用光替代铜，用毫米级的封装内传输替代厘米级的PCB走线。</p>
+<p>如果把AI算力比作一座现代化工厂，GPU是车间里的机床，那CPO就是连接所有机床的高速传送带。没有它，再多的机床也只能各干各的。</p>
+<hr>
+<h2>二、纵向分析：一束光的二十年长征</h2>
+<h3>萌芽：硅光子的星星之火（2004—2010）</h3>
+<p>故事要从2004年讲起。</p>
+<p>那一年，Intel内部一个叫Mario Paniccia的意大利裔工程师，说服了公司高层启动一个听起来有点疯狂的计划——用硅来做光学器件。</p>
+<p>这在当时几乎是异端邪说。光通信行业用的是三五族化合物半导体（磷化铟、砷化镓），硅是做电子芯片的材料，用硅来调制光信号？业界的主流反应是「这不可能」和「即使可能也没意义」。</p>
+<p>但Paniccia看到了一个别人忽视的逻辑：如果光学器件能用CMOS工艺来制造，那光学元件的成本曲线就能像电子芯片一样遵循摩尔定律——越做越便宜、越做越小、越做越密。这个洞察，成了后来整个CPO产业的逻辑原点。</p>
+<p>Intel把这个方向定位为「将摩尔定律延伸到光纤光学领域」。与此同时，加州大学圣巴巴拉分校（UCSB）的John Bowers教授也在学术界推进硅光子的基础研究。学术界和产业界两条线并行，硅光子技术从一个边缘课题，慢慢变成了一个被认真对待的研究方向。</p>
+<p>但在2010年之前，这一切还只是实验室里的事。没有人谈论CPO，甚至「共封装光学」这个词都还没被发明出来。硅光子技术更多被看作一种远期的技术储备，离商业化还隔着几层厚厚的迷雾。</p>
+<h3>探索：从实验室走向产品（2010—2018）</h3>
+<p>2010年代，硅光子技术开始了漫长的工程化之路。</p>
+<p>Intel在Paniccia的团队推动下，持续在《Nature》等顶级期刊上发表硅光调制器、探测器的研究成果。到2016年，Intel终于发布了第一款商用硅光产品——用于数据中心的100G光模块。这是一个里程碑：硅光子从论文变成了可以买卖的东西。</p>
+<p>到2018年前后，Intel已经占据了硅光通信市场40%以上的份额。但这时候的硅光产品，本质上还是「可插拔光模块」——只不过里面的光芯片从传统的三五族化合物换成了硅基材料。它们仍然是独立的、可以热插拔的模块，并没有和交换芯片「融为一体」。</p>
+<p>与此同时，一些更前沿的研究者开始思考一个更激进的问题：既然硅光芯片可以用CMOS工艺制造，那为什么不直接把它和电子芯片封装在一起呢？</p>
+<p>这个想法的种子，悄悄埋下了。</p>
+<p>行业组织也开始介入。OIF（光互联论坛）在2010年代中后期开始讨论光电共封装的标准化问题。虽然当时没有形成共识，但至少CPO开始作为一个正式的技术方向，出现在了行业会议的议程上。</p>
+<p>值得一提的是，2015年，四个MIT的毕业生创立了一家叫Ayar Labs的公司，专注于用硅光子技术做芯片间的光学互连（Optical I/O）。当时几乎没人注意到这家小公司，但它后来会成为CPO叙事中一个重要的角色。</p>
+<h3>成型：巨头入场与概念爆发（2018—2022）</h3>
+<p>2019年，一个关键事件发生了：Broadcom（博通）在业内首次公开展示了CPO原型系统。</p>
+<p>这不是学术界的概念验证，而是全球最大的交换芯片厂商拿出的工程原型。它向整个行业传递了一个清晰的信号——CPO不再是远期愿景，而是已经在做的事情。</p>
+<p>紧接着，2020年，Facebook（现在的Meta）在OCP（开放计算项目）框架下启动了CPO子项目。Mark Zuckerberg的公司开始大力推动CPO的开源标准化和生态建设。Meta的逻辑很直接：它是全球最大的AI训练集群运营者之一，它比任何人都清楚传统互连方案在超大规模集群中的痛点——功耗太高、带宽不够、机柜里的线缆像意大利面一样纠缠在一起。</p>
+<p>2021年，台积电在HotChips会议上公布了一个叫COUPE（Compact Universal Photonic Engine，紧凑型通用光子引擎）的项目。全球最先进的半导体代工厂开始为CPO提供封装级的技术支撑，这意味着CPO从「芯片设计问题」升级为「先进封装问题」——而台积电恰好是这个领域的王者。</p>
+<p>Intel也没闲着。2020年的OFC大会上，Intel展示了1.6Tbps的硅光CPO原型，把16个光引擎集成到一起，每个跑106Gbps的PAM4信号，而且不需要前向纠错（FEC）。这是一个相当硬核的技术展示。</p>
+<p>到2022年，CPO产业链的版图已经基本成型：</p>
+<ul>
+<li><strong>芯片端</strong>：Broadcom、Intel、Marvell在做交换芯片+光引擎的集成方案</li>
+<li><strong>封装端</strong>：台积电COUPE、Intel Co-EMIB在做先进封装工艺</li>
+<li><strong>标准端</strong>：OIF、OCP在推标准化</li>
+<li><strong>创业端</strong>：Ayar Labs拿到了越来越多的融资，光I/O的故事开始被资本市场认真对待</li>
+</ul>
+<p>但这一切，还缺一个最后的催化剂。</p>
+<h3>引爆：AI大模型与商用元年（2023—2026）</h3>
+<p>2023年初，ChatGPT席卷全球。</p>
+<p>AI大模型的训练和推理需要成千上万颗GPU高速互连，数据在GPU之间以Tb/s级别的带宽流动。传统的铜互连和可插拔光模块，在这种规模下同时撞上了三堵墙：</p>
+<p><strong>第一堵墙：功耗。</strong> 传统方案中，电信号要通过PCB铜线和SerDes（串行/解串器）长距离传输。SerDes的能耗随速率指数级上升——224G PAM4单通道功耗已经超过5W，交换芯片的I/O功耗占比超过50%。800G之后，这条路走不通了。</p>
+<p><strong>第二堵墙：带宽密度。</strong> 交换芯片的带宽从12.8T一路演进到25.6T、51.2T、102.4T，但交换机面板上能塞的光模块数量是有物理上限的——32个800G光口已经是极限。1.6T以上的速率，铜线材料本身的损耗和串扰都扛不住。</p>
+<p><strong>第三堵墙：空间和散热。</strong> 英伟达的GB200 NVL72单机柜功耗达到120KW，传统布线方式的散热已经接近极限。</p>
+<p>CPO的解法是：把光引擎直接封装到交换芯片旁边，把电信号的传输路径从厘米级压缩到毫米级，功耗直降30%—50%，带宽密度提升数倍。</p>
+<p>于是，从2023年下半年开始，CPO概念在A股市场上「一飞冲天」。光模块板块成了AI行情中涨幅最大的分支之一——中际旭创一年涨了近400%，新易盛涨了400%+，天孚通信涨了300%+。</p>
+<p>但真正的产业里程碑，发生在2025年3月。</p>
+<p><strong>2025年GTC大会</strong>，黄仁勋站在舞台上，发布了英伟达历史上第一款CPO交换机——Quantum-X Photonics和Spectrum-X Photonics。144个800G端口，总带宽115.2Tbps，使用外置激光光源（18个ELS模块，每个含8颗激光器）。CoreWeave、Lambda等AI云厂商率先采购。</p>
+<p>这是CPO从「概念」到「产品」的分水岭。</p>
+<p>几乎同一时期，Broadcom也在推进自己的Bailly 51.2T CPO交换机——基于Tomahawk 5芯片，8个硅光引擎，每个6.4T。2025年10月，Broadcom宣布与Meta合作的CPO系统在高温实验室中完成超过100万小时的可靠性测试，零数据丢失。这为CPO的工业级部署扫清了最大的信任障碍。</p>
+<p>2026年初，Broadcom更进一步，发布了全球首款单芯片102.4Tbps的CPO交换芯片——Tomahawk 6。</p>
+<p>台积电的COUPE工艺在2025年完成试产，2026年准备量产。Ayar Labs在2026年2月完成了5亿美元的E轮融资，估值飙升至37.5亿美元，AMD、ARK Invest等重量级投资者入局。</p>
+<p>OFC 2026大会成了CPO的集中展示舞台：Intel展示了光学计算互连（OCI）芯粒，IBM发布了50微米间距的高密度CPO技术，Lightmatter实现了单根光纤1.6Tbps的记录性能。</p>
+<p><strong>2026年，被业界公认为「CPO商用元年」。</strong></p>
+<p>从2004年Intel硅光实验室的第一束光，到2026年英伟达CPO交换机的批量出货，这束光走了整整二十二年。</p>
+<h3>纵向时间线总结</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>时间</th>
+<th>核心事件</th>
+<th>驱动力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>萌芽期</td>
+<td>2004—2010</td>
+<td>Intel启动硅光子计划，学术界奠基</td>
+<td>技术愿景</td>
+</tr>
+<tr>
+<td>探索期</td>
+<td>2010—2018</td>
+<td>Intel首款硅光产品，OIF开始讨论标准</td>
+<td>成本优势驱动</td>
+</tr>
+<tr>
+<td>成型期</td>
+<td>2018—2022</td>
+<td>Broadcom展示CPO原型，Meta推OCP，台积电启动COUPE</td>
+<td>数据中心需求</td>
+</tr>
+<tr>
+<td>爆发期</td>
+<td>2023—2026</td>
+<td>AI大模型引爆需求，英伟达/博通CPO交换机落地</td>
+<td>AI算力刚需</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>三、横向分析：五条路线的竞争图谱</h2>
+<p>CPO并不是在真空中诞生的。在AI算力互连这个赛道上，至少有五种技术路线在同时竞争——或者说，在不同场景中各自寻找自己的生态位。要理解CPO的价值，必须把它放在这个竞争格局中来看。</p>
+<h3>对手一：传统可插拔光模块——「老大哥」还能打多久？</h3>
+<p>传统可插拔光模块是当前数据中心光互连的绝对主力。2025年，全球800G光模块市场规模已超过百亿美元，增速超50%。中际旭创一家的营收就做到了382亿元人民币。</p>
+<p>它的最大优势是<strong>灵活性</strong>：坏了可以热插拔，维护简单；不同厂家的模块可以混用；产业链成熟，成本持续下降。</p>
+<p>但它的天花板也越来越清晰。</p>
+<p>当交换芯片带宽从51.2T演进到102.4T时，传统可插拔架构面临的根本问题是：面板上塞不下那么多光模块了。以博通102.4T芯片为例，如果用传统800G可插拔模块，需要128个光口——这在物理上几乎不可能实现。</p>
+<p>而且，电信号从交换芯片出发，要经过几厘米的PCB铜线才能到达光模块，这段路径上的SerDes功耗和信号损耗，在1.6T以上速率下变得不可承受。</p>
+<p><strong>CPO的核心优势</strong>就在这里：把电信号路径从厘米级压缩到毫米级，功耗降30%—50%，带宽密度提升数倍。</p>
+<p>但CPO也有明显的短板：<strong>不能热插拔</strong>。光引擎和芯片封在一起，坏了就得换整个设备。这在运维成本上是一个实实在在的劣势。</p>
+<p>所以，两者的关系不是「谁取代谁」，而是<strong>场景分化</strong>：</p>
+<ul>
+<li>800G及以下、需要灵活运维的场景 → 传统可插拔继续主导</li>
+<li>1.6T及以上、追求极致功耗和密度的AI超算集群 → CPO逐步接管</li>
+</ul>
+<h3>对手二：LPO（线性直驱光模块）——「轻量级改良」</h3>
+<p>LPO的思路很巧妙：保留可插拔光模块的外形，但把里面最贵、最耗电的DSP芯片去掉，改用线性模拟驱动器直接驱动光信号。</p>
+<p>效果立竿见影——功耗降低约50%（和传统可插拔比），成本也大幅下降，而且保持了热插拔的灵活性。</p>
+<p>2025—2027年，LPO在800G/1.6T端口上占据超过60%的出货份额，是当之无愧的「现在进行时」。</p>
+<p>但LPO有两个根本性的局限：</p>
+<p>第一，<strong>传输距离受限</strong>。没有了DSP的信号补偿，LPO主要适用于2公里以内的短距互联。在跨机架、跨数据中心的场景中力不从心。</p>
+<p>第二，<strong>带宽上限受限</strong>。3.2T及以上速率，纯线性驱动的信号质量很难保证。</p>
+<p>所以，LPO和CPO之间的关系是<strong>时间维度上的接力</strong>：LPO是2025—2027年的过渡方案，CPO是2026—2030年的终极形态。它们在不同时间窗口各有主场，短期内甚至可以并存。</p>
+<p>英伟达的态度很明确：强推CPO。博通则更务实：短期优先LPO和铜互连，CPO作为中长期布局。中国厂商（中际旭创、新易盛）两条线都在跑。</p>
+<h3>对手三：NPO（近封装光学）——「折中方案」</h3>
+<p>NPO是介于传统可插拔和CPO之间的方案：光引擎和芯片分开放置，但贴得很近（距离在150mm以内），通过短距PCB走线连接。</p>
+<p>它的优势是<strong>降低了工程难度</strong>：不用解决光电共封装的热管理问题，光引擎可以单独更换，维护性比CPO好。功耗优化也有一定效果（虽然不如CPO极致）。</p>
+<p>NPO被广泛视为「过渡方案」，在2025—2027年有实用价值。但也有人（比如2026年3月雪球上的一些分析）认为，在200G/Lane时代，NPO可能比CPO更务实。</p>
+<p><strong>终局共识</strong>是：未来AI数据中心大概率是<strong>混合架构</strong>——短距用铜（CPC），中距用NPO/CPO，远距用可插拔光模块。CPO不需要「一统天下」，它只需要在超高带宽的核心场景中站稳脚跟。</p>
+<h3>对手四：Optical I/O（光学I/O）——「更远的未来」</h3>
+<p>Ayar Labs是这个方向的代表。他们做的事情比CPO更激进：不只是把光引擎和交换芯片放在一起，而是要让光信号直接在芯片内部传输——芯片间互连（Die-to-Die）的光学化。</p>
+<p>Ayar Labs在2026年2月拿到5亿美元E轮融资，估值37.5亿美元。他们和台积电合作开发的COUPE架构，号称能实现单封装双向200—250 Tb/s的带宽，比现有GPU互连提升一个数量级。</p>
+<p>Optical I/O和CPO的关系，与其说是竞争，不如说是<strong>演进</strong>：</p>
+<ul>
+<li>CPO解决的是<strong>网络交换层</strong>的光电集成（交换芯片+光引擎）</li>
+<li>Optical I/O解决的是<strong>芯片内部</strong>的光电集成（GPU内部芯片互连）</li>
+</ul>
+<p>它们最终可能合流成同一条技术路线。但Optical I/O的商用化时间表比CPO更远，大概要到2028—2030年才能看到规模化部署。</p>
+<h3>对手五：铜互连——「正在被替代的现任」</h3>
+<p>NVLink、InfiniBand这些英伟达的王牌互连技术，底层走的都是铜。铜互连在短距（&lt;3米）、中等带宽的场景中仍然是最经济的选择。</p>
+<p>但当AI集群规模从几千GPU扩展到几万、几十万GPU时，铜互连撞上了物理极限：</p>
+<ul>
+<li>SerDes速率冲破224Gb/s后，铜缆信号完整性急剧恶化</li>
+<li>功耗指数级上升</li>
+<li>距离限制（通常&lt;3米）使得跨机架互联困难</li>
+<li>散热压力巨大</li>
+</ul>
+<p>英伟达自己也很清楚这一点。在Rubin架构（2026年）的路线图中，英伟达已经规划了CPO版本的NVLink互连——至少在NVSwitch上集成CPO，未来甚至可能在GPU封装上直接集成。</p>
+<p><strong>铜互连不会消失，但它的领地正在缩小。</strong> 未来大概率是：机柜内短距用铜，机柜间/集群级用光。</p>
+<h3>横向竞争格局总览</h3>
+<table>
+<thead>
+<tr>
+<th>技术路线</th>
+<th>核心优势</th>
+<th>核心劣势</th>
+<th>主场景</th>
+<th>时间窗口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>传统可插拔</strong></td>
+<td>灵活、成熟、可热插拔</td>
+<td>功耗高、密度受限</td>
+<td>通用场景</td>
+<td>当前主力</td>
+</tr>
+<tr>
+<td><strong>LPO</strong></td>
+<td>低功耗、低成本、保持可插拔</td>
+<td>距离受限、带宽上限</td>
+<td>短距AI互联</td>
+<td>2025—2027</td>
+</tr>
+<tr>
+<td><strong>NPO</strong></td>
+<td>工程难度低、可维护</td>
+<td>优化不如CPO极致</td>
+<td>过渡方案</td>
+<td>2025—2027</td>
+</tr>
+<tr>
+<td><strong>CPO</strong></td>
+<td>极致功耗/密度/带宽</td>
+<td>不可热插拔、工程难度大</td>
+<td>AI超算核心</td>
+<td>2026—2030+</td>
+</tr>
+<tr>
+<td><strong>Optical I/O</strong></td>
+<td>芯片级光互连、终极形态</td>
+<td>商用化最远</td>
+<td>芯片内部互连</td>
+<td>2028—2030+</td>
+</tr>
+<tr>
+<td><strong>铜互连</strong></td>
+<td>成本最低、短距最优</td>
+<td>物理极限明显</td>
+<td>机柜内短距</td>
+<td>持续存在但缩小</td>
+</tr>
+</tbody>
+</table>
+<h3>全球产业链竞争格局</h3>
+<p><strong>海外阵营</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>定位</th>
+<th>CPO进展</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>英伟达</strong></td>
+<td>AI芯片+交换机</td>
+<td>2025 GTC发布CPO交换机，最强推动力</td>
+</tr>
+<tr>
+<td><strong>博通</strong></td>
+<td>交换芯片龙头</td>
+<td>Bailly 51.2T → TH6 102.4T CPO，务实路线</td>
+</tr>
+<tr>
+<td><strong>Intel</strong></td>
+<td>硅光子先驱</td>
+<td>OCI芯粒，专利积累最深</td>
+</tr>
+<tr>
+<td><strong>台积电</strong></td>
+<td>先进封装</td>
+<td>COUPE工艺，2026年量产</td>
+</tr>
+<tr>
+<td><strong>Marvell</strong></td>
+<td>光电方案</td>
+<td>跟随布局</td>
+</tr>
+<tr>
+<td><strong>Ayar Labs</strong></td>
+<td>光I/O创业公司</td>
+<td>5亿美元E轮，估值37.5亿美元</td>
+</tr>
+</tbody>
+</table>
+<p><strong>中国阵营</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>定位</th>
+<th>核心竞争力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>中际旭创</strong></td>
+<td>全球光模块第一</td>
+<td>规模+客户+自研硅光，2025营收382亿</td>
+</tr>
+<tr>
+<td><strong>天孚通信</strong></td>
+<td>光引擎+器件平台</td>
+<td>英伟达CPO核心供应商，纯度最高</td>
+</tr>
+<tr>
+<td><strong>新易盛</strong></td>
+<td>光模块第二梯队</td>
+<td>深度绑定博通，北美客户结构优</td>
+</tr>
+<tr>
+<td><strong>源杰科技</strong></td>
+<td>激光器芯片IDM</td>
+<td>CW大功率光源，量价齐升</td>
+</tr>
+<tr>
+<td><strong>仕佳光子</strong></td>
+<td>光芯片+器件</td>
+<td>CPO三重卡位（光源+AWG+FAU）</td>
+</tr>
+<tr>
+<td><strong>光迅科技</strong></td>
+<td>央企全产业链</td>
+<td>自主可控，硅光+EML+薄膜铌酸锂</td>
+</tr>
+</tbody>
+</table>
+<p><strong>中美差距的真实图景</strong>：</p>
+<p>中国在光模块/器件的量产能力和成本控制上已经是全球顶级。中际旭创是全球出货量第一的光模块厂商，新易盛增速更是惊人。</p>
+<p>但在CPO的核心环节——高端交换芯片（博通、英伟达主导）和先进封装（台积电主导）——中国仍然存在明显差距。CPO时代的话语权本质上是「芯片公司主导，光通信公司配套」。中国厂商的角色更多是供应链中的关键节点，而非产业链的主导者。</p>
+<p>不过，国产替代正在加速。2025年武汉光谷发布了全国产化12寸硅光全流程套件，中际旭创自研硅光PIC能力在持续提升。这条路还很长，但方向是清晰的。</p>
+<h3>CPO市场规模预测</h3>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>市场规模（亿美元）</th>
+<th>关键事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025</td>
+<td>2+</td>
+<td>英伟达CPO产品首发</td>
+</tr>
+<tr>
+<td>2026</td>
+<td>5—10</td>
+<td>博通102.4T量产，商用元年</td>
+</tr>
+<tr>
+<td>2027</td>
+<td>15—25</td>
+<td>规模部署开始</td>
+</tr>
+<tr>
+<td>2028</td>
+<td>35—50</td>
+<td>大规模商用</td>
+</tr>
+<tr>
+<td>2030</td>
+<td>~93</td>
+<td>市场成熟（摩根士丹利预测）</td>
+</tr>
+</tbody>
+</table>
+<p>2023—2030年复合增长率（CAGR）：<strong>172%</strong>（摩根士丹利基准情景）。</p>
+<hr>
+<h2>四、横纵交汇洞察</h2>
+<h3>历史如何塑造了当下的竞争位置</h3>
+<p>回头看CPO的二十二年发展史，有一个非常清晰的规律：<strong>技术的积累是线性的，但需求的爆发是非线性的。</strong></p>
+<p>Intel从2004年就开始做硅光子，做了十几年，到2018年才占到硅光市场40%的份额。Broadcom从2019年展示CPO原型到今天，也花了七年。台积电的COUPE项目从2021年启动到2026年量产，走了五年。</p>
+<p>这些都是「线性」的技术积累——扎扎实实、一步一个脚印。</p>
+<p>但2023年AI大模型的爆发，是「非线性」的需求冲击。ChatGPT出来之后，全球AI算力需求在一两年内翻了几番，远远超过了传统互连技术的供给能力。</p>
+<p>CPO之所以在2025—2026年突然从「远期愿景」变成「当下刚需」，不是因为它的技术突然成熟了（技术一直在稳步推进），而是因为需求侧突然来了一个不可逆的跃迁。</p>
+<p>这给我们一个重要的启示：<strong>在硬科技投资中，技术成熟度和需求爆发的时间差，往往是最大的alpha来源。</strong> 那些在需求爆发前就已经建立了技术壁垒的公司（比如天孚通信之于英伟达CPO供应链），在拐点来临时获得了巨大的先发优势。</p>
+<h3>「卖铲子」的层次结构</h3>
+<p>主人问了一个好问题：CPO是不是「卖铲子」赚钱？</p>
+<p>答案是：<strong>是的，但铲子也分好几层。</strong></p>
+<p>整个AI算力产业链，本质上是一个多层嵌套的「卖铲子」结构：</p>
+<pre><code>第一层：英伟达/博通（卖GPU和交换芯片给云厂商）
+  第二层：光模块/光引擎厂商（给英伟达的交换机卖光互连方案）
+    第三层：光芯片/器件厂商（给光模块厂商卖激光器、FAU等零部件）
+      第四层：设备商（给光芯片厂商卖制造设备）
+</code></pre>
+<p>CPO产业链内部的价值链重构也值得关注。在传统可插拔架构中，光模块厂商占据了60%以上的价值。但在CPO架构下，这个蛋糕要重新分：</p>
+<ul>
+<li>光引擎/硅光芯片占约30%</li>
+<li>先进封装占约20%</li>
+<li>外置光源占约15%</li>
+<li>FAU/连接器占约15%</li>
+<li>交换芯片本身占约20%</li>
+</ul>
+<p>传统光模块厂商的份额被「摊薄」了——如果它们不能升级为「光引擎ODM+系统方案商」，就有被边缘化的风险。天孚通信之所以被市场给予最高的「CPO纯度」评价，正是因为它从器件商成功转型为光引擎供应商，直接绑定了英伟达的CPO核心供应链。</p>
+<h3>下游应用是不是「全靠它」？</h3>
+<p>另一个关键问题：AI的下游应用是不是一定全靠CPO？</p>
+<p><strong>不是「全靠」，但在特定场景中是「必须」。</strong></p>
+<p>逻辑是这样的：</p>
+<ul>
+<li>如果你训练一个几百亿参数的「小模型」，用几十到几百颗GPU，传统可插拔光模块完全够用</li>
+<li>如果你训练万亿参数的超大模型，需要上万颗GPU高速互联，传统方案在功耗和带宽上撞墙，CPO变成刚需</li>
+<li>推理端的需求取决于并发规模。大规模推理集群同样需要高密度互连</li>
+</ul>
+<p>Meta在训练Llama-3-504B时使用了16,000颗GPU，训练过程中任何一个互连故障都可能导致整个训练中断。未来的模型更大、集群更密，互连的可靠性和效率变得至关重要。</p>
+<p>所以，更准确的说法是：<strong>CPO是AI算力在「超大规模」阶段的必要基础设施。</strong> 就像高铁不会完全取代普通铁路，但在350km/h的速度需求下，高铁是唯一的选择。</p>
+<h3>三个剧本推演</h3>
+<p><strong>剧本一：最可能的（基准情景）</strong></p>
+<p>2026—2027年，英伟达和博通的CPO交换机逐步放量，但渗透率仍然较低（&lt;10%的数据中心交换机端口）。LPO在800G/1.6T场景中仍是主流。2028年，随着51.2T/102.4T交换机成为标配，CPO渗透率快速提升至20%—30%。2030年，CPO在高端场景（3.2T+）中占据主导地位，全球市场规模接近百亿美元。</p>
+<p><strong>对应投资策略</strong>：短期重仓光模块龙头（业绩兑现），中期逐步转向CPO纯度更高的器件/芯片标的。</p>
+<p><strong>剧本二：最危险的（悲观情景）</strong></p>
+<p>CPO的封装良率问题持续困扰量产——当前硅光CPO封装良率约70%—80%，目标是95%+，但爬坡速度不及预期。与此同时，LPO技术进步超预期，在1.6T甚至部分3.2T场景中也能应对，分流了CPO的市场空间。2026—2027年CPO出货量远低于预期，A股相关标的（PE已在70—100倍区间）面临严重的估值回撤。</p>
+<p><strong>对应风险控制</strong>：密切跟踪台积电COUPE良率数据和英伟达CPO订单能见度，如果2026年H2出货量明显低于预期，果断减仓。</p>
+<p><strong>剧本三：最乐观的（乐观情景）</strong></p>
+<p>AI算力需求加速爆发，Google、AWS、Microsoft同时大规模采购CPO交换机，加上英伟达Rubin架构在GPU层面也引入CPO（不只是交换机层面），CPO渗透速度远超预期。中国厂商在硅光/光引擎环节实现技术突破，国产替代加速。2028年前CPO市场规模就突破50亿美元，相关公司业绩大幅超预期。</p>
+<p><strong>对应操作</strong>：2026年H1如果看到超预期的CPO订单数据，可以加大配置力度。</p>
+<hr>
+<h2>五、信息来源</h2>
+<ol>
+<li>Intel Silicon Photonics Research Program, intel.com</li>
+<li>Broadcom CPO Technical Documentation, broadcom.com</li>
+<li>Meta OCP CPO Subproject Specification, opencompute.org</li>
+<li>TSMC COUPE/CoWoS Technical Conference Papers, ECTC/HotChips</li>
+<li>NVIDIA GTC 2025 Keynote, nvidia.com</li>
+<li>IBM Research Blog: Co-Packaged Optics for AI Computing, research.ibm.com</li>
+<li>Ayar Labs E轮融资公告, businesswire.com</li>
+<li>IEEE Spectrum: Co-Packaged Optics Report, spectrum.ieee.org</li>
+<li>SemiAnalysis: Ayar Labs CPO Revolution, newsletter.semianalysis.com</li>
+<li>OFC 2026 Conference Reports, photoncap.net, drflyout.com</li>
+<li>LightCounting CPO市场预测</li>
+<li>摩根士丹利 CPO市场规模预测（2023—2030）</li>
+<li>高盛：中际旭创/光模块行业研究报告</li>
+<li>天风证券：《硅光产业深度报告》（2024.08）</li>
+<li>36Kr：《硅光技术三十年沉浮》</li>
+<li>主人研究目录现有资料：01_技术与产业趋势.md、02_光引擎与光模块.md、03_光芯片与光源.md、04_无源器件与精密光学.md、05_设备与封测.md、README.md</li>
+</ol>
+<blockquote>
+<p><strong>方法论说明</strong>：本报告采用「横纵分析法」研究框架，由数字生命卡兹克（Khazix）提出，纵向追时间深度，横向追同期广度，最终交汇出判断。</p>
+</blockquote>
+</body>
+</html>
