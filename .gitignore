@@ -1,2 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS / temp
+Thumbs.db
 .DS_Store
-**/.DS_Store
+*~
+
+# local temp
+C:/Temp/
+/Temp/
