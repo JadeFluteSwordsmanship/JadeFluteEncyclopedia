@@ -1,6 +1,6 @@
 ---
 name: hv-analysis
-description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成PDF报告。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。"
+description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown、网页 HTML 与 PDF。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。"
 ---
 
 # 横纵分析法深度研究
@@ -8,15 +8,15 @@ description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）
 > **方法论溯源**
 > 横纵分析法由数字生命卡兹克（Khazix）提出，融合了语言学中的历时-共时分析（Saussure）、社会科学中的纵向-横截面研究设计、商学院案例研究法、以及竞争战略分析的核心思想，形成了一套适用于产品/公司/概念/人物的通用研究框架。核心原则不变：纵向追时间深度，横向追同期广度，最终交汇出判断。
 
-你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。最终产出 Markdown 定稿和一份排版可用的 PDF 研究报告。
+你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。最终产出三件套：Markdown 定稿、网页阅读版 HTML、排版可用的 PDF。
 
 ## 前置准备
 
 ### 环境准备
 
-1. **确认PDF转换脚本可用**：本Skill自带 `scripts/md_to_pdf.py`。依赖：`pip install weasyprint markdown`。脚本会自动发现本机中文字体（Noto Sans SC / 微软雅黑 / PingFang / 文泉驿）；找不到时会尝试下载 Noto Sans SC。不要改用已废弃的 `Droid Sans Fallback` 字体栈，那是乱码的根因。
-2. **报告模板**：写作时严格遵循 [references/report-template.md](references/report-template.md)。
-3. **写作风格**：本Skill已内置完整的写作风格指南（见下文"写作风格"部分），无需额外加载其他skill。
+1. **确认转换脚本可用**：本 Skill 自带 `scripts/md_to_html.py`（网页阅读版）和 `scripts/md_to_pdf.py`（PDF）。依赖：`pip install weasyprint markdown`。PDF 脚本会自动发现本机中文字体（Noto Sans SC / 微软雅黑 / PingFang / 文泉驿）；找不到时会尝试下载 Noto Sans SC。不要改用已废弃的 `Droid Sans Fallback` 字体栈，那是乱码的根因。
+2. **报告模板**：写作时严格遵循 [references/report-template.md](references/report-template.md)。网页视觉规范见 [references/html-design.md](references/html-design.md)，模板是 [references/web-report.html](references/web-report.html)。
+3. **写作风格**：本Skill已内置完整的写作风格指南（见下文"写作风格"部分），无需额外加载其他skill。网页 HTML 不要为单篇报告手写 CSS，一律走转换脚本。
 
 ### 明确研究对象
 
@@ -198,9 +198,23 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
 
 ---
 
-## 第五步：生成PDF报告
+## 第五步：生成网页阅读版 HTML
 
-报告写完后，使用本Skill自带的 `scripts/md_to_pdf.py` 将 Markdown 转为 PDF。完整章节骨架见 [references/report-template.md](references/report-template.md)。
+Markdown 定稿后，**必须**再用本 Skill 的网页模板生成独立 HTML。这是给屏幕阅读的交付物，不要把 PDF 的 A4 印刷页直接当网页。
+
+视觉规范：[references/html-design.md](references/html-design.md)。改样式只改 `references/web-report.html`，不要为单篇报告手写一套 CSS。
+
+```bash
+python [skill目录]/scripts/md_to_html.py input.md output.html --title "研究对象名称" --author "玉笛百科"
+```
+
+脚本会抽出封面标题/副标题、元信息、目录、结论带和「剧本」卡片，正文保持原 Markdown 结构。产出必须可单文件打开（CSS/JS 内联），含：粘滞目录、阅读进度、深浅色、字号、移动端目录抽屉、`prefers-reduced-motion`。
+
+不要做：紫雾落地页、三列功能卡、每个小节加英文眉题、为装饰生成假截图。
+
+## 第六步：生成PDF报告
+
+报告写完后，使用本Skill自带的 `scripts/md_to_pdf.py` 将 Markdown 转为 PDF。完整章节骨架见 [references/report-template.md](references/report-template.md)。网页阅读版已经由上一步单独生成；PDF 脚本默认不再覆盖 `.html`。
 
 ### 转换流程
 
@@ -210,7 +224,7 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
    ```bash
    python [skill目录]/scripts/md_to_pdf.py input.md output.pdf --title "研究对象名称" --author "玉笛百科"
    ```
-4. 脚本会生成中间 HTML（便于预览）和最终 PDF。默认引擎是 WeasyPrint；若仍失败可用 `--engine playwright` 或 `--engine auto`。
+4. 默认引擎是 WeasyPrint；若仍失败可用 `--engine playwright` 或 `--engine auto`。需要保留印刷用中间 HTML 时加 `--keep-html`（写成 `.print.html`），不要覆盖阅读版 `.html`。
 
 ### 脚本内置的排版规范
 
@@ -249,6 +263,7 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
 ```
 <分类>/<研究对象>/
   <研究对象>_横纵分析报告.md
+  <研究对象>_横纵分析报告.html
   <研究对象>_横纵分析报告.pdf
   图片、图表、附件…
 ```
@@ -258,6 +273,32 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
 同一对象的旧笔记、研报 PDF、仿真 notebook 也归入该目录，不要在分类根下另放一份。
 
 `AI全行业/` 与 `人形机器人/` 中尚未成文的叶节点是空文件占位符，禁止改成目录或写入 `.gitkeep`。
+
+---
+
+## 第七步：提交并推送（必做收尾）
+
+HTML 与 PDF 质检通过后，**立刻用 Conventional Commits 提交并 `git push`**。产出留在工作区不算交付完成。不要等用户再说「帮我提交」。
+
+1. 查看 `git status`、`git diff`、最近 `git log`，只暂存本次研究对象目录内的 md / pdf / html / 图片 / 数据。
+2. 不要提交 `.env`、密钥、无关改动。
+3. 提交信息格式：`type(scope): subject`
+
+```
+feat(<分类>/<研究对象>): add <研究对象>横纵分析报告
+```
+
+示例：
+
+```
+feat(人物/李宗盛): add 李宗盛横纵分析报告
+
+feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
+```
+
+用 HEREDOC 传 message。不要 `--no-verify`，不要 `--force`。
+
+4. `git push` 到当前跟踪的 remote 分支。失败则报告错误并停下。
 
 ---
 
@@ -303,5 +344,8 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
 - [ ] 所有关键事实标注了信息来源？
 - [ ] 搜不到的信息诚实标注了「暂缺」，没有编造？
 - [ ] PDF 中文正常、无方框/乱码，封面、目录、结论卡片完整？
+- [ ] 网页 HTML 由 `md_to_html.py` 生成，可单文件打开，目录/进度/深浅色可用，移动端不破版？
+- [ ] HTML 不是 A4 印刷页的翻版，也不是紫雾落地页？
 - [ ] 结构符合 report-template.md（速览 + 纵轴 + 横轴 + 交汇 + 来源）？
 - [ ] 总字数在 10,000-30,000 字的范围内？
+- [ ] 已用 Conventional Commits 提交本次产出并 `git push`？

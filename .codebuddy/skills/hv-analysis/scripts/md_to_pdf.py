@@ -19,6 +19,7 @@ import subprocess
 import sys
 from pathlib import Path
 from urllib.request import urlopen
+import tempfile
 
 import markdown
 
@@ -742,6 +743,11 @@ def main() -> None:
         default="weasyprint",
         help="PDF 引擎。weasyprint 为默认；auto 失败时回退 playwright",
     )
+    parser.add_argument(
+        "--keep-html",
+        action="store_true",
+        help="把印刷用中间 HTML 留在输出目录（.print.html）。网页阅读版请用 md_to_html.py",
+    )
     args = parser.parse_args()
 
     src = Path(args.input)
@@ -762,9 +768,15 @@ def main() -> None:
     )
 
     dest.parent.mkdir(parents=True, exist_ok=True)
-    html_path = dest.with_suffix(".html")
-    html_path.write_text(html, encoding="utf-8")
-    print(f"[OK] HTML: {html_path}")
+    if args.keep_html:
+        html_path = dest.with_suffix(".print.html")
+        html_path.write_text(html, encoding="utf-8")
+        print(f"[OK] print HTML: {html_path}")
+    else:
+        tmp = tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".print.html", delete=False)
+        tmp.write(html)
+        tmp.close()
+        html_path = Path(tmp.name)
 
     engines = [args.engine] if args.engine != "auto" else ["weasyprint", "playwright"]
     last_error: Exception | None = None
