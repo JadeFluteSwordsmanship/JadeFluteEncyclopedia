@@ -1,0 +1,36 @@
+---
+description: 生成报告或其他可归档产出后，必须用 Conventional Commits 提交并 push
+alwaysApply: true
+---
+
+# 产出收尾：提交并推送
+
+在本仓库生成报告、研报、规则、skill 或其他可归档产出后，**立刻 commit 并 push**。这是交付的一部分，用户不必再口头要求。
+
+## 提交
+
+1. 先看 `git status`、`git diff`、最近 `git log`，只暂存本次产出。
+2. 不要提交 `.env`、凭据、密钥。
+3. 用 [Conventional Commits](https://www.conventionalcommits.org/)：
+
+```
+type(scope): subject
+```
+
+常用 type：`feat` 新报告/新能力，`fix` 修正，`docs` 文档/规则，`chore` 杂项。
+
+研究报告示例：
+
+```
+feat(人物/李宗盛): add 李宗盛横纵分析报告
+
+feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
+```
+
+4. 用 HEREDOC 传 commit message；不要 `--no-verify`，不要 `--amend`（除非用户明确要求且符合安全条件）。
+
+## 推送
+
+- `git push` 到当前分支跟踪的 remote。需要时用 `-u`。
+- 禁止 `--force` / `--force-with-lease`。
+- push 失败（认证、冲突、hook）就报告错误并停下，不要改写历史。
