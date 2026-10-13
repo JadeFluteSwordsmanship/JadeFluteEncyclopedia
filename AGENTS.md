@@ -39,3 +39,4 @@
 1. 检查 `git status` / `git diff` / `git log`，只暂存本次产出（不含 `.env`、密钥）。
 2. 提交信息：`type(scope): subject`，必要时加 body。研究报告用 `feat(<分类>/<对象>): add <对象>横纵分析报告`。
 3. `git push` 到当前跟踪的 remote 分支。不要 `--force`，不要跳过 hooks。推送失败就报告错误并停下。
+4. 任务来自 htalk 时，把网页 HTML 发到来源群：`htalk send --group <groupID> --file <报告.html>`。群里交付物是这个文件，不要贴长文摘要。

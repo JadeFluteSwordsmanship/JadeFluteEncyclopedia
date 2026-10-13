@@ -34,3 +34,13 @@ feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
 - `git push` 到当前分支跟踪的 remote。需要时用 `-u`。
 - 禁止 `--force` / `--force-with-lease`。
 - push 失败（认证、冲突、hook）就报告错误并停下，不要改写历史。
+
+## htalk 来源群
+
+任务来自 htalk 时，git push 之后还要把网页 HTML 发到来源群：
+
+```bash
+htalk send --group <groupID> --file <报告.html>
+```
+
+群里交付物是这个文件。不要贴长文摘要。

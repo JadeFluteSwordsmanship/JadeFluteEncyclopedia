@@ -323,6 +323,13 @@ feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
 用 HEREDOC 传 message。不要 `--no-verify`，不要 `--force`。
 
 4. `git push` 到当前跟踪的 remote 分支。失败则报告错误并停下。
+5. **任务来自 htalk 时，立刻把网页 HTML 发到来源群**，不要只 git push、不要在群里贴长文摘要：
+
+```bash
+htalk send --group <groupID> --file <研究对象目录>/<研究对象>_横纵分析报告.html
+```
+
+群里的交付物就是这个 HTML 文件。Agent 自动回群的 result 只留一两句（已发送 / 路径），禁止再贴一遍报告正文。
 
 ---
 
@@ -374,3 +381,4 @@ feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
 - [ ] 结构符合 report-template.md（速览 + 纵轴 + 横轴 + 交汇 + 来源）？
 - [ ] 总字数在 10,000-30,000 字的范围内？
 - [ ] 已用 Conventional Commits 提交本次产出并 `git push`？
+- [ ] 若任务来自 htalk：已把 HTML 用 `htalk send --file` 发到来源群，且没有在群里贴长文？
