@@ -2,6 +2,8 @@
 
 网页 HTML 是给屏幕阅读的交付物，和 PDF 的 A4 印刷页不是同一套样式。所有报告走 `scripts/md_to_html.py` + `references/web-report.html`，不要为单篇报告手写 CSS。
 
+**已审定（2026-10-13，深度研究）：** 本模板作为默认网页阅读页。后续报告按此生成，不要另起视觉方案。
+
 ## Design Read
 
 Reading this as: editorial long-form research report for analysts, with a quiet publication language, leaning toward native CSS + JadeFlute ink/celadon identity.

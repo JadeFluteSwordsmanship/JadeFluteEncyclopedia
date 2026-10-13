@@ -2,5 +2,5 @@
   "slug": "hv-analysis",
   "name": "横纵分析法",
   "description": "用横纵分析法（HV Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown、网页 HTML 与 PDF。纵轴还原生命历程，横轴对比竞品，交汇产出洞察。触发：横纵分析、深度研究、调研、竞品分析、deep research、帮我研究/分析/搞懂。",
-  "version": "1.2.0"
+  "version": "1.2.1"
 }

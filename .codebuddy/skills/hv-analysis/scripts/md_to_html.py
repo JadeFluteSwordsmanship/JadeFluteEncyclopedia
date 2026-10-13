@@ -298,8 +298,19 @@ def main() -> None:
     if not TEMPLATE_PATH.is_file():
         raise SystemExit(f"找不到网页模板: {TEMPLATE_PATH}")
 
+    md_text = src.read_text(encoding="utf-8")
+    try:
+        from lint_cjk_punct import format_report, lint
+
+        findings = lint(md_text)
+        if findings:
+            print(format_report(src, findings), file=sys.stderr)
+            print("[WARN] 先改 Markdown 标点，再重新生成 HTML。", file=sys.stderr)
+    except ImportError:
+        pass
+
     html = md_to_reading_html(
-        src.read_text(encoding="utf-8"),
+        md_text,
         title=args.title or "横纵分析报告",
         author=args.author,
         subtitle=args.subtitle,

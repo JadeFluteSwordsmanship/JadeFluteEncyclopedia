@@ -756,6 +756,15 @@ def main() -> None:
         raise SystemExit(f"找不到输入文件: {src}")
 
     md_text = src.read_text(encoding="utf-8")
+    try:
+        from lint_cjk_punct import format_report, lint
+
+        findings = lint(md_text)
+        if findings:
+            print(format_report(src, findings), file=sys.stderr)
+            print("[WARN] 先改 Markdown 标点，再重新生成 PDF。", file=sys.stderr)
+    except ImportError:
+        pass
     cjk_font = resolve_cjk_font()
     print(f"[OK] 中文字体: {cjk_font}")
 

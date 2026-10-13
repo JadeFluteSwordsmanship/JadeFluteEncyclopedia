@@ -15,7 +15,8 @@
 1. 读取并遵循 `.cursor/skills/hv-analysis/SKILL.md`。
 2. 按 `.cursor/skills/hv-analysis/references/report-template.md` 组织全文。
 3. 用 `.cursor/skills/hv-analysis/scripts/md_to_html.py` 生成网页阅读版 HTML，再用 `scripts/md_to_pdf.py` 将定稿转为 PDF。
-4. 关键事实必须有来源；搜不到写「暂缺」，不编造。网页 HTML 走统一模板，不要为单篇手写 CSS。
+4. 关键事实必须有来源；搜不到写「暂缺」，不编造。网页 HTML 走统一模板（2026-10-13 审定），不要为单篇手写 CSS。
+5. 中文正文用全角标点（`，。：；（）《》`），半角 `,.:()` 只留给英文、数字、代码、URL。定稿后跑 `.cursor/skills/hv-analysis/scripts/lint_cjk_punct.py`，有报错先改 md。
 
 ## 交付
 
