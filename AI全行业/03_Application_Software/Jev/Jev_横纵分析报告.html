@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-size="md">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Jev横纵分析报告</title>
+<style>
+:root {
+  --ink: #15232c;
+  --ink-soft: #2a3d46;
+  --paper: #f2f5f3;
+  --paper-2: #e7eeea;
+  --jade: #2f7a64;
+  --jade-deep: #1f5648;
+  --jade-soft: rgba(47, 122, 100, 0.12);
+  --muted: #4a5c61;
+  --hair: #cdd8d3;
+  --card: #ffffff;
+  --shadow: 0 18px 40px rgba(21, 35, 44, 0.08);
+  --cover: #15232c;
+  --cover-ink: #eaf3ef;
+  --cover-muted: rgba(234, 243, 239, 0.68);
+  --warn: #8b4a3a;
+  --warn-soft: rgba(139, 74, 58, 0.1);
+  --ok-soft: rgba(47, 122, 100, 0.1);
+  --base-soft: rgba(74, 92, 97, 0.08);
+  --radius: 8px;
+  --sidebar: 17.25rem;
+  --measure: 42rem;
+  --topbar: 3.5rem;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SFMono-Regular", "Cascadia Mono", "Consolas", "Liberation Mono", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --ink: #e4ece8;
+  --ink-soft: #c5d2cc;
+  --paper: #12181a;
+  --paper-2: #1a2225;
+  --jade: #6eb89f;
+  --jade-deep: #8fd0ba;
+  --jade-soft: rgba(110, 184, 159, 0.14);
+  --muted: #9aada8;
+  --hair: #2c3a3d;
+  --card: #1a2225;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --cover: #101618;
+  --cover-ink: #e4ece8;
+  --cover-muted: rgba(228, 236, 232, 0.64);
+  --warn: #d08978;
+  --warn-soft: rgba(208, 137, 120, 0.14);
+  --ok-soft: rgba(110, 184, 159, 0.14);
+  --base-soft: rgba(154, 173, 168, 0.1);
+}
+
+[data-size="sm"] { --body-size: 15.5px; }
+[data-size="md"] { --body-size: 17px; }
+[data-size="lg"] { --body-size: 19px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  scroll-padding-top: calc(var(--topbar) + 0.8rem);
+}
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-size: var(--body-size);
+  line-height: 1.85;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .topbar, .progress span, .toc a, .theme-btn, .toc-drawer {
+    transition: background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.skip {
+  position: absolute;
+  left: 0.8rem;
+  top: -3rem;
+  background: var(--jade);
+  color: #f4faf7;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius);
+  z-index: 80;
+}
+.skip:focus { top: 0.6rem; }
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--jade);
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.1rem;
+  color: var(--cover-ink);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+.topbar.is-scrolled {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border-bottom-color: var(--hair);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .topbar.is-scrolled { background: var(--paper); backdrop-filter: none; }
+}
+
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  font-weight: 650;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.brand small {
+  display: block;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 0.68rem;
+}
+
+.top-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar.is-scrolled .top-title { opacity: 0.86; }
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.icon-btn:focus-visible,
+.toc a:focus-visible,
+.article a:focus-visible {
+  outline: 2px solid var(--jade);
+  outline-offset: 2px;
+}
+.icon-btn[aria-pressed="true"] { border-color: color-mix(in srgb, currentColor 28%, transparent); }
+.toc-toggle { display: none; }
+
+.cover {
+  min-height: 100dvh;
+  background: var(--cover);
+  color: var(--cover-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5.5rem 8vw 4.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -18% auto;
+  width: min(52vw, 34rem);
+  height: min(52vw, 34rem);
+  background: radial-gradient(circle, rgba(47, 122, 100, 0.22), transparent 68%);
+  pointer-events: none;
+}
+.cover-inner {
+  position: relative;
+  max-width: 48rem;
+}
+.cover-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--jade);
+  font-weight: 650;
+  margin: 0 0 1.1rem;
+}
+.cover h1 {
+  font-size: clamp(2.35rem, 6vw, 4.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 670;
+  margin: 0;
+  max-width: 14ch;
+  padding-bottom: 0.15em;
+}
+.cover-sub {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.45;
+  color: var(--cover-muted);
+  max-width: 28ch;
+  font-weight: 400;
+}
+.cover-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--jade);
+  border: 0;
+  margin: 1.7rem 0 1.4rem;
+}
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  color: var(--cover-muted);
+  font-size: 0.92rem;
+}
+.cover-meta span { white-space: nowrap; }
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  gap: 0 2.5rem;
+}
+
+.toc-wrap {
+  position: sticky;
+  top: var(--topbar);
+  align-self: start;
+  height: calc(100dvh - var(--topbar));
+  padding: 2rem 0 2.5rem;
+  overflow: auto;
+  border-right: 1px solid var(--hair);
+  padding-right: 1.2rem;
+}
+.toc-close { display: none; }
+.toc-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin: 0 0 0.9rem;
+  font-weight: 650;
+}
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc li { margin: 0; }
+.toc .depth-2 { margin-top: 0.55rem; }
+.toc .depth-2:first-child { margin-top: 0; }
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  padding: 0.38rem 0.6rem 0.38rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.toc a:hover { color: var(--ink); }
+.toc a.is-active {
+  color: var(--jade-deep);
+  border-left-color: var(--jade);
+  background: var(--jade-soft);
+  font-weight: 600;
+}
+.toc .depth-3 a {
+  font-size: 0.8rem;
+  padding-left: 1.35rem;
+}
+.toc-kind {
+  display: inline-block;
+  width: 0.9rem;
+  font-size: 0.68rem;
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.article {
+  max-width: var(--measure);
+  padding: 2.4rem 0 5rem;
+  min-width: 0;
+}
+
+.article > .summary,
+.article > .lead-band {
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--jade);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.4rem 1.2rem;
+  margin: 0 0 2.4rem;
+  box-shadow: none;
+}
+.article > .summary > h2:first-child,
+.article > .lead-band > h2:first-child {
+  margin-top: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--jade-deep);
+}
+.article > .summary > h2:first-child::after,
+.article > .lead-band > h2:first-child::after {
+  display: none;
+}
+.article > .summary > p:first-of-type,
+.article > .lead-band > p:first-of-type {
+  font-size: 1.12em;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.article h2 {
+  font-size: 1.58rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 2.8rem 0 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.article h2::after {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 2px;
+  background: var(--jade);
+  margin-top: 0.7rem;
+}
+.article h3 {
+  font-size: 1.18rem;
+  line-height: 1.4;
+  margin: 2rem 0 0.7rem;
+  font-weight: 680;
+  color: var(--ink);
+}
+.article h4 {
+  font-size: 1.02rem;
+  margin: 1.5rem 0 0.45rem;
+  color: var(--ink-soft);
+  font-weight: 650;
+}
+
+.article p { margin: 0.85rem 0; }
+.article p:first-child { margin-top: 0; }
+
+.article a {
+  color: var(--jade-deep);
+  text-underline-offset: 0.18em;
+}
+.article a:hover { color: var(--jade); }
+
+.article strong { font-weight: 670; color: var(--ink); }
+
+.article ul, .article ol {
+  margin: 0.7rem 0 1rem;
+  padding-left: 1.35rem;
+}
+.article li { margin: 0.28rem 0; }
+.article li::marker { color: var(--jade); }
+
+.article blockquote {
+  margin: 1.3rem 0;
+  padding: 0.2rem 0 0.2rem 1.05rem;
+  border-left: 3px solid var(--jade);
+  color: var(--ink-soft);
+  background: transparent;
+  font-style: normal;
+}
+.article blockquote p { margin: 0.35rem 0; }
+
+.article hr {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 2rem 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.3rem 0 1.6rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+}
+.article thead th {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: left;
+  font-weight: 650;
+  padding: 0.7rem 0.85rem;
+  white-space: nowrap;
+}
+[data-theme="dark"] .article thead th {
+  background: #0c1214;
+  color: var(--ink);
+}
+.article td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: top;
+}
+.article tbody tr:last-child td { border-bottom: 0; }
+.article tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+
+.article pre, .article code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+.article code {
+  background: var(--paper-2);
+  padding: 0.08em 0.35em;
+  border-radius: 4px;
+}
+.article pre {
+  background: var(--cover);
+  color: var(--cover-ink);
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.article pre code { background: none; padding: 0; color: inherit; }
+.article img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.scenario {
+  margin: 1.2rem 0 1.6rem;
+  padding: 1.15rem 1.2rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--hair);
+  background: var(--card);
+}
+.scenario > h3:first-child,
+.scenario > h4:first-child {
+  margin-top: 0;
+}
+.scenario-up { background: var(--ok-soft); border-color: color-mix(in srgb, var(--jade) 35%, var(--hair)); }
+.scenario-base { background: var(--base-soft); }
+.scenario-down { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, var(--hair)); }
+
+.article .sources-h + *,
+.sources {
+  font-size: 0.92em;
+  color: var(--ink-soft);
+}
+
+.site-foot {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.site-foot p { margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--hair); }
+
+.toc-backdrop {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  html.toc-open { overflow: hidden; }
+  .toc-toggle { display: inline-flex; }
+  .toc-close { display: inline-flex; position: absolute; top: 0.85rem; right: 0.7rem; }
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 0 1.1rem 3rem;
+  }
+  .toc-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: min(20rem, 86vw);
+    background: var(--paper);
+    z-index: 70;
+    padding: 4.4rem 1rem 1.5rem;
+    transform: translateX(-105%);
+    border-right: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+  }
+  html.toc-open .toc-wrap { transform: translateX(0); }
+  .toc-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 24, 26, 0.42);
+    z-index: 65;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.toc-open .toc-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .cover { padding: 5rem 1.25rem 3rem; }
+  .cover h1 { max-width: none; }
+  .article { padding-top: 1.6rem; }
+}
+
+@media print {
+  .progress, .topbar, .toc-wrap, .toc-backdrop, .site-foot { display: none !important; }
+  .layout { display: block; max-width: none; padding: 0; }
+  .cover { min-height: auto; padding: 1.5cm 0; break-after: page; }
+  .article { max-width: none; padding: 0; }
+  a { text-decoration: none; color: inherit; }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#article">跳到正文</a>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#cover">玉笛百科<small>JADE FLUTE</small></a>
+  <div class="top-title" id="top-title">Jev</div>
+  <div class="top-actions">
+    <button class="icon-btn toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-wrap">目录</button>
+    <button class="icon-btn" id="size-down" type="button" title="减小字号" aria-label="减小字号">A-</button>
+    <button class="icon-btn" id="size-up" type="button" title="增大字号" aria-label="增大字号">A+</button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false">深色</button>
+  </div>
+</header>
+
+<section class="cover" id="cover">
+  <div class="cover-inner">
+    <p class="cover-kicker">横纵分析</p>
+    <h1>Jev</h1>
+    <p class="cover-sub">横纵分析法深度研究报告</p>
+    <hr class="cover-rule">
+    <div class="cover-meta"><span>AI 应用软件 / 决策模型 / Agent 基础设施 · 产品</span><span>2026年10月13日</span><span>约 11777 字</span><span>阅读 26 分钟</span><span>玉笛百科</span></div>
+  </div>
+</section>
+
+<div class="toc-backdrop" id="toc-backdrop"></div>
+
+<div class="layout">
+  <aside class="toc-wrap" id="toc-wrap">
+    <button class="icon-btn toc-close" id="toc-close" type="button">关闭</button>
+    <p class="toc-label">目录</p>
+    <nav aria-label="章节">
+      <ol class="toc"><li class="depth-2"><a href="#核心结论速览-1">核心结论速览</a></li>
+<li class="depth-2"><a href="#一纵向分析从诞生到当下-2"><span class="toc-kind" aria-hidden="true">纵</span>一、纵向分析：从诞生到当下</a></li>
+<li class="depth-3"><a href="#11-起源教模型听话的人决定不再让模型说话-3">1.1 起源：教模型听话的人，决定不再让模型说话</a></li>
+<li class="depth-3"><a href="#12-隐身两年给软件造一套-System-One20242026-年-9-月-4">1.2 隐身两年：给软件造一套 System One（2024–2026 年 9 月）</a></li>
+<li class="depth-3"><a href="#13-发布即品类从-waitlist-到万亿-token2026-年-9-月-15-日21-日-5">1.3 发布即品类：从 waitlist 到万亿 token（2026 年 9 月 15 日–21 日）</a></li>
+<li class="depth-3"><a href="#14-资本加冕与对手围拢2026-年-10-月-6">1.4 资本加冕与对手围拢（2026 年 10 月）</a></li>
+<li class="depth-2"><a href="#二横向分析竞争图谱-7"><span class="toc-kind" aria-hidden="true">横</span>二、横向分析：竞争图谱</a></li>
+<li class="depth-3"><a href="#21-竞品地图-8">2.1 竞品地图</a></li>
+<li class="depth-3"><a href="#22-Jev-当前画像-9">2.2 Jev 当前画像</a></li>
+<li class="depth-3"><a href="#23-vs-vLLM-SR-Decision-30-10">2.3 vs vLLM-SR Decision 3.0</a></li>
+<li class="depth-3"><a href="#24-vs-Microsoft-Decision-1-11">2.4 vs Microsoft-Decision-1</a></li>
+<li class="depth-3"><a href="#25-vs-OpenAI-Decisions-API-12">2.5 vs OpenAI Decisions API</a></li>
+<li class="depth-3"><a href="#26-vs-Cloudflare-Clef-与开源平替-13">2.6 vs Cloudflare Clef 与开源平替</a></li>
+<li class="depth-3"><a href="#27-维度对照-14">2.7 维度对照</a></li>
+<li class="depth-3"><a href="#28-生态位与格局-15">2.8 生态位与格局</a></li>
+<li class="depth-2"><a href="#三横纵交汇洞察-16"><span class="toc-kind" aria-hidden="true">汇</span>三、横纵交汇洞察</a></li>
+<li class="depth-3"><a href="#31-历史如何塑造了当下位置-17">3.1 历史如何塑造了当下位置</a></li>
+<li class="depth-3"><a href="#32-优势与劣势的历史根源-18">3.2 优势与劣势的历史根源</a></li>
+<li class="depth-3"><a href="#33-未来三个剧本-19">3.3 未来三个剧本</a></li>
+<li class="depth-2"><a href="#四信息来源-20">四、信息来源</a></li>
+<li class="depth-2"><a href="#五方法论说明-21">五、方法论说明</a></li></ol>
+    </nav>
+  </aside>
+  <article class="article" id="article">
+<section class="summary"><h2 id="核心结论速览-1">核心结论速览</h2>
+<p><strong>一句话定义</strong>：Jev 是 TypeSafe AI 在 2026 年 9 月推出的「System One」决策模型：它读一段程序状态，并行回答一组预先定义好类型的问题，直接返回带校准概率的判断，不写字、不聊天、不生成代码。</p>
+<p><strong>关键判断</strong>：</p>
+<ol>
+<li>Jev 的真正发明是接口，不是更大的脑子。它把软件里每天要做成千上万次的「分类、路由、打分、是否」从大模型的聊天接口里拆出来，变成一条可以嵌进控制流的函数调用。创始人 Diogo Almeida 本人就是 InstructGPT / RLHF 论文的共同作者，他从「教模型跟人说话」走到「不让模型对人说话」，这条反向路径解释了产品为什么长成现在这样。</li>
+<li>发布后 24 天内拿到 a16z 领投的 8.7 亿美元、估值 75 亿美元，核心在于它撞上了 Agent 落地的真实瓶颈：一次真正的 Agent 跑起来，大部分时间不是在「想」，而是在反复判断该调哪个工具、上下文还要不要留、结果要不要人工复查。这些判断交给会深度思考的大模型，又慢又贵。</li>
+<li>智东西 10 月 12 日那篇「Jev 对手来了」说的对手，是 vLLM Semantic Router 开源的 Decision 3.0。它不是唯一对手。10 月头两周，Cloudflare Clef、OpenAI Decisions API、微软 Microsoft-Decision-1 几乎同时入场。Jev 用封闭 API 定义了品类，开源权重和云厂商正在按同一套 <code>state + questions → typed answers</code> 协议把它摊薄。</li>
+</ol>
+<p><strong>机会与风险</strong>：</p>
+<ul>
+<li>机会：谁先把「决策层」做成软件默认零件，谁就能吃到 Agent 流水线里最高频、最可计量的那一层调用。Jev 目前仍是这层里文档最完整、概率校准叙事最强、开发者心智最占先的托管产品。</li>
+<li>风险：权重不开、不能看图、中文弱于英文、校准几乎没有独立验证。「零幻觉」只保证输出类型合法，不保证判断正确。开源多模态一旦在自有数据上够用，Jev 的溢价会迅速从「品类定义者」变成「贵一点的托管接口」。</li>
+</ul>
+<hr>
+</section><h2 id="一纵向分析从诞生到当下-2">一、纵向分析：从诞生到当下</h2>
+<blockquote>
+<p><strong>叙事主线</strong>：一个帮大模型学会「听话」的人，发现听话解决不了自动化。他隐身两年，造了一种故意不会写字的模型。模型一上线就变成品类；品类一成立，对手就按同一份协议涌进来。</p>
+</blockquote>
+<h3 id="11-起源教模型听话的人决定不再让模型说话-3">1.1 起源：教模型听话的人，决定不再让模型说话</h3>
+<p>2022 年 3 月，OpenAI 发表 InstructGPT 论文《Training language models to follow instructions with human feedback》。作者名单里有 Diogo Almeida。官方博客《Aligning language models to follow instructions》把他列为共同作者，和他一起的还有 Long Ouyang、Jeff Wu、John Schulman、Paul Christiano 等人。那篇工作的核心动作很具体：先用标注员示范把 GPT-3 做监督微调，再收集输出排序，用人类反馈强化学习（RLHF）继续训。结果是 13 亿参数的 InstructGPT，在人类评估里胜过 1750 亿参数的 GPT-3。</p>
+<p>ChatGPT 几个月后爆发。行业把 RLHF 写成「对齐」的标准配方。Almeida 后来说，他当时以为聊天模型也许会通向 AGI。做了几年之后，他改口了。官网第一句话写得很硬：「We took the opposite research direction」。官宣文里他写自己过去四年的驱动问题只有一句：模型已经超人级别地会聊天了，自动化为什么还是没来？</p>
+<p>他给的答案很工程：电脑不讲人话。大模型输出的是字符串，软件要的是分支。字符串灵活，所以能写诗、写代码、也能幻觉、拒答、跑出 schema。要让程序用它，必须再解析、再校验、再重试。延迟按秒计，输出按 token 加价，置信度还对不上真实正确率。</p>
+<p>2023 到 2025 年，行业把这个问题处理成 prompt 工程和 JSON mode。做法是：在系统提示词里把 schema 写死，要求模型「只输出 JSON」，再用正则或 pydantic 兜底。能用，也一直在用。代价是每次判断仍然走完整的自回归生成，模型会先在内心拟一篇分析，再把分析压成字段；字段偶发飘出类型，流水线就断。Agent 一流行，这个代价被放大。一个能在仓库里改文件、调浏览器、跑测试的 Agent，单次任务里可能要做几十上百次微型判断：这个工具现在该不该调、这条搜索结果还要不要、用户这句话是新任务还是追问、刚才那次补丁有没有把测试搞红。每一问都请 Claude 或 GPT 想一遍，账单和尾延迟会先把产品杀死。</p>
+<p>软件里真正高频的活，从来不是写一篇对人类漂亮的回复。是工单归哪个组、这次要不要调工具、这段上下文还能不能留、这条内容过不过审。这些活以前用规则写死太脆，用大模型又太贵太慢。中间缺的是一种「模糊的 if」：能读自然语言和半结构化状态，但返回值必须能直接写进 <code>if</code>。</p>
+<p>2024 年，Almeida 与前 Meta 研究工程师 Sasha Sheng、工程师 Erik Gafni 在旧金山创办 TypeSafe AI。Almeida 任 CEO，Sheng 任 COO，Gafni 任 CTO。公司隐身大约两年。2026 年 9 月 15 日退出隐身时，BusinessWire / SiliconANGLE 报道 DCVC 领投约 4000 万美元种子轮；Forbes 援引知情人士称估值约 2 亿美元，公司和 DCVC 未在官方稿里写这个数字。</p>
+<p>公司名 TypeSafe，产品哲学写在名字上：给软件一种类型安全的智能原语。模型类名 System One，借自丹尼尔·卡尼曼《思考，快与慢》里的快系统。产品名 Jev，取自 19 世纪经济学家威廉·杰文斯。杰文斯悖论说的是：蒸汽机把煤烧得更省，煤的总消耗反而上升。TypeSafe 赌的是同一件事：智能一旦便宜到可以在代码里随处调用，调用量会爆掉。a16z 后来把这个现象直接叫成「Jev-ons paradox」。</p>
+<h3 id="12-隐身两年给软件造一套-System-One20242026-年-9-月-4">1.2 隐身两年：给软件造一套 System One（2024–2026 年 9 月）</h3>
+<p>隐身期对外几乎没有论文。能确定的技术主张，都写在 9 月 15 日 Almeida 的官宣里。他们自称造了三样新东西：一套面向自动化的模型架构、一个并行采样器、一种叫 Reinforcement Learning for Calibrated Decisions（RLCD）的训练方法。</p>
+<p>和 LLM 的对照表，是理解 Jev 的最短路径。</p>
+<p>LLM 用 RLHF / RLVR 优化人类偏好或可验证奖励，输入偏对话，输出是字符串，采样是自回归，一个 token 等上一个。Jev 用 RLCD 优化「校准过的决策」：输入偏程序状态，输出是事先定义好的类型值，一次请求里所有问题并行出结果。官宣给出的成本是每百万输入 token 0.042 美元，输出免费；端到端 70 到 500 毫秒。他们把这组数字和前沿模型的 3 到 329 秒、输入 0.20 到 10 美元/百万 token 放在一张表里。首页更大胆：在自家 System One 工作流评测上，称快 193.6 倍、便宜 444.6 倍。官宣自己加了括号：这些数字落在真实收益的高端。</p>
+<p>「校准」是他们最想卖的词。意思是：模型说 90% 把握，在代表性样本上大约应该对九成。文档写得很克制：校准是在一组预测上度量的，不保证单条答案正确。输出只有三种原语：</p>
+<ul>
+<li><strong>Choice</strong>：从给定选项里选一个，例如工单该去 billing / technical / account。</li>
+<li><strong>Score</strong>：在有序刻度上打分，例如客户愤怒程度。</li>
+<li><strong>Noul</strong>：判断某事是否成立，返回 0 到 1 的概率，例如这封邮件是不是在要求退款。</li>
+</ul>
+<p>一次请求的形状是 <code>state</code> 加一组 <code>questions</code>。<code>state</code> 可以是字符串、JSON 或文本数组。模型把 state 读一遍，所有问题对着同一份状态并行作答，每个答案带概率和 confidence。选项基数上限 255。超过这个数，官方演示用两阶段：先独立打分，再显式选择。</p>
+<p>他们反复强调一件数学上成立的事：类型错误不可能发生。输出空间在请求里就锁死了，模型选不出 schema 以外的字段。官宣把这件事写成「can't hallucinate」。这个句子后来被媒体原样传播，也成为后来最大的语义陷阱。它保证的是类型，不是真相。模型照样能把错误选项选得很自信。</p>
+<p>参数量没有公布。文档写明：不对客户数据做微调或 LoRA，所有账号共用同一套用 RLCD 训出来的权重。领域适配靠把专有内容塞进 <code>state</code>，把业务规则写进 <code>instructions</code> 和 <code>criteria</code>，再在代码里把多个原子问题组合成工作流。输入目前只有文本，图像、音频、视频要先转成文字或结构化字段。英文是主训练语言，CJK「能用，但效果不等同」，文档要求非英文工作负载先用自己的数据测。</p>
+<p>隐身两年真正锁死的，是产品形态：封闭托管、统一权重大家用、用请求而不是微调来定制、用类型而不是 prompt 来约束。后面所有优势和包袱，都从这四个选择长出来。</p>
+<h3 id="13-发布即品类从-waitlist-到万亿-token2026-年-9-月-15-日21-日-5">1.3 发布即品类：从 waitlist 到万亿 token（2026 年 9 月 15 日–21 日）</h3>
+<p>2026 年 9 月 15 日，Jev 以 early access 上线。同一天种子轮稿件发出。Almeida 把产品形容成「frontier-intelligence function call」：非结构化状态进，带类型的概率决策出。</p>
+<p>增长数字来自公司和投资人，外部很难复核。a16z 10 月 9 日的投资声明写：Jev 是他们见过增长最快的模型，上线仅 3 天 token 用量达到 1 万亿。同一篇稿件写，25% 的 Fortune 500 已经接入。TechCrunch 同一天报道融资时写的是 TypeSafe 声称三分之一的 Fortune 500 已在用。两个口径差了八个百分点，都是宣称，不是经审计的客户名单。</p>
+<p>中文报道补充了开发者侧的热度，需要当二手来源看。钛媒体 9 月 25 日文称：官宣帖在 X 上浏览量冲到数千万；Hacker News 当天 1800 多分、近 500 条评论；Vercel 上线 24 小时内近 13% 的付费团队接入；发布 36 小时内测申请涉及约 14 万开发者；9 月 21 日对所有人开放，新用户送 5 美元额度（约 1.2 亿 token）。这些数字没有官方逐条背书，但 9 月 21 日开放 API、按输入计费、输出免费，与现行文档一致。</p>
+<p>社区用法比融资数字更能说明它撞上了什么。有人把它接进 Claude Code 清上下文：大量工具调用和终端输出交给 Jev 打分，只把仍与当前任务相关的片段留给大模型。有人拿 Agent 执行记录问它：目标完成了没有、有没有漏项、质量落在哪一档。有人用它在 40 秒里拆 724 条实时广告。官方自己的玩具更夸张：用结构化游戏状态驱动 Doom 机器人，每秒大约 10 次查询；用它玩维基竞速，每一步在成百上千个链接里选。Doom 演示明确写了：喂进去的是带文本的数据结构，还不是图像。</p>
+<p>LangChain 做过一组小规模实验，让 Jev、GPT-5.6 Luna、GPT-5.6 Terra 和 Claude Sonnet 4.6 对固定的 Agent 输出反复评分。新浪转引的数字是：Jev 平均每次约 0.44 秒、约 0.00035 美元，一致性突出。LangChain 自己强调这是早期小样本，不能外推到生产。</p>
+<p>冷水也来得很快。钛媒体引 Redis 作者 antirez 的公开批评：Jev 也许有一些很窄的场景，围绕它的炒作说明泡沫里的人分不清什么重要。也有人说它就是个 JSON 分类器。Sebastian Raschka 的反驳被同一篇文章记下：传统分类器标签训死了，场景一变要重训；Jev 能在运行时接收自然语言标签，对动态选项做判断。更说明风向的是：Jev 发布同一周，Cloudflare 公开了把 DiffusionGemma 改成决策接口的实验。品类还没满月，仿制已经开始。</p>
+<p>如果把一个 Agent 拆开，Jev 这类模型至少能顶三个位置，这也是它在工程上真正值钱的地方。</p>
+<p>第一个位置是模型路由。进来一条请求，先问：这是闲聊、查资料、写代码，还是根本不用模型、走规则就能回？选错的代价不对称：简单问题发给最贵的推理模型，浪费钱；复杂问题发给小模型，用户感知到蠢。决策模型的输出带着概率，路由层可以写成：高于阈值走小模型，低于阈值升级，命中安全类别直接拒。以前这件事也会做，只是每次路由本身就是一次 LLM 调用。</p>
+<p>第二个位置是工具门槛。Agent 的工具列表越来越长，每次都让大模型在 30 个工具里挑，既慢又容易幻觉出不存在的函数名。Jev 的 Choice 把工具名锁在 <code>criteria</code> 里，选不出来的名字根本不在输出空间。Noul 则负责更前置的一问：现在需不需要工具。很多请求的正确答案是「不需要」，省掉一次搜索或一次代码执行，比把搜索做对更重要。</p>
+<p>第三个位置是验证与监督。大模型写完一段补丁、拟好一封客服回复、规划好下一步点击，系统需要一个外部裁判：有没有完成目标、有没有违反政策、质量落在哪一档。再请一个同样会写字的模型来审，等于用生成检查生成，慢，还容易共谋式地放水。决策模型不写评语，只打分。LangChain 那组小实验看中的，就是这种重复评分时的稳定性。</p>
+<p>三个位置叠在一起，Agent 的架构从「全程 LLM」变成「规则 + 决策模型 + LLM + 工具」。LLM 仍然负责复杂推理和生成，Jev 负责那些又小又急的判断题。发布第一周的 demo 看起来像玩具，骨架已经是这个分层。</p>
+<p>这一周真正完成的，是心智占领。开发者第一次有一个可以抄的协议：<code>POST /v1/systemone</code>，<code>state</code> + <code>questions</code>，回来的是 Choice / Score / Noul。后来所有对手，包括智东西文章里的 Decision 3.0，都在抄这张表。</p>
+<h3 id="14-资本加冕与对手围拢2026-年-10-月-6">1.4 资本加冕与对手围拢（2026 年 10 月）</h3>
+<p>2026 年 10 月 9 日，TypeSafe 宣布新一轮融资。TechCrunch 报道：a16z 领投 8.7 亿美元，估值 75 亿美元，Sequoia 和老股东 DCVC 跟投。a16z 署名 Jennifer Li、Sarah Wang、Martin Casado、Marc Andreessen、Ben Horowitz。稿件把 Jev 称为「今年见过最大的叙事违规」：一边是大实验室继续堆参数、上下文和类人推理，一边是 TypeSafe 把智能送回开发者手里，让软件变聪明，而不是用 AI 把现有软件再写一遍。</p>
+<p>从种子轮宣称的约 2 亿美元，到 24 天后的 75 亿美元，中间几乎没有新的技术论文，只有用量、开发者 demo 和「我们定义了一个品类」。资本买的是接口标准和时间窗口。</p>
+<p>窗口立刻被挤满。按公开时间排：</p>
+<ul>
+<li><strong>10 月 1 日</strong>：Cloudflare 发布开源决策模型 Clef / Clef-flash，Apache-2.0，挂在 Workers AI 上，API 按 Jev 的 System One 形状兼容，并宣布后续提供微调。</li>
+<li><strong>10 月 6 日</strong>：OpenAI Decisions API 进入公开 beta，模型是 <code>gpt-6-luna</code>，<code>POST /v1/decisions</code>，支持文本和图像，输入 0.10 美元/百万 token，输出免费，官方称比同一模型走 Responses API 做决策快最多约 10 倍。</li>
+<li><strong>10 月 9 日</strong>：微软发布 Microsoft-Decision-1，基于 Qwen3.5-9B 后训练，走 Microsoft Foundry 和 OpenRouter，定价直接写成每百万输入 0.042 美元、输出免费，和 Jev 同一价签。</li>
+<li><strong>10 月 11 日前后</strong>：vLLM 社区孵化的 vLLM Semantic Router 开源 Decision 3.0 系列，权重放在 Hugging Face，旗舰 d3 基于 Qwen3.8-27B，能看多图和视频。智东西 10 月 12 日的文章把这件事写成「Jev 对手模型来了」。</li>
+</ul>
+<p>现行文档里的 Jev 已经迭代到 <code>jev-1.13.0</code>，别名 <code>jev-latest</code>。上下文预算是每请求 64k，其中 <code>state</code> 加最长一个问题不得超过 32k。限流写的是每秒 10 万 token、每秒 80 请求，文档声明需求太大，限额会动态调整。服务节点在美国西海岸。企业可签零数据保留。</p>
+<p>纵向走到 2026 年 10 月 13 日，故事已经换了主题。前两周的主题是「一种新模型」。这一周的主题是「一种新协议」。Jev 还是这个协议上文档最完整的托管实现，但它已经不是唯一实现。</p>
+<hr>
+<h2 id="二横向分析竞争图谱-7">二、横向分析：竞争图谱</h2>
+<blockquote>
+<p><strong>切面时间</strong>：2026 年 10 月 13 日。触发材料是智东西 10 月 12 日关于 vLLM Semantic Router Decision 3.0 的报道。</p>
+</blockquote>
+<h3 id="21-竞品地图-8">2.1 竞品地图</h3>
+<p>这是场景 C：直接竞品在三周内超过五个，而且接口几乎同构。对比对象按「会不会被用户拿来替 Jev」来选，不把中科闻歌 Decitron 这类世界模型 / 博弈推演系统算进来。Decitron 做的是对未来的推演，Jev 做的是当下的一次判断，名字里都有「决策」，工程对象不是一类。</p>
+<p>五个代表：</p>
+<ol>
+<li><strong>vLLM-SR Decision 3.0</strong>：智东西点名的对手，开源权重、多模态、本地可部署。</li>
+<li><strong>Microsoft-Decision-1</strong>：企业云里的官方决策模型，价签对齐 Jev。</li>
+<li><strong>OpenAI Decisions API</strong>：实验室把现有聊天模型开了一条决策专用通道。</li>
+<li><strong>Cloudflare Clef</strong>：第一个高调开源、API 兼容、还承诺微调的云厂商产品。</li>
+<li><strong>开源平替群（Kev / Laya 等）</strong>：证明「抄接口」的训练成本可以低到个人项目。</li>
+</ol>
+<h3 id="22-Jev-当前画像-9">2.2 Jev 当前画像</h3>
+<p>定位：封闭托管的 System One 旗舰。用户买的是一个稳定的 <code>POST /v1/systemone</code>，不是一张可以搬回家的权重。</p>
+<p>核心能力写在文档和官宣里，能够核对：</p>
+<ul>
+<li>三种强类型输出，并行多问，选项最多 255。</li>
+<li>输入百万 token 0.042 美元，输出不收费。</li>
+<li>官方延迟 70–500 毫秒；Cloudflare 自己测到的 Jev 中位延迟 524.1 毫秒（硬件环境未与 TypeSafe 对齐，只能当量级参考）。</li>
+<li>64k 请求上下文，文本 / JSON / 文本数组。</li>
+<li>版本化模型 ID，阈值调好以后可以钉死 <code>jev-1.13.0</code>，避免别名滑动。</li>
+<li>官方工作流评测自称占据速度-成本帕累托前沿；同时承认相对最强外部模型的参考概率，Jev 并不总是更准。</li>
+</ul>
+<p>短板同样写在自己的文档和对手的模型卡上：</p>
+<ul>
+<li>不能看图、不能看视频。</li>
+<li>不能按客户数据微调。</li>
+<li>英文主场，中文和其它 CJK 要自测。</li>
+<li>权重封闭，无法私有化、无法离线、无法做合规审计意义上的「模型在我这」。</li>
+<li>「零幻觉」是类型保证。独立评论指出，主流 Decision Index 收了全部分布概率，却不算 ECE、Brier、可靠性曲线，Jev 最想卖的校准几乎没有第三方成绩单。</li>
+</ul>
+<p>目标用户是要把判断嵌进代码的人：Agent 作者、工作流引擎、客服路由、内容审核、模型网关。商业模式是 API 计量，企业另开更高限额和零数据保留。TypeSafe 不靠卖卡、不靠开源获取、不靠让客户训出自己的模型。护城河如果存在，就在校准质量、高基数选项、文档 / SDK 完成度，以及先到的开发者心智。</p>
+<p>口碑两极。一边是「终于有一个可以当 if 用的模型」；一边是「JSON 分类器被 75 亿估值」。两边说的其实是同一件事：它把一件小事做成了基础设施。小事值不值这个价，要看 Agent 流水线里判断调用的密度，以及开源平替多久能在自有数据上追上。</p>
+<p>实际接入时，Jev 的用法比「换一个更快的分类器」更啰嗦，也更有约束力。文档推荐的路径是：先把一个大判断拆成许多原子问题，让每个问题只问一件事；把专有政策、历史工单、库存状态放进 <code>state</code>；把边界情况写进 <code>criteria</code>；在代码里用概率做与或、做加权，而不是把模型的 Choice 直接当成最终动作。官方 cookbook 里有一个叫 SDE cascade 的例子：便宜的小生成模型先抽字段，Jev 用一组 Noul 去抓「这个字段可能抽错了」，超过阈值再升级到更贵的推理模型。AutoResearch 则更进一步：让另一个 LLM 提议该问哪些问题，Jev 对每一行数据作答，答案变成 CatBoost 的数字特征，再根据错误样本改问题。这两份配方说明 TypeSafe 想占据的位置，是特征工厂和门卫，不是聊天机器人替代品。</p>
+<p>中文场景要单独说一句。文档写明英文是主场。客服分流、内容审核、代码 PR 分类这些活，中国团队每天也在做，但直接把中文工单丢给 Jev，官方自己都不建议依赖。服务节点在美西，时延和合规叠在语言之上。对国内使用者，Jev 更像一份接口规范和一组英文评测基线；能落地的往往是 Decision 3.0、Clef，或自己用通义后训练出来的本地判断器。品类的意义在，接口已经有了；产品的意义在，英文云端工作流里它可以马上用。</p>
+<h3 id="23-vs-vLLM-SR-Decision-30-10">2.3 vs vLLM-SR Decision 3.0</h3>
+<p>Decision 3.0 是这条微信链接里的「对手」。vLLM Semantic Router 团队在 Hugging Face 上放出六个检查点：d3（约 26.09B，含 0.46B 视觉编码器）、d3-flash（约 8.4B）、d3-mini、d3-nano、d3-lite、d3-edge（约 0.6B）。许可证 Apache-2.0。旗舰基于 Qwen3.8-27B，其余基于不同规模的 Qwen3.5。调用形状几乎照抄 System One：<code>model.system_one(state=..., questions=...)</code>，本地也能用 <code>vllm-sr serve</code> 开出 <code>/v1/systemone</code>。</p>
+<p>和 Jev 的本质差别有三条。</p>
+<p>第一，能看。d3 接受多张 PNG / JPEG / WebP，以及 MP4 / WebM / MOV / MKV 视频，默认 2 帧/秒、最多 32 帧。智东西举的例子很具体：客户说搅拌机破了，附收据图和配送视频，一次请求里同时回答该由哪个团队处理、收据上有没有这台机器、包裹怎么送达。Jev 要把图和视频先转成文字，信息在预处理里就已经丢了一层。</p>
+<p>第二，能搬回家。权重公开，可在自有 GPU 上跑。模型卡给出的单卡数字：一张 AMD Instinct MI325X 上，文本请求中位延迟 54.4 毫秒，带图 290 毫秒，10 秒视频约 500 毫秒；Engine 模式下单卡文本大约 27 请求/秒。有开发者把 d3-lite 用 Core ML 打到 M5 Pro 的 Mac 上，给 1000 个 PR 做工作组分类，总耗时约 2 分钟。这些数字是厂商或社区自测，但方向清楚：决策模型开始变成可以塞进笔记本和边缘的零件。</p>
+<p>第三，榜上暂时领先。智东西引用的 Jev Decision Index 0.3.1：d3 文本 64.7、公开集 65.5，高于 Jev 的 60.1；视觉榜 71.6。d3 模型卡更新到 0.3.2 时自称文本 66.3、视觉 71.3，在 149 个文本条目里第一。独立站点在 10 月 12 日的再生榜上也写过 vLLM-SR d3 领先。必须立刻加的限制：Decision Index 的满分里大约 20% 来自公开集，50% 来自同技能私有题，30% 来自新域私有题，外人无法复现那 80%。它测的是广度上的准确率，不是校准。Jev 在 0.3.1 公开榜上仍是第一阵营，并没有被打出品类。</p>
+<p>Decision 3.0 的代价是运维。你要备 GPU、处理量化、对齐 kernel、自己做评测集。Jev 卖的是「阈值调好就能用」。对已经把判断写进生产、并且依赖那套 confidence 门槛的团队，搬家成本高于下载权重。对必须处理截图、单据、录像，或者数据不能出境的团队，d3 是更合理的第一选择。</p>
+<h3 id="24-vs-Microsoft-Decision-1-11">2.4 vs Microsoft-Decision-1</h3>
+<p>微软 10 月 9 日的稿件，作者是 CTO 办公室软件工程 VP Achint Srivastava。产品定位几乎逐句翻译 Jev：给固定选项打校准概率，用于路由、分类、优先级、校验、工作流控制、Agent 护栏。它从 Qwen3.5-9B 后训练，承诺以后会 rebase 到 MAI 和 OpenAI 模型。Foundry 文档里的请求路径是微软自己的 <code>/v1/systemone</code>，字段仍是 <code>state</code> 和 <code>questions</code>（noul / choice / score）。</p>
+<p>微软没有走「我们发明了品类」，走的是「我们在自己的生产里已经这么用了」：</p>
+<ul>
+<li>Xbox Research 用它处理超过 1 万条开放反馈，按研究员定好的主题归类，称质量接近 GPT-6 Sol，快 14 倍以上，便宜约 200 倍。</li>
+<li>Copilot 团队拿它做聊天和 Agent 回复质检，称与 GPT-5.6 Luna 接近，快 100 倍。</li>
+<li>值班工程师用它在日志和工单里检索相关知识，称比 LLM 更好更快。</li>
+<li>Microsoft Discovery 用它给科学实验的自适应重规划打分，称一致性是 LLM 打分的 46 倍。</li>
+</ul>
+<p>自家 36 项、近 15 万题的对比里，微软称 Decision-1 准确率最高；P50 延迟大约是 GPT-6 Sol 的 1/35，比当时第二的 H2O-Lightning-4B v1.1 快 2.5 倍。稳健性测试：八种扰动平均 1.3% 的决策翻转，选项描述改写或选项顺序打乱时零翻转。定价与 Jev 相同：0.042 美元/百万输入，输出免费。OpenRouter 列出的上下文大约 32k。</p>
+<p>对已经在 Azure 里跑 Copilot 和工作流的企业，Decision-1 的意义是采购路径，不是算法故事。它降低了「决策模型」进入安全审查名单的摩擦。对 Jev 的压力来自价签对齐：微软用 9B 后训练模型，按同一单价出售，还附带 Foundry 的合规包装。Jev 若不能在校准、高基数选项和一致性上拿出可复核的差距，企业会问一句：为什么不买微软的？</p>
+<p>智东西引用的 0.3.1 榜上，Decision-1 文本 53.2，低于 d3 和 Jev。微软的回应写在自己的稿件里：他们拿 JevBench 上的热门公开模型，到另外 36 个公开加私有基准上测，Decision-1 更会泛化。两套榜互相不认，是这个品类眼下的常态。</p>
+<h3 id="25-vs-OpenAI-Decisions-API-12">2.5 vs OpenAI Decisions API</h3>
+<p>OpenAI 10 月 6 日把 Decisions API 放进公开 beta。社区公告写：让应用近实时选择模型、工具或动作；由 GPT-6 Luna 驱动；输入可以是文本和图像；三种输出是 predicate（命题为真的概率）、choice、score。定价 0.10 美元/百万输入 token，大约是 Jev 的 2.4 倍，输出同样免费。官方称比同一模型走 Responses API 做决策快最多约 10 倍。Node SDK 在同一天出现了独立的 <code>client.decisions.create</code>。</p>
+<p>这是实验室路线。它没有宣称新架构或 RLCD，而是给已经会聊天的模型开了一条更快的决策通道。优点是生态：账号、数据协议、图像输入、未来和 Responses / Agents 的衔接，都在同一栋楼里。缺点也清楚：它仍然是「大模型在做判断」，只是少写字、少收费。Jev 官宣里最得意的 40 到 200 倍速度差，对 OpenAI 自己的 Decisions 端点会缩小。</p>
+<p>对 Almeida 个人，这个对手有一层传记意味。他在 OpenAI 参与了让模型听话的方法，离开后去做不说话的模型。老东家没有否认品类，而是把品类收进 GPT-6 的产品矩阵。Jev 若只是「结构化输出的快模式」，OpenAI 可以在自己的栈里复制；Jev 必须证明并行采样加 RLCD 在校准和一致性上，仍然不是 Luna 套一层 schema 能替代的。</p>
+<h3 id="26-vs-Cloudflare-Clef-与开源平替-13">2.6 vs Cloudflare Clef 与开源平替</h3>
+<p>Clef 是 10 月 1 日的第一枪。27B 的 Clef 和 9B 的 Clef-flash，Apache-2.0，Workers AI 托管，Hugging Face 放权重。Cloudflare 写明：Jev 兼容，换模型名就能试。它强调三件事：有视觉编码器；上下文 64k（稿件里把它写成对 Jev 32k 的优势，对应的是 Jev 文档里 state+最长问题 32k 那一档，请求总预算其实已经是 64k）；以及客户可以微调。</p>
+<p>训练叙述比 TypeSafe 更透明。骨干冻结 Qwen，推理时只做 prefill，再对合法 schema 选项并行打分，非自回归。后训练用标签平滑交叉熵加 Brier loss，再把 RLCD 当作第二优化目标。Clef-flash 用的是 Qwen3.5-9B。Cloudflare 在自测的 10 项与决策相关的基准上，多数项目高于 Jev；中位延迟 Clef 209.3 毫秒、Clef-flash 38.8 毫秒，Jev 524.1 毫秒。TypeSafe 四项工作流上，Clef 在发票、客服、安全事件三项略高，Agent trace 一项略低。这些是厂商自测。</p>
+<p>独立测试并不完全站在 Cloudflare 一边。有开发者在 1048 道题上比较：Jev 1.13 正确 805 题（76.8%），Clef 27B 733 题，差异显著。同一文同意 Cloudflare 的一个短板：Clef-flash 在「以上都不是」这类选项上明显弱于 Jev（61% 对 86%）。Arize 的另一组测试则把 Jev、Clef 27B、Liquid d1 放在幻觉识别上只差一个百分点左右，并写「发布三周后，头部决策模型在准确率上已经商品化」。</p>
+<p>Kev 把商品化写得更刺眼：有报道称第一轮跨三个尺寸的训练大约只花了 95 美元租来的 GPU 时间，接口按 Jev 抄。Laya 以约 4 亿参数、能在 CPU 上跑、还带多语言作为卖点，但多家评测把它放在接近随机的位置，校准很差。开源平替证明了两件事：协议可以复制；复制之后质量方差极大。Jev 目前仍在「能直接设阈值」这一档里被人点名，Kev 在「可私有化微调」这一档被人点名。</p>
+<h3 id="27-维度对照-14">2.7 维度对照</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Jev</th>
+<th>Decision 3.0（d3）</th>
+<th>Microsoft-Decision-1</th>
+<th>OpenAI Decisions</th>
+<th>Cloudflare Clef</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出品方</td>
+<td>TypeSafe AI</td>
+<td>vLLM Semantic Router</td>
+<td>微软</td>
+<td>OpenAI</td>
+<td>Cloudflare</td>
+</tr>
+<tr>
+<td>公开时间</td>
+<td>2026-09-15</td>
+<td>约 2026-10-11</td>
+<td>2026-10-09</td>
+<td>2026-10-06</td>
+<td>2026-10-01</td>
+</tr>
+<tr>
+<td>形态</td>
+<td>封闭 API</td>
+<td>开源权重 + 可自托管</td>
+<td>Foundry / OpenRouter</td>
+<td>实验室 API</td>
+<td>托管 + Apache-2.0 权重</td>
+</tr>
+<tr>
+<td>骨干</td>
+<td>未公布</td>
+<td>Qwen3.8-27B</td>
+<td>Qwen3.5-9B 后训练</td>
+<td>GPT-6 Luna</td>
+<td>Qwen3.8-27B / 3.5-9B</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>仅文本</td>
+<td>文本 + 多图 + 视频</td>
+<td>文本（官方未强调视频）</td>
+<td>文本 + 图像</td>
+<td>文本 + 图像</td>
+</tr>
+<tr>
+<td>输出</td>
+<td>Choice / Score / Noul</td>
+<td>同左</td>
+<td>同左</td>
+<td>predicate / choice / score</td>
+<td>兼容 System One</td>
+</tr>
+<tr>
+<td>输入定价</td>
+<td>0.042 美元/百万 token</td>
+<td>自备算力</td>
+<td>0.042 美元/百万 token</td>
+<td>0.10 美元/百万 token</td>
+<td>Workers AI 计量；有报道约 0.24 美元/百万</td>
+</tr>
+<tr>
+<td>官方延迟量级</td>
+<td>70–500 毫秒</td>
+<td>文本中位约 55 毫秒（MI325X）</td>
+<td>称快于多数决策模型和 GPT-6 Sol</td>
+<td>称比 Responses 快最多约 10 倍</td>
+<td>中位约 209 / 39 毫秒</td>
+</tr>
+<tr>
+<td>微调</td>
+<td>不提供</td>
+<td>可自训</td>
+<td>未作为主卖点</td>
+<td>走实验室模型迭代</td>
+<td>明确提供 FDE / RL 微调</td>
+</tr>
+<tr>
+<td>中文 / 本地</td>
+<td>CJK 弱于英文；节点在美西</td>
+<td>可本地，基座是通义</td>
+<td>走 Azure 合规</td>
+<td>走 OpenAI 账号</td>
+<td>边缘节点</td>
+</tr>
+<tr>
+<td>当前叙事</td>
+<td>品类定义者、校准、高基数</td>
+<td>开源多模态、榜首</td>
+<td>企业生产、稳健性</td>
+<td>生态内决策通道</td>
+<td>兼容 + 视觉 + 可训</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="28-生态位与格局-15">2.8 生态位与格局</h3>
+<p>格局是「协议已定、实现混战」。Jev 填补的空白，是 2026 年夏天 Agent 系统里那一层又急又碎的判断。它没有消灭 LLM，而是把 LLM 从「什么都问它」里解放出来。大模型继续写代码、做多步推理、生成给人类看的文字；Jev 这类模型做路由、验收、过滤、分级。</p>
+<p>两强争霸还不成立。一边是 TypeSafe 的封闭旗舰，一边是 Qwen 后训练开源家族（d3、Clef、Decision-1 都从通义出发）。OpenAI 是第三条线：不承认自己只是套壳，但也不需要新公司来定义协议。用户真实选择已经开始分层：</p>
+<ul>
+<li>要零运维、选项很多、想直接拿 confidence 设阈值：先看 Jev。</li>
+<li>要看图看视频、要私有化、要本地：先看 Decision 3.0 或 Clef。</li>
+<li>人在 Azure / 微软安全边界里：Decision-1 是最小阻力。</li>
+<li>人已经在 OpenAI 栈里：Decisions API 少接一条新供应商。</li>
+<li>要自己的标签数据：Clef 的微调叙事和 Kev 的可训开源，比 Jev 的「全员同一套权重」更对口。</li>
+</ul>
+<p>Jev 仍占品类命名权。Decision Index、JevBench、甚至开源项目名里的 Jev-style、AnyJev、JEV-27B，都在用它的名字当单位。这是心智胜利。心智胜利能维持溢价多久，取决于校准能不能被第三方测出来，以及文本-only 在多模态对手面前能守住多少生产场景。</p>
+<hr>
+<h2 id="三横纵交汇洞察-16">三、横纵交汇洞察</h2>
+<h3 id="31-历史如何塑造了当下位置-17">3.1 历史如何塑造了当下位置</h3>
+<p>Almeida 在 OpenAI 的工作，是让模型输出更像人想看的文字。那个成功把整个行业锁进聊天窗口。Jev 的位置，是他从同一条经验里抽出的反命题：人喜欢的文字，软件依赖不起。</p>
+<p>所以 TypeSafe 做了四件在当时看起来像自废武功的事。放弃生成，就得到并行采样和类型锁定。放弃客户微调，就得到一套全球共用的校准过的权重，阈值可以跨账号复用。放弃开源，就得到 24 天 75 亿美元估值的稀缺性。放弃多模态，就先把文本决策的延迟和价格打到软件经济学能接受的区间。</p>
+<p>每一项都在横轴上变成可攻击面。Decision 3.0 打多模态和开源。Clef 打微调和边缘。微软打价签与合规。OpenAI 打「你的决策通道本来就可以长在 GPT 上」。Jev 今天仍能排在第一阵营，是因为那四项自废武功先把它做成了唯一能被全行业抄的接口。抄袭是对标准的承认。标准的发明者一旦被抄，就要靠深一层的质量活下去。</p>
+<p>a16z 写「叙事违规」，指的是大实验室还在用类人智能替代软件工程师。Jev 的历史选择是相反的：把智能降级成零件，交给工程师去组合。这个选择让它站在开发者一边，也让它必须接受零件被替代的命运。螺丝发明者很难对螺丝收软件估值，除非这颗螺丝的公差（校准）短期无法复制。</p>
+<h3 id="32-优势与劣势的历史根源-18">3.2 优势与劣势的历史根源</h3>
+<p>今天能看见的强项，都能追到隐身期的决策。</p>
+<p><strong>强项一：接口像代码。</strong> 来自「输出空间先验」。软件之所以能设阈值、能组合、能把 Jev 塞进 100 毫秒的热路径，是因为 2024 年他们决定不返回字符串。</p>
+<p><strong>强项二：便宜到可以乱花。</strong> 来自并行采样和「输出免费」。杰文斯命名不是装饰。3 天 1 万亿 token 这种宣称，只有在单次判断便宜到接近噪声时才可能发生。Agent 里判断次数远多于「写一篇回复」的次数，价格弹性在这一层最大。</p>
+<p><strong>强项三：叙事完整。</strong> 来自创始人履历。InstructGPT 共同作者说「聊天解决不了自动化」，比一家无名分类公司说同一句话，更容易让开发者和资本同时相信。75 亿估值里，有相当一部分买的是这个人的反向 arc。</p>
+<p>今天能看见的包袱，也是同一组决策的利息。</p>
+<p><strong>包袱一：「零幻觉」说过头了。</strong> 类型安全在隐身期是正确的产品约束，写成营销句之后，被理解成判断不会错。独立基准又正好不测校准。卖点最硬的地方，证据最软。</p>
+<p><strong>包袱二：文本-only。</strong> 2026 年 9 月要先打速度，这个选择合理。10 月客服场景已经在塞收据照片和配送视频。预处理成文字，等于把多模态对手请到自己的主场门口。</p>
+<p><strong>包袱三：不能微调。</strong> 「同一套权重 + 请求里写规则」保证了校准叙事的干净，也拒绝了最赚钱的企业需求：用十年工单标签训一个只属于我的路由头。Clef 把微调写成产品，就是冲着这道门。</p>
+<p><strong>包袱四：封闭。</strong> 它让 TypeSafe 在 24 天内完成从种子到 75 亿的跳跃，也让 vLLM、Cloudflare、个人开发者可以在协议层合法地围猎。协议开放、权重大开的那一天，托管溢价只剩下 SLA、校准和 255 选项这种具体能力。</p>
+<p>准确率从来不是 Jev 的主场。钛媒体转引的 Banking77 数字是 Jev 81.0%、Claude Opus 5 84.4%；官方工作流里 Jev 67.8%、最强基线 74.1%。这些数字若大体属实，故事就更清楚：人们抢着用它，是因为它够快够便宜、输出能进代码，不是因为它更聪明。聪明留给 System Two。Jev 的历史任务是把 System One 从人脑类比，落成一项云服务。</p>
+<h3 id="33-未来三个剧本-19">3.3 未来三个剧本</h3>
+<ul>
+<li>
+<p><strong>最可能</strong>：决策模型变成和 embedding 类似的默认层。Jev 继续做托管标准，份额被开源 Qwen 系（d3 / Clef / 各种 9B）和云厂商（微软、OpenAI、Cloudflare）切开。TypeSafe 靠校准、高基数、企业 SLA 和 SDK 活在「贵一点但省心」的位置，估值从 75 亿往下修，但仍是品类里的 Elasticsearch 而不是 Lucene。Agent 框架会同时内置 Jev 和本地 d3-flash，热路径用小模型，争议样本升到 Jev 或大模型。多模态成为标配，Jev 若在 2027 年还不能看图，会从「默认」变成「文本专用」。</p>
+</li>
+<li>
+<p><strong>最危险</strong>：校准叙事被独立评测戳破，同时开源多模态在自有集上追平准确率。企业发现 90% confidence 并不对应 90% 正确，阈值策略失效，决策层退回「再叫一次 LLM 但用 JSON mode」。75 亿估值对应的是「新智能原语」，一旦被重新分类为「快分类器」，资本和开发者会一起离开。另一个危险变体是 OpenAI / 微软把决策通道做成账号内免费或近免费的附带能力，Jev 作为独立供应商失去存在理由。</p>
+</li>
+<li>
+<p><strong>最乐观</strong>：RLCD 和并行采样被证明在校准和一致性上有真实、可复现的优势，Jev 补上视觉，仍保持封闭。它成为软件里的默认 <code>if</code>，用量随 Agent 部署指数上升，杰文斯悖论兑现。TypeSafe 从模型公司长成决策基础设施公司，协议兼容层（Clef、d3）反而帮它把 System One API 推成行业标准，类似 Kubernetes 旁仍能长出 GKE。那时候 75 亿看起来像早鸟价。</p>
+</li>
+</ul>
+<p>我的判断偏「最可能」靠近「略悲观」的那一侧。品类是真的，Jev 作为命名者的位置也是真的。24 天 75 亿买的是窗口，窗口在 10 月上旬已经关上。智东西那篇文章的价值，不在于 d3 比 Jev 高几分，而在于它宣布：对手可以开源、可以看图、可以按同一份协议插进你的代码。Jev 的意义已经完成了前半句——把判断做成软件零件。后半句是零件会不会还印着 TypeSafe 的商标。</p>
+<p>回到用户那句最直白的问题：Jev 是什么，有什么意义。</p>
+<p>它是一个不会聊天的模型，专门给软件做判断。你给它一段状态和几个事先定义好的问题，它返回选项、分数或是非概率。快，便宜，输出能直接写进代码。创始团队来自把 ChatGPT 教听话的那条研究线，产品却站在聊天的反面。</p>
+<p>意义分三层，一层比一层硬。</p>
+<p>工程层：Agent 和业务自动化缺的不是更会写的模型，是一层可靠的微型判断。没有这层，系统会把路由、验收、过滤全部外包给生成模型，又贵又抖。有了这层，生成模型可以只在真正需要推理和成文的时候出场。Jev 把这层做成了可调用的云函数。</p>
+<p>产业层：它证明「不做生成」可以独立成一个融资叙事和一套 API 标准。三周内微软、OpenAI、Cloudflare、vLLM 全部按同一形状入场，说明这个空位是真的。开源多模态对手来得这么快，也说明空位一旦被指出，封闭模型守不住独家。</p>
+<p>认知层：过去四年行业默认智能的界面是对话。Jev 把界面改回函数。函数没有文采，但软件是由函数组成的。模型已经很能聊的那几年里，自动化没有随之而来，卡点往往就在这里：智能的形态和软件的形态合不上。Jev 合上了一小块。一小块就足以掀起品类；一小块也不足以支撑永久的 75 亿溢价。</p>
+<p>对要不要用它，可以用更具体的规则来选。判断题是封闭的、发生频率高、需要进控制流、英文为主、可以接受数据出境：值得先拿 Jev 做基线，用自己的几百条标注设阈值。判断题带着截图或录像、必须私有化、要吃中文工单或历史标签：直接看 Decision 3.0 或 Clef，把 Jev 当作协议说明书来读。需要写字、需要开放域推理、需要解释给人类看：它帮不上，那是 LLM 的活。</p>
+<hr>
+<h2 class="sources-h" id="四信息来源-20">四、信息来源</h2>
+<ol>
+<li><a href="https://typesafe.ai/">TypeSafe 官网</a> — 访问日期 2026-10-13 — 反向研究方向、RLCD、首页 193.6x / 444.6x 宣称、0.042 美元/百万 token</li>
+<li><a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">Introducing System One Models &amp; Jev（Diogo Almeida）</a> — 访问日期 2026-10-13 — 发布日主张、与 LLM 对照、命名来源、Doom / Wikiracing、工作流评测限定</li>
+<li><a href="https://docs.typesafe.ai/models">TypeSafe Models 文档</a> — 访问日期 2026-10-13 — <code>jev-1.13.0</code>、定价、64k/32k 上下文、仅文本、不可微调、CJK 限制、限流</li>
+<li><a href="https://docs.typesafe.ai/concepts/system-one">TypeSafe System One 概念文档</a> — 访问日期 2026-10-13 — Choice / Score / Noul、校准口径</li>
+<li><a href="https://a16z.com/announcement/investing-in-typesafe-ai/">a16z：Investing in TypeSafe AI</a> — 访问日期 2026-10-13 — 领投声明、3 天 1 万亿 token、25% Fortune 500、Jev-ons paradox</li>
+<li><a href="https://techcrunch.com/2026/10/09/the-maker-of-non-text-ai-model-jev-valued-at-7-5b-just-weeks-after-launch/">TechCrunch：Jev 开发商估值 75 亿美元</a> — 访问日期 2026-10-13 — 8.7 亿美元、a16z / Sequoia / DCVC、联合创始人、三分之一 Fortune 500 宣称</li>
+<li><a href="https://openai.com/index/instruction-following/">OpenAI：Aligning language models to follow instructions</a> — 访问日期 2026-10-13 — Diogo Almeida 为 InstructGPT 共同作者</li>
+<li><a href="https://arxiv.org/abs/2203.02155">InstructGPT 论文 arXiv:2203.02155</a> — 访问日期 2026-10-13 — RLHF 指令跟随方法</li>
+<li><a href="https://siliconangle.com/2026/09/16/typesafe-ai-exits-stealth-with-40m-to-build-ai-for-use-by-software/">SiliconANGLE：TypeSafe 退出隐身与 4000 万美元种子轮</a> — 访问日期 2026-10-13 — DCVC 领投、Forbes 2 亿美元估值传闻</li>
+<li><a href="https://mp.weixin.qq.com/s/eHLq5VezHjPZA_hveu8qBw">智东西：0.6B 起！Jev 对手模型来了</a> — 访问日期 2026-10-13 — Decision 3.0 系列、0.3.1 榜、微软 Decision-1、应用示例</li>
+<li><a href="https://huggingface.co/vllm-sr/d3">Hugging Face：vllm-sr/d3</a> — 访问日期 2026-10-13 — 参数量、多模态、延迟、Decision Index 0.3.2、Apache-2.0</li>
+<li><a href="https://huggingface.co/collections/vllm-sr/decision-30">Hugging Face：Decision 3.0 Collection</a> — 访问日期 2026-10-13 — 六档模型</li>
+<li><a href="https://commandline.microsoft.com/microsoft-decision-1-model-foundry/">微软：Introducing Microsoft-Decision-1</a> — 访问日期 2026-10-13 — 产品定位、内部用例、定价、稳健性 1.3%</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-microsoft-decision">Microsoft Learn：在 Foundry 使用 Microsoft-Decision-1</a> — 访问日期 2026-10-13 — API 形状</li>
+<li><a href="https://openrouter.ai/microsoft/microsoft-decision-1">OpenRouter：Microsoft-Decision-1</a> — 访问日期 2026-10-13 — 0.042 美元定价、32k 上下文、2026-10-09 发布</li>
+<li><a href="https://community.openai.com/t/decisions-api-is-now-available-in-public-beta/1403877">OpenAI 开发者社区：Decisions API Public Beta</a> — 访问日期 2026-10-13 — 2026-10-06、gpt-6-luna、0.10 美元/百万 token</li>
+<li><a href="https://blog.cloudflare.com/clef-decision-models/">Cloudflare：Introducing Clef</a> — 访问日期 2026-10-13 — 2026-10-01、开源、视觉、微调、自测延迟与基准、训练方法</li>
+<li><a href="https://news.qq.com/rain/a/20260925A03QPJ00">钛媒体：不写字的 AI 凭什么刷屏</a> — 访问日期 2026-10-13 — 社区热度、用法、antirez / Raschka 评论、Banking77 转引数字（二手，需折扣）</li>
+<li><a href="https://virtualuncle.com/jev-decision-index-calibration/">Jev Got Benchmarked Twice. Neither Tested Calibration.</a> — 访问日期 2026-10-13 — Decision Index 不测校准</li>
+<li><a href="https://www.jevdirectory.org/resources/apolinario-decision-index">Decision Index 说明（JevDirectory）</a> — 访问日期 2026-10-13 — 20/50/30 权重、延迟门槛</li>
+<li><a href="https://arize.com/blog/decision-model-benchmark/">Arize：Decision model benchmark</a> — 访问日期 2026-10-13 — Jev / Clef / Liquid / Kev 对照，商品化判断</li>
+</ol>
+<h2 id="五方法论说明-21">五、方法论说明</h2>
+<p>本文采用横纵分析法（Horizontal-Vertical Analysis）。纵轴沿时间还原对象的生命历程，横轴在当前截面与同类对比，两条轴交汇后给出判断。方法论由数字生命卡兹克提出；本报告由玉笛百科撰写。</p>
+<p>融资客户数、3 天 1 万亿 token、Fortune 500 占比均为公司或投资人宣称，正文已标明。Decision Index 含大比例私有题，不能当作可复现的能力证明。校准是 Jev 的核心卖点，截至本报告撰写日，仍缺少可公开复核的 ECE / 可靠性曲线。搜不到的细节（Jev 参数量、完整客户名单、RLCD 论文）标为未公开，不编造。</p>
+  </article>
+</div>
+
+<footer class="site-foot">
+  <p>玉笛百科 · 横纵分析法深度研究报告 · 玉笛百科 · 2026年10月13日</p>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var topbar = document.getElementById("topbar");
+  var bar = document.getElementById("progress-bar");
+  var themeBtn = document.getElementById("theme-toggle");
+  var tocWrap = document.getElementById("toc-wrap");
+  var tocToggle = document.getElementById("toc-toggle");
+  var tocClose = document.getElementById("toc-close");
+  var tocBackdrop = document.getElementById("toc-backdrop");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function stored(key, fallback) {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  var theme = stored("hv-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  var size = stored("hv-size", "md");
+  root.setAttribute("data-theme", theme);
+  root.setAttribute("data-size", size);
+
+  function syncThemeLabel() {
+    var dark = root.getAttribute("data-theme") === "dark";
+    themeBtn.textContent = dark ? "浅色" : "深色";
+    themeBtn.setAttribute("aria-pressed", dark ? "true" : "false");
+  }
+  syncThemeLabel();
+
+  themeBtn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    save("hv-theme", next);
+    syncThemeLabel();
+  });
+
+  var sizes = ["sm", "md", "lg"];
+  document.getElementById("size-down").addEventListener("click", function () {
+    var i = Math.max(0, sizes.indexOf(root.getAttribute("data-size")) - 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+  document.getElementById("size-up").addEventListener("click", function () {
+    var i = Math.min(sizes.length - 1, sizes.indexOf(root.getAttribute("data-size")) + 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+
+  var links = [].slice.call(document.querySelectorAll(".toc a"));
+  var headings = [].slice.call(document.querySelectorAll(".article h2, .article h3"));
+
+  function syncToc() {
+    var probe = topbar.offsetHeight + 48;
+    var activeId = null;
+    headings.forEach(function (h) {
+      if (h.id && h.getBoundingClientRect().top <= probe) activeId = h.id;
+    });
+    if (!activeId && headings[0]) activeId = headings[0].id;
+    links.forEach(function (a) {
+      var id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+      a.classList.toggle("is-active", id === activeId);
+    });
+  }
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = p + "%";
+    topbar.classList.toggle("is-scrolled", window.scrollY > 16);
+    syncToc();
+  }
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  function setToc(open) {
+    root.classList.toggle("toc-open", open);
+    tocToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  tocToggle.addEventListener("click", function () {
+    setToc(!root.classList.contains("toc-open"));
+  });
+  tocClose.addEventListener("click", function () { setToc(false); });
+  tocBackdrop.addEventListener("click", function () { setToc(false); });
+  links.forEach(function (a) {
+    a.addEventListener("click", function () { setToc(false); });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setToc(false);
+  });
+
+  if (reduce) return;
+})();
+</script>
+</body>
+</html>
