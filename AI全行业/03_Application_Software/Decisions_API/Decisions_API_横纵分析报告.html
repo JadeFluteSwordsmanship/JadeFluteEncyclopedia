@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-size="md">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Decisions API横纵分析报告</title>
+<style>
+:root {
+  --ink: #15232c;
+  --ink-soft: #2a3d46;
+  --paper: #f2f5f3;
+  --paper-2: #e7eeea;
+  --jade: #2f7a64;
+  --jade-deep: #1f5648;
+  --jade-soft: rgba(47, 122, 100, 0.12);
+  --muted: #4a5c61;
+  --hair: #cdd8d3;
+  --card: #ffffff;
+  --shadow: 0 18px 40px rgba(21, 35, 44, 0.08);
+  --cover: #15232c;
+  --cover-ink: #eaf3ef;
+  --cover-muted: rgba(234, 243, 239, 0.68);
+  --warn: #8b4a3a;
+  --warn-soft: rgba(139, 74, 58, 0.1);
+  --ok-soft: rgba(47, 122, 100, 0.1);
+  --base-soft: rgba(74, 92, 97, 0.08);
+  --radius: 8px;
+  --sidebar: 17.25rem;
+  --measure: 42rem;
+  --topbar: 3.5rem;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SFMono-Regular", "Cascadia Mono", "Consolas", "Liberation Mono", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --ink: #e4ece8;
+  --ink-soft: #c5d2cc;
+  --paper: #12181a;
+  --paper-2: #1a2225;
+  --jade: #6eb89f;
+  --jade-deep: #8fd0ba;
+  --jade-soft: rgba(110, 184, 159, 0.14);
+  --muted: #9aada8;
+  --hair: #2c3a3d;
+  --card: #1a2225;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --cover: #101618;
+  --cover-ink: #e4ece8;
+  --cover-muted: rgba(228, 236, 232, 0.64);
+  --warn: #d08978;
+  --warn-soft: rgba(208, 137, 120, 0.14);
+  --ok-soft: rgba(110, 184, 159, 0.14);
+  --base-soft: rgba(154, 173, 168, 0.1);
+}
+
+[data-size="sm"] { --body-size: 15.5px; }
+[data-size="md"] { --body-size: 17px; }
+[data-size="lg"] { --body-size: 19px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  scroll-padding-top: calc(var(--topbar) + 0.8rem);
+}
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-size: var(--body-size);
+  line-height: 1.85;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .topbar, .progress span, .toc a, .theme-btn, .toc-drawer {
+    transition: background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.skip {
+  position: absolute;
+  left: 0.8rem;
+  top: -3rem;
+  background: var(--jade);
+  color: #f4faf7;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius);
+  z-index: 80;
+}
+.skip:focus { top: 0.6rem; }
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--jade);
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.1rem;
+  color: var(--cover-ink);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+.topbar.is-scrolled {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border-bottom-color: var(--hair);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .topbar.is-scrolled { background: var(--paper); backdrop-filter: none; }
+}
+
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  font-weight: 650;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.brand small {
+  display: block;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 0.68rem;
+}
+
+.top-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar.is-scrolled .top-title { opacity: 0.86; }
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.icon-btn:focus-visible,
+.toc a:focus-visible,
+.article a:focus-visible {
+  outline: 2px solid var(--jade);
+  outline-offset: 2px;
+}
+.icon-btn[aria-pressed="true"] { border-color: color-mix(in srgb, currentColor 28%, transparent); }
+.toc-toggle { display: none; }
+
+.cover {
+  min-height: 100dvh;
+  background: var(--cover);
+  color: var(--cover-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5.5rem 8vw 4.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -18% auto;
+  width: min(52vw, 34rem);
+  height: min(52vw, 34rem);
+  background: radial-gradient(circle, rgba(47, 122, 100, 0.22), transparent 68%);
+  pointer-events: none;
+}
+.cover-inner {
+  position: relative;
+  max-width: 48rem;
+}
+.cover-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--jade);
+  font-weight: 650;
+  margin: 0 0 1.1rem;
+}
+.cover h1 {
+  font-size: clamp(2.35rem, 6vw, 4.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 670;
+  margin: 0;
+  max-width: 14ch;
+  padding-bottom: 0.15em;
+}
+.cover-sub {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.45;
+  color: var(--cover-muted);
+  max-width: 28ch;
+  font-weight: 400;
+}
+.cover-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--jade);
+  border: 0;
+  margin: 1.7rem 0 1.4rem;
+}
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  color: var(--cover-muted);
+  font-size: 0.92rem;
+}
+.cover-meta span { white-space: nowrap; }
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  gap: 0 2.5rem;
+}
+
+.toc-wrap {
+  position: sticky;
+  top: var(--topbar);
+  align-self: start;
+  height: calc(100dvh - var(--topbar));
+  padding: 2rem 0 2.5rem;
+  overflow: auto;
+  border-right: 1px solid var(--hair);
+  padding-right: 1.2rem;
+}
+.toc-close { display: none; }
+.toc-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin: 0 0 0.9rem;
+  font-weight: 650;
+}
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc li { margin: 0; }
+.toc .depth-2 { margin-top: 0.55rem; }
+.toc .depth-2:first-child { margin-top: 0; }
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  padding: 0.38rem 0.6rem 0.38rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.toc a:hover { color: var(--ink); }
+.toc a.is-active {
+  color: var(--jade-deep);
+  border-left-color: var(--jade);
+  background: var(--jade-soft);
+  font-weight: 600;
+}
+.toc .depth-3 a {
+  font-size: 0.8rem;
+  padding-left: 1.35rem;
+}
+.toc-kind {
+  display: inline-block;
+  width: 0.9rem;
+  font-size: 0.68rem;
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.article {
+  max-width: var(--measure);
+  padding: 2.4rem 0 5rem;
+  min-width: 0;
+}
+
+.article > .summary,
+.article > .lead-band {
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--jade);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.4rem 1.2rem;
+  margin: 0 0 2.4rem;
+  box-shadow: none;
+}
+.article > .summary > h2:first-child,
+.article > .lead-band > h2:first-child {
+  margin-top: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--jade-deep);
+}
+.article > .summary > h2:first-child::after,
+.article > .lead-band > h2:first-child::after {
+  display: none;
+}
+.article > .summary > p:first-of-type,
+.article > .lead-band > p:first-of-type {
+  font-size: 1.12em;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.article h2 {
+  font-size: 1.58rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 2.8rem 0 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.article h2::after {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 2px;
+  background: var(--jade);
+  margin-top: 0.7rem;
+}
+.article h3 {
+  font-size: 1.18rem;
+  line-height: 1.4;
+  margin: 2rem 0 0.7rem;
+  font-weight: 680;
+  color: var(--ink);
+}
+.article h4 {
+  font-size: 1.02rem;
+  margin: 1.5rem 0 0.45rem;
+  color: var(--ink-soft);
+  font-weight: 650;
+}
+
+.article p { margin: 0.85rem 0; }
+.article p:first-child { margin-top: 0; }
+
+.article a {
+  color: var(--jade-deep);
+  text-underline-offset: 0.18em;
+}
+.article a:hover { color: var(--jade); }
+
+.article strong { font-weight: 670; color: var(--ink); }
+
+.article ul, .article ol {
+  margin: 0.7rem 0 1rem;
+  padding-left: 1.35rem;
+}
+.article li { margin: 0.28rem 0; }
+.article li::marker { color: var(--jade); }
+
+.article blockquote {
+  margin: 1.3rem 0;
+  padding: 0.2rem 0 0.2rem 1.05rem;
+  border-left: 3px solid var(--jade);
+  color: var(--ink-soft);
+  background: transparent;
+  font-style: normal;
+}
+.article blockquote p { margin: 0.35rem 0; }
+
+.article hr {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 2rem 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.3rem 0 1.6rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+}
+.article thead th {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: left;
+  font-weight: 650;
+  padding: 0.7rem 0.85rem;
+  white-space: nowrap;
+}
+[data-theme="dark"] .article thead th {
+  background: #0c1214;
+  color: var(--ink);
+}
+.article td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: top;
+}
+.article tbody tr:last-child td { border-bottom: 0; }
+.article tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+
+.article pre, .article code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+.article code {
+  background: var(--paper-2);
+  padding: 0.08em 0.35em;
+  border-radius: 4px;
+}
+.article pre {
+  background: var(--cover);
+  color: var(--cover-ink);
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.article pre code { background: none; padding: 0; color: inherit; }
+.article img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.scenario {
+  margin: 1.2rem 0 1.6rem;
+  padding: 1.15rem 1.2rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--hair);
+  background: var(--card);
+}
+.scenario > h3:first-child,
+.scenario > h4:first-child {
+  margin-top: 0;
+}
+.scenario-up { background: var(--ok-soft); border-color: color-mix(in srgb, var(--jade) 35%, var(--hair)); }
+.scenario-base { background: var(--base-soft); }
+.scenario-down { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, var(--hair)); }
+
+.article .sources-h + *,
+.sources {
+  font-size: 0.92em;
+  color: var(--ink-soft);
+}
+
+.site-foot {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.site-foot p { margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--hair); }
+
+.toc-backdrop {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  html.toc-open { overflow: hidden; }
+  .toc-toggle { display: inline-flex; }
+  .toc-close { display: inline-flex; position: absolute; top: 0.85rem; right: 0.7rem; }
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 0 1.1rem 3rem;
+  }
+  .toc-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: min(20rem, 86vw);
+    background: var(--paper);
+    z-index: 70;
+    padding: 4.4rem 1rem 1.5rem;
+    transform: translateX(-105%);
+    border-right: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+  }
+  html.toc-open .toc-wrap { transform: translateX(0); }
+  .toc-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 24, 26, 0.42);
+    z-index: 65;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.toc-open .toc-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .cover { padding: 5rem 1.25rem 3rem; }
+  .cover h1 { max-width: none; }
+  .article { padding-top: 1.6rem; }
+}
+
+@media print {
+  .progress, .topbar, .toc-wrap, .toc-backdrop, .site-foot { display: none !important; }
+  .layout { display: block; max-width: none; padding: 0; }
+  .cover { min-height: auto; padding: 1.5cm 0; break-after: page; }
+  .article { max-width: none; padding: 0; }
+  a { text-decoration: none; color: inherit; }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#article">跳到正文</a>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#cover">玉笛百科<small>JADE FLUTE</small></a>
+  <div class="top-title" id="top-title">Decisions API</div>
+  <div class="top-actions">
+    <button class="icon-btn toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-wrap">目录</button>
+    <button class="icon-btn" id="size-down" type="button" title="减小字号" aria-label="减小字号">A-</button>
+    <button class="icon-btn" id="size-up" type="button" title="增大字号" aria-label="增大字号">A+</button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false">深色</button>
+  </div>
+</header>
+
+<section class="cover" id="cover">
+  <div class="cover-inner">
+    <p class="cover-kicker">横纵分析</p>
+    <h1>Decisions API</h1>
+    <p class="cover-sub">软件要的是判断，混元还停在写字</p>
+    <hr class="cover-rule">
+    <div class="cover-meta"><span>AI 应用软件 / 决策模型 / 模型网关 · 概念（协议与产品族）兼内部接入层</span><span>2026年10月14日</span><span>约 12225 字</span><span>阅读 27 分钟</span><span>玉笛百科</span></div>
+  </div>
+</section>
+
+<div class="toc-backdrop" id="toc-backdrop"></div>
+
+<div class="layout">
+  <aside class="toc-wrap" id="toc-wrap">
+    <button class="icon-btn toc-close" id="toc-close" type="button">关闭</button>
+    <p class="toc-label">目录</p>
+    <nav aria-label="章节">
+      <ol class="toc"><li class="depth-2"><a href="#核心结论速览-1">核心结论速览</a></li>
+<li class="depth-2"><a href="#一纵向分析从诞生到当下-2"><span class="toc-kind" aria-hidden="true">纵</span>一、纵向分析：从诞生到当下</a></li>
+<li class="depth-3"><a href="#11-起源判断一直在接口一直错位20222025-3">1.1 起源：判断一直在，接口一直错位（2022–2025）</a></li>
+<li class="depth-3"><a href="#12-品类被命名Jev-把-System-One-做成函数2026-年-9-月-4">1.2 品类被命名：Jev 把 System One 做成函数（2026 年 9 月）</a></li>
+<li class="depth-3"><a href="#13-实验室把品类收进自己的栈2026-年-9-月-22-日10-月-6-日-5">1.3 实验室把品类收进自己的栈（2026 年 9 月 22 日–10 月 6 日）</a></li>
+<li class="depth-3"><a href="#14-四周竞赛开源云厂商中国云2026-年-10-月-6">1.4 四周竞赛：开源、云厂商、中国云（2026 年 10 月）</a></li>
+<li class="depth-3"><a href="#15-混元停在会写-JSON-的快模型到-2026-年-10-月-14-日-7">1.5 混元停在会写 JSON 的快模型（到 2026 年 10 月 14 日）</a></li>
+<li class="depth-3"><a href="#16-tt-switch切的是谁来写字不是谁来判断-8">1.6 tt-switch：切的是谁来写字，不是谁来判断</a></li>
+<li class="depth-2"><a href="#二横向分析竞争图谱-9"><span class="toc-kind" aria-hidden="true">横</span>二、横向分析：竞争图谱</a></li>
+<li class="depth-3"><a href="#21-竞品地图-10">2.1 竞品地图</a></li>
+<li class="depth-3"><a href="#22-Decisions-API-当前画像-11">2.2 Decisions API 当前画像</a></li>
+<li class="depth-3"><a href="#23-vs-Jev谁先定义协议谁先长进套件-12">2.3 vs Jev：谁先定义协议，谁先长进套件</a></li>
+<li class="depth-3"><a href="#24-vs-阿里云决策模型中国云已经开门-13">2.4 vs 阿里云决策模型：中国云已经开门</a></li>
+<li class="depth-3"><a href="#25-vs-微软-Decision-1采购路径不是协议创新-14">2.5 vs 微软 Decision-1：采购路径，不是协议创新</a></li>
+<li class="depth-3"><a href="#26-vs-混元栈槽位在-CMR模型在别处-15">2.6 vs 混元栈：槽位在 CMR，模型在别处</a></li>
+<li class="depth-3"><a href="#27-vs-tt-switch插头和插座-16">2.7 vs tt-switch：插头和插座</a></li>
+<li class="depth-3"><a href="#28-这种-API-究竟怎么被调用-17">2.8 这种 API 究竟怎么被调用</a></li>
+<li class="depth-3"><a href="#29-维度对照-18">2.9 维度对照</a></li>
+<li class="depth-3"><a href="#210-生态位与格局-19">2.10 生态位与格局</a></li>
+<li class="depth-2"><a href="#三横纵交汇洞察-20"><span class="toc-kind" aria-hidden="true">汇</span>三、横纵交汇洞察</a></li>
+<li class="depth-3"><a href="#31-历史如何塑造了当下位置-21">3.1 历史如何塑造了当下位置</a></li>
+<li class="depth-3"><a href="#32-优势与劣势的历史根源-22">3.2 优势与劣势的历史根源</a></li>
+<li class="depth-3"><a href="#33-未来三个剧本-23">3.3 未来三个剧本</a></li>
+<li class="depth-2"><a href="#四信息来源-24">四、信息来源</a></li>
+<li class="depth-2"><a href="#五方法论说明-25">五、方法论说明</a></li></ol>
+    </nav>
+  </aside>
+  <article class="article" id="article">
+<section class="summary"><h2 id="核心结论速览-1">核心结论速览</h2>
+<p><strong>一句话定义</strong>：Decisions API 是一条「不写字、只做有界判断」的专用接口：应用提交一段状态加一组类型化问题，模型返回概率、选项或量表，程序拿回来就能进 <code>if</code>。OpenAI 在 2026 年 10 月 6 日把它做成 <code>POST /v1/decisions</code>；混元（hy）截至 10 月 14 日公开文档里没有对等端点。司内口语里的 tt-switch，公网证据指向 Claude Code / Codex 一类工具的供应商切换器（CC Switch / TT switch），它切的是聊天协议，接不住一条还不存在的混元 Decisions。</p>
+<p><strong>关键判断</strong>：</p>
+<ol>
+<li>论坛问「hy 什么时候可以出 Decisions API」，问的是混元有没有一条和 OpenAI / Jev 同构的决策通道。公开事实停在这里：TokenHub 2026 年 10 月 13 日的 API 说明只列 Chat Completions、Responses、Anthropic Messages 和 <code>GET /v1/models</code>，模型表是 <code>hy3</code>、<code>hy4-preview</code>、DeepSeek、GLM、Kimi。分类决策在腾讯云上已经有一个槽位，但不在混元身上：模型路由 CMR 同一天更新的调度文档，把「分类决策模型（如 Jev 模型）」写成可选模态，意图路由可以「开启分类决策模型」。槽有了，混元自研决策模型还没有。</li>
+<li>这种 API 的主场是工作流和 Agent 套件外侧的闸门，不是 Cursor 对话里再冒出一个 MCP 工具。OpenAI 官方把密钥留在服务端，语音场景走 Live API 的 client-delegation：模型继续说话，应用在旁边调 Decisions、执行动作、把结果塞回去。Jev 社区把同一层做成 Claude Code 的 <code>PreToolUse</code> hook 和 Cursor 的 <code>beforeShellExecution</code>，主模型一 token 都不用花。MCP（<code>jev_decide</code>）可以嵌进对话，那是给 Agent「想起来再问」用的慢路径。Cursor 没有把 OpenAI <code>/v1/decisions</code> 做成内置工具，公网也查不到。</li>
+<li>「看 OpenAI 和其他厂商的接入速度，应该很容易吧？」协议层确实快。阿里云百炼已经提供 <code>POST /compatible-mode/v1/systemone</code>，模型 <code>decision-model-preview</code>，官方示例返回 <code>latency_ms: 52.9</code>，文档页更新到 2026 年 10 月 11 日。微软 10 月 9 日发布 Microsoft-Decision-1，价签对齐 Jev 的 0.042 美元/百万输入。Cloudflare Clef 更早，10 月 1 日。真正没出独立端点的是 Anthropic、Gemini、DeepSeek、Kimi 和混元。网关转发 Jev 或 Luna 是几天的活；训一套校准过的混元决策头、再让 tt-switch 多一种协议，是两件难度完全不同的事。后者容易，前者才是论坛在等的东西。</li>
+</ol>
+<p><strong>机会与风险</strong>：</p>
+<ul>
+<li>机会：内部工具要「简单快速的意图判断」，今天就能用三条现成路：CMR 意图路由挂 Jev、TokenHub 上 <code>hy3</code> 的 <code>json_schema</code> 凑合分类、或直连 OpenAI Decisions / 百炼 systemone。tt-switch 一旦多一种 Decisions 协议，Claude Code 热路径上的模型选择和工具闸门可以同时变便宜。</li>
+<li>风险：把 <code>hy3</code> 结构化输出当成 Decisions，延迟和校准都还在生成模型那一档。把 MCP 当成主接入方式，等于让会写字的模型决定要不要做判断，判断层的速度优势会被吃掉。混元若只抄接口、不抄校准，上线日会很快，可用性会很差。</li>
+</ul>
+<hr>
+</section><h2 id="一纵向分析从诞生到当下-2">一、纵向分析：从诞生到当下</h2>
+<blockquote>
+<p><strong>叙事主线</strong>：软件一直需要一种模糊的 <code>if</code>。行业先把判断塞进聊天模型，再发现聊天模型会写字、会幻觉、会按 token 收费。有人做出不会写字的决策模型，实验室和云厂商在四周内把同一套协议铺开。混元还停在「会写 JSON 的快模型」，tt-switch 还停在「切换谁来写字」。</p>
+</blockquote>
+<h3 id="11-起源判断一直在接口一直错位20222025-3">1.1 起源：判断一直在，接口一直错位（2022–2025）</h3>
+<p>客服工单该去哪个组、这条请求要不要调工具、这段补丁过不过测试，这些判断每天发生成千上万次。2018 年以后，固定标签分类器用 BERT 一类模型就能做，标签集在训练时冻死，场景一变就要重训。</p>
+<p>2022 年 8 月 10 日，OpenAI 上线 Moderation API。它是 GPT 系分类器，免费，输出一组有害内容类别的分数。用途很窄：内容审核，不是任意业务 schema。</p>
+<p>真正把「判断」送进应用开发者手里的，是 2023 年 6 月 13 日的 Function calling。<code>gpt-4-0613</code> 和 <code>gpt-3.5-turbo-0613</code> 可以输出 JSON 函数参数。模型仍在写字，只是字被规定成参数。2023 年 11 月的 JSON mode 保证合法 JSON，不保证字段对。2024 年 8 月 6 日 Structured Outputs 把 <code>strict: true</code> 写进 API，JSON Schema 被语法约束住。</p>
+<p>这一串升级解决了「解析失败」。没有解决「每次判断都要生成」。模型会在心里拟一篇分析，再把分析压成字段。延迟按秒计，输出按 token 加价，说出来的 95% 把握对不上长期正确率。Agent 一流行，这个错位被放大。一次能改仓库、开浏览器、跑测试的任务里，微型判断可能有几十上百次：现在该不该搜、这条结果还要不要、用户是在追问还是开新任务。每一问都请 Claude 或 GPT 想一遍，账单和尾延迟会先把产品杀死。</p>
+<p>2025 年 10 月 9 日，arxiv 上出现 <em>When to Reason: Semantic Router for vLLM</em>（2510.08731）。它做的是「这条请求要不要走推理」，在 MMLU-Pro 上宣称准确率加 10.2 个百分点、延迟降 47.1%、token 降 48.5%。2026 年 2 月的技术报告把路由写成 13 类信号加布尔决策引擎。这些工作服务的仍是 chat completions：分类器站在大模型门口，大模型继续写字。缺的是把分类器自己做成一种一等 API。</p>
+<p>内部工具链其实早就在用土办法填这个缺口。规则：关键词命中就走某个模型。小模型：用 7B、8B 先做一次分类，再把标签塞进路由表。Prompt：在系统提示词里写「只输出 billing 或 technical」。三条路都能跑，也一直在跑。规则太脆，同义词一变就漏。小模型要为每个标签集准备数据。Prompt 最灵活，也最贵最慢，输出偶发飘出 schema。论坛说「蛮多工具可以通过简单快速的意图判断猛猛提效」，指的是把这三条土办法收成一条稳定 API。土办法的存在，说明需求不是新的；独立端点的出现，说明旧接口已经劝退了足够多的人。</p>
+<h3 id="12-品类被命名Jev-把-System-One-做成函数2026-年-9-月-4">1.2 品类被命名：Jev 把 System One 做成函数（2026 年 9 月）</h3>
+<p>2026 年 9 月 15 日，TypeSafe AI 把 Jev 放进 early access。创始人 Diogo Almeida 是 InstructGPT / RLHF 论文的共同作者。官宣博客把产品写成 frontier-intelligence function call：非结构化状态进，带类型的概率决策出。官网第一句更硬：We took the opposite research direction。</p>
+<p>接口形状后来被所有人抄走。一次请求是 <code>state</code> 加一组 <code>questions</code>。输出只有三种原语：Choice（从给定选项里选一个）、Score（在有序刻度上打分）、Noul（某事是否成立，返回 0 到 1 的概率）。模型不生成文本。官方定价每百万输入 token 0.042 美元，输出免费；端到端延迟写 70 到 500 毫秒。训练方法自称 Reinforcement Learning for Calibrated Decisions（RLCD）：模型说 90% 把握，在代表性样本上大约应该对九成。文档自己写了限制：校准是在一组预测上度量的，不保证单条正确。「can't hallucinate」保证的是类型，不是真相。</p>
+<p>同一周，开发者开始把它塞进三个位置。模型路由：闲聊走小模型，写代码走贵模型。工具门槛：先问现在需不需要工具，再在锁死的工具名里选。验证与监督：大模型写完补丁，外面站一个不写评语、只打分的裁判。Agent 的骨架从「全程 LLM」变成「规则 + 决策模型 + LLM + 工具」。</p>
+<p>Jev 还给 Agent 工具链留了门。jevmodel.org 提供远程 MCP，工具名 <code>jev_decide</code> / <code>jev_noul</code> / <code>jev_choice</code> / <code>jev_score</code>，文档写明面向 Claude Code、Cursor、Cline。这条路径后来常被误读成「Decisions 就是 MCP」。它只是 Jev 的一种封装。官方设计仍然是应用自己 <code>POST /v1/systemone</code>。</p>
+<p>社区把同一层又往下凿了一格。有人在 Claude Code 清上下文：终端输出和工具结果先交给 Jev 打分，只把仍与当前任务相关的片段留给大模型。有人拿 Agent 执行记录问它：目标完成了没有、有没有漏项。有人用它在几十秒里拆几百条广告。这些用法有一个共同点：判断发生在主模型的上下文预算之外。主模型越贵，这一刀越值得。混元论坛里「简单快速的意图判断猛猛提效」，指的就是这一刀，不是再让 <code>hy3</code> 多写一段分析。</p>
+<h3 id="13-实验室把品类收进自己的栈2026-年-9-月-22-日10-月-6-日-5">1.3 实验室把品类收进自己的栈（2026 年 9 月 22 日–10 月 6 日）</h3>
+<p>2026 年 9 月 22 日，OpenAI changelog 发布 GPT-6 Sol 和 GPT-6 Luna，当时它们是生成模型。Luna 走 Responses API 时，输入 0.10 美元/百万 token，输出 0.50 美元，支持 function calling、structured outputs、streaming、prompt caching。</p>
+<p>7 天后的 DevDay（9 月 29 日），Decisions API 以 limited preview 亮相。官方 recap 写它会在 coming days 做更广的 release。</p>
+<p>10 月 6 日，公开 beta。社区帖创建于 UTC 20:53。changelog 同日。Python SDK PR #4033 20:50 开、21:09 合，发布进 v3.26.0；Node PR #2886 合进 7.30.0。官方指南把产品写成一句话：</p>
+<blockquote>
+<p>The Decisions API evaluates text, images, or both and returns typed answers about 10x faster than the Responses API.</p>
+</blockquote>
+<p>端点是 <code>POST <a href="https://api.openai.com/v1/decisions">https://api.openai.com/v1/decisions</a></code>。模型目前只有 <code>gpt-6-luna</code>。请求三块：<code>model</code>、<code>input</code>（文本或带 inline base64 图的 user 消息）、<code>questions</code>。输出三种：<code>predicate</code>（条件为真的概率）、<code>choice</code>（固定选项）、<code>score</code>（有序量表的概率加权平均）。另外还有 <code>refusal</code>。定价：Luna 走 Decisions 时只收输入 0.10 美元/百万 token，不收 cache-read、cache-write、output。官方明确对比：需要自定义 JSON 对象或 tool arguments 时，仍用 Responses；需要这三种答案时，才用 Decisions。</p>
+<p>OpenAI 没有宣称新架构或 RLCD。它给已经会聊天的 Luna 开了一条更快的决策通道。社区立刻拿它和 Jev 比。有人测图像输入在约 3 Mbps 网上大约 0.8 秒；有人在几百题小样本里看到 Jev 中位约 0.3 秒、Luna 约 1.6 秒。有人发现 predicate 校准较好，choice 会把 70% 的硬币压成 98% heads。这些是社区实验，不是官方 SLA。官方毫秒级延迟、独立 API Reference schema、GA 日期，截至本调研仍暂缺。指南只说 expect to GA in the coming weeks。</p>
+<p>语音是 OpenAI 相对 Jev 的差异化。文档 <em>Connect voice to Decisions</em> 规定 client-delegation：GPT-Live 继续说和听，应用在 <code>session.delegation.created</code> 之后自己调 Decisions，执行 <code>back</code> / <code>reload</code> / <code>noop</code> 这类动作，再用 <code>session.commentary.append</code> 让 Live 开口汇报。复杂请求可以把 <code>reason</code> 做成一个 choice，再转 Responses 上的推理模型。Luna 模型卡写明 Live 本身 Not supported。语音会话是 GPT-Live，Decisions 是应用在 delegation 窗口里的侧路调用。</p>
+<h3 id="14-四周竞赛开源云厂商中国云2026-年-10-月-6">1.4 四周竞赛：开源、云厂商、中国云（2026 年 10 月）</h3>
+<p>窗口被挤满的速度，比混元论坛里的等待更说明问题。</p>
+<p>10 月 1 日，Cloudflare 发布 Clef / Clef-flash，Apache-2.0，挂在 Workers AI，API 按 Jev 的 System One 形状兼容。骨干冻结 Qwen，推理只做 prefill，再对合法 schema 并行打分。厂商 43-eval 表上，Clef 中位 209.3 毫秒，Clef-flash 38.8 毫秒，同表 Jev 524.1 毫秒。changelog 把 Agent guardrails 写成「调工具前几十毫秒」。</p>
+<p>10 月 9 日，微软发布 Microsoft-Decision-1。基座是 Qwen3.5-9B 后训练，Foundry 路径 <code>{foundry}/providers/microsoft/v1/systemone</code>，定价直接写成 0.042 美元/百万输入、输出免费。稿件举 Xbox Research 超过 1 万条反馈、Copilot 质检、值班检索。附录把 GPT-6 Luna Decisions 列为对比对象。</p>
+<p>10 月 11 日前后，vLLM Semantic Router 开源 Decision 3.0。Hugging Face 上的 d3 能看多图和视频。模型卡 10 月 13 日在单卡 AMD MI325X 上测文本一问 p50 54.4 毫秒。智东西 10 月 12 日那篇「Jev 对手来了」，说的就是它。本百科已有单独的 Jev 横纵报告，这里只把它当作协议扩散的证据。</p>
+<p>同一窗口里，阿里云百炼上线了决策模型 API。帮助中心页写：<code>POST /compatible-mode/v1/systemone</code>，模型 <code>decision-model-preview</code>，一次前向返回分类、评分、是非判断及概率，不生成文本。问题类型是 choice / noul / score，和 Jev 同构。Python 示例直接 <code>pip install typesafe-sdk</code>。官方返回示例带 <code>latency_ms: 52.9</code>。模型信息页更新时间 2026 年 10 月 11 日，北京和新加坡两地标「限时免费」，限流 1200 RPM、200 万 TPM，上下文 65536，最大输出长度 0。中国云厂商里，公开把 System One 做成一等 API 的，目前能核到的是阿里。</p>
+<p>Anthropic 没有独立 Decisions。官方 ticket-routing 指南仍用 Messages + 小模型 + 强制 tool。Gemini 走 Interactions API 加 JSON Schema / <code>text/x.enum</code>。DeepSeek 补的是 Anthropic 兼容 <code><a href="https://api.deepseek.com/anthropic">https://api.deepseek.com/anthropic</a></code>。月之暗面 Kimi 公开兼容列表有 chat completions、responses、messages，没有 <code>/v1/decisions</code>。百川开放平台未见 systemone。这些实验室选择继续用生成模型做判断，只是把 JSON 约束得更死。</p>
+<h3 id="15-混元停在会写-JSON-的快模型到-2026-年-10-月-14-日-7">1.5 混元停在会写 JSON 的快模型（到 2026 年 10 月 14 日）</h3>
+<p>hy 是混元在内部和 TokenHub 上的简称。TokenHub 模型 ID 已经从 <code>hunyuan-turbos-*</code>、<code>hunyuan-t1-*</code>、<code>hunyuan-functioncall</code> 迁到 <code>hy3</code> / <code>hy3-preview</code> / <code>hy4-preview</code>。旧版 ChatCompletions 的 <code>Tools</code> 曾绑定在 turbos、t1、functioncall 上。新文档把 Function Calling、<code>response_format.json_schema</code>、深度思考、Cache 写进 <code>hy3</code> 和 <code>hy4-preview</code>。</p>
+<p>这些能力都还在写字。结构化输出保证字段形状，function call 保证工具参数 JSON，快思考（混元 Turbo S 那条「秒回」叙事，以及 TokenHub 的 <code>reasoning_effort</code>）缩短的是第一个生成 token。没有一条接口声明：我拒绝生成文本，只返回 predicate / choice / score。</p>
+<p>TokenHub API 使用说明最近更新 2026-10-13 15:50:30。域名 <code><a href="https://tokenhub.tencentmaas.com">https://tokenhub.tencentmaas.com</a></code>，鉴权 Bearer，<code>GET /v1/models</code> 示例里是 <code>hy3</code> 和 <code>deepseek-v4-pro</code>。兼容协议是 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages。<code>/v1/decisions</code> 和 <code>/v1/systemone</code> 在这一页上不存在。</p>
+<p>混元原生 API 概览（1729/101848）列的是 ChatCompletions、ImageQuestion、GetEmbedding、生图、翻译。产品动态页检索「Decisions / System One / 决策模型」无官方宣布。公开 roadmap 暂缺。司内论坛那句「hy 什么时候可以出 Decisions API」，公网零命中，按司内讨论处理，不编造帖文和时间表。</p>
+<p>腾讯云并不是没看见这个品类。CMR（Cloud Model Routing，产品 1829）2026 年 10 月 13 日 19:34:30 更新的《配置模型调度管理》写得很直白。步骤 1 选模态：文本生成、视频生成、向量嵌入、重排序、<strong>分类决策模型（如 Jev 模型）</strong>。步骤 3 意图路由有开关「开启分类决策模型」：开启后用本实例关联的分类决策模型做意图路由。客户端仍可走 OpenAI / Anthropic 兼容，Claude Code 文档把 <code>ANTHROPIC_MODEL=ModelRouter/auto</code> 指到 CMR。这是腾讯公有云上最接近 Decisions 的产品位。挂进去的决策模型，文档举例是 Jev，不是混元。</p>
+<p>旁边还有两层更老的「意图」：云原生智能网关的意图识别路由，先调一个 NLU 再按置信度阈值（文档推荐 0.70）打到业务模型；智能体开发平台的「大模型意图识别节点」，画布里最多 20 个意图。前者多一次生成调用，后者是工作流节点。它们能分流，给不出 Luna / Jev 那种校准概率原语。</p>
+<h3 id="16-tt-switch切的是谁来写字不是谁来判断-8">1.6 tt-switch：切的是谁来写字，不是谁来判断</h3>
+<p>公网没有腾讯官方把「tt-switch」登记成混元服务。能钉死的是同一形态的切换器。</p>
+<p>CC Switch 是开源桌面应用，仓库 <code>farion1231/cc-switch</code>，MIT，Tauri 2。它给 Claude Code、Claude Desktop、Codex、Gemini CLI、Grok Build、OpenCode、OpenClaw、Hermes 做供应商一键切换，可选本机 sidecar（默认 <code>127.0.0.1:15721</code>）做协议转换。腾讯云 TokenHub 官方文档（1823/136605、1823/136601）教如何在 CC Switch 里接 Token Plan 企业版和个人版：Anthropic 走 <code>.../plan/anthropic</code>，OpenAI Completions 走 <code>.../plan/v3</code>。v3.19.1 给 Codex 加了「Tencent Hunyuan」预设，直连 <code><a href="https://tokenhub.tencentmaas.com/v1">https://tokenhub.tencentmaas.com/v1</a></code>，<code>wire_api=responses</code>，模型 <code>hy3</code> / <code>hy3-preview</code>。GitHub issue #5592 要求加 Cursor 支持，被标重复后关闭，官方仍不支持 Cursor。</p>
+<p>一份公开笔记把这套东西直接写成「TT switch」，标题是 OpenCode Zen 接入 Claude Code / TT switch，行为与 CC Switch 一致：本机代理、<code>PROXY_MANAGED</code>、模型映射，并写明其他 provider 包含「腾讯内网」。验证命令是 <code>curl <a href="http://127.0.0.1:&amp;lt;TT_SWITCH_PORT&amp;gt;/v1/messages?beta=true">http://127.0.0.1:&amp;lt;TT_SWITCH_PORT&amp;gt;/v1/messages?beta=true</a></code>。</p>
+<p>据此可以下一个有证据的判断：腾讯员工口语里的 tt-switch / TT switch，很大概率就是 CC Switch 或内部 fork，用来把 Claude Code 在官方 Claude、腾讯内网、TokenHub 混元之间切换。它转换的是 Messages / Chat Completions / Responses。它不实现混元 Function Call，更没有 Decisions 协议。论坛说「让 tt-switch 接入下」，工程含义是：混元一旦有 <code>/v1/decisions</code> 或 <code>/v1/systemone</code>，在切换器里加一种协议、一个模型 ID，让内部工具沿用同一套 Key 和本地端口。司内若另有完全同名的网关服务，维护团队和内网 endpoint 公开材料暂缺，不编造。</p>
+<p>若只看「接入速度」，OpenAI 自己的动作其实也分两截。Luna 作为生成模型是 9 月 22 日发布的；Decisions 专用通道晚了 14 天。SDK 在公开 beta 同一小时合进主干，说明接口形状事先锁死了，不是上线当天现写。阿里在 10 月 11 日的模型信息页上已经把最大输出长度写成 0，这是产品经理愿意承认「这个模型不会说话」的标志。混元到 10 月 14 日仍把 hy3 的卖点写在深度思考和 Function Calling 上。思考越深，离 Decisions 越远。决策模型要的是浅、快、校准、类型锁死。</p>
+<p>纵向走到今天，故事卡在两截。外面：决策已经从「prompt 里求 JSON」变成独立端点，阿里比混元先把门开了。里面：tt-switch 很会给写字的模型换插头，判断这条线还插在生成模型的插座上。论坛把两截捏成一句话来问，听起来像一个功能请求，拆开是两个团队的活：模型侧要不要训头，网关侧要不要加协议。</p>
+<hr>
+<h2 id="二横向分析竞争图谱-9">二、横向分析：竞争图谱</h2>
+<blockquote>
+<p><strong>切面时间</strong>：2026 年 10 月 14 日。触发材料是司内论坛「hy 什么时候可以出 Decisions API，让 tt-switch 接入」。</p>
+</blockquote>
+<h3 id="21-竞品地图-10">2.1 竞品地图</h3>
+<p>这是场景 C。用户真正拿来对比的，不是「另一个聊天模型」，而是「谁能提供可嵌入控制流的判断」。选取六个代表：</p>
+<ol>
+<li><strong>OpenAI Decisions API</strong>：实验室给 Luna 开的专用通道，名字就是论坛在喊的那个词。</li>
+<li><strong>Jev / System One</strong>：品类定义者，MCP 和 hook 文档最全。</li>
+<li><strong>阿里云 <code>decision-model-preview</code></strong>：中国云上已经能买到的 System One。</li>
+<li><strong>Microsoft-Decision-1</strong>：企业采购路径上的官方决策模型。</li>
+<li><strong>混元 + TokenHub + CMR</strong>：腾讯侧现状，槽位和模型错位。</li>
+<li><strong>tt-switch / CC Switch</strong>：本地接入层，决定内部工具明天能不能用上第 1 到第 5 项。</li>
+</ol>
+<p>Cloudflare Clef 和 vLLM d3 在 Jev 专文里展开过，这里只在对照表里保留，避免把同一场四周竞赛写两遍。</p>
+<h3 id="22-Decisions-API-当前画像-11">2.2 Decisions API 当前画像</h3>
+<p>定位：应用服务器上的判断函数。官方 playground 让你先试 questions 和 input，再写代码。SDK 入口是 <code>client.decisions.create</code>。</p>
+<p>一次典型调用像这样：工单文本进 <code>input</code>，<code>questions</code> 里并行放「是否报损」（predicate）、「派哪个组」（choice）、「紧急度」（score）。回来的 <code>answers</code> 按 <code>name</code> 对齐。choice 和 score 带 <code>probabilities</code> 与 <code>confidence</code>。应用自己设阈值：高置信度自动执行，低的转人工或升级到推理模型。</p>
+<p>它明确不做什么。不写 tool arguments，不吐自定义 JSON 对象，不流式生成，beta 期间没有 prompt caching。图像必须 inline base64，不接受 URL 和 <code>file_id</code>。依赖前一答案的决策要拆成多次请求。</p>
+<p>目标用户是要把判断写进代码的人：网关、客服路由、Agent 套件、语音动作选择。商业模式沿用 OpenAI 账号和 ZDR / HIPAA。口碑从社区帖就能读到两极：有人立刻拿去分类反馈；有人警告不要用 choice 做校准敏感的概率，predicate 更老实。</p>
+<h3 id="23-vs-Jev谁先定义协议谁先长进套件-12">2.3 vs Jev：谁先定义协议，谁先长进套件</h3>
+<p>Jev 比 OpenAI Decisions 早 21 天进入 early access。开发者先记住的是 <code>state + questions</code> 和 noul/choice/score，不是 <code>input + predicate</code>。OpenAI 换了字段名，语义几乎一一对应：predicate ≈ noul。定价 Luna 约是 Jev 的 2.38 倍。Jev 官方延迟 70–500 毫秒，OpenAI 只给「约 10 倍于 Responses」。Jev 不能看图；Luna Decisions 能看 inline 图。Jev 权重封闭；OpenAI 走实验室账号。</p>
+<p>调用形态上，Jev 更早长进 Agent 套件。官方 MCP 面向 Cursor；社区 <code>jev-use</code> 给 Claude Code 提供 <code>PreToolUse</code> 闸门：Bash / Write / Edit 在执行前先问 Jev 是否可逆，主模型零 token。jevwiki 把同一套 hook 映射到 Codex、Cursor <code>beforeShellExecution</code>、opencode。OpenAI 的官方套件路径是语音 Live + 服务端 Decisions，不是 Cursor 插件。</p>
+<p>用户选 Jev，是因为文档、校准叙事、以及已经写好的 hook。用户选 OpenAI Decisions，是因为账号已经在、能看图、以后和 Responses / Agents 在同一栋楼。对腾讯内部，「合适的使用 API」这两家都能算合适，前提是数据能出境。出不了境，Jev 和 Luna 都过不了第一关。中文工单、中文代码评论、中文对话质检，Jev 文档自己写了 CJK 弱于英文、要自测。这是混元若出决策头，唯一不需要靠速度就能站住的理由：数据在境内，语言是主场。速度可以买开源 d3，语言和驻留买不来。</p>
+<p>OpenAI 把 Decisions 做成 Luna 的专用通道，还有一层组织含义。Almeida 在 OpenAI 参与了让模型听话，离开后去做不说话的模型。老东家没有否认品类，而是把品类收进 GPT-6 的产品矩阵。混元没有这个传记包袱，也没有 Luna 那种现成小模型通道被写进模型卡。它要抄，抄的是接口和训练目标，抄不了「我们本来就有一条更快的 Luna」。因此「应该很容易」如果指 SDK 加一个 <code>client.decisions.create</code>，是的；如果指 hy3 明天改个路由就能当闸门，公开材料不支持这个乐观。</p>
+<h3 id="24-vs-阿里云决策模型中国云已经开门-13">2.4 vs 阿里云决策模型：中国云已经开门</h3>
+<p>百炼的 <code>decision-model-preview</code> 走 TypeSafe System One，不是 OpenAI <code>/v1/decisions</code>。这对国内团队更省事：typesafe-sdk 换 <code>base_url</code> 就能打到北京或新加坡。工单分流示例一次请求问部门、是否升级、严重度，官方返回里 <code>latency_ms</code> 52.9、<code>confidence</code> 0.88 / 0.91。价格页写限时免费，不能当成长期单价。Function Calling、结构化输出、联网、微调，能力表上全是「不支持」——它承认自己不是生成模型。</p>
+<p>和混元比，阿里把「决策」做成了独立模型 ID 和独立路径。混元把「判断」继续塞在 <code>hy3</code> 的 <code>json_schema</code> 里。论坛里那句「司内好像没有合适的使用 api」，对照百炼这一页，落差非常具体：阿里的开发者今天能 <code>POST .../systemone</code>；腾讯的开发者今天能 <code>POST .../chat/completions</code> 然后自己解析 JSON。解析这一步看起来小，落到 Agent 热路径上就是：多一次 schema 失败重试、多一段被模型写出来的解释、多一截无法设阈值的假置信度。百炼把最大输出长度写成 0，就是为了从根上取消这三笔开销。</p>
+<p>阿里也没有宣布这套东西进了 CC Switch。Token Plan 文档有「接入决策模型」的评论审核教程，走的是 AI 工具扩展机制和 <code>/compatible-mode/v1/systemone</code>，仍然是应用侧调用。中国云赛道上，混元要追的第一名是这个端点，不是再发一个更快的 hy4。</p>
+<h3 id="25-vs-微软-Decision-1采购路径不是协议创新-14">2.5 vs 微软 Decision-1：采购路径，不是协议创新</h3>
+<p>Microsoft-Decision-1 抄的是 System One，价签对齐 Jev，基座是 9B 的 Qwen 后训练。它卖的是 Foundry 合规和「我们已经在 Xbox / Copilot 里用了」。对已经买 Azure 的企业，这降低安全审查摩擦。对腾讯，它提供一个参照：用现成的 Qwen 后训练，十天内可以做出可售的决策模型。混元自己有稠密和 MoE 权重，缺的不是基座，是把输出头从自回归生成改成并行打分，再配一套校准训练。微软稿件里的 35 倍、100 倍、200 倍都是对自家生成模型的相对值，不能直接拿来预测混元上线日。</p>
+<p>后训练这条路值得单独说一句。Clef、Decision-1、d3 的骨干都是 Qwen 家族，冻结或轻量后训练，推理时对合法选项并行打分。混元若坚持「必须用自研基座才叫 hy Decisions」，日历会比「先用混元或通义做一版后训练头、挂上 CMR」更长。论坛要的是能用的 api，商标写在哪家权重上是第二问。TokenHub 已经在卖 DeepSeek、GLM、Kimi，决策头哪怕第一版不是混元自家名字，只要路径在、数据不出境，tt-switch 就可以接。坚持名字正确、接口缺席，是把品牌顺序放在了提效前面。</p>
+<h3 id="26-vs-混元栈槽位在-CMR模型在别处-15">2.6 vs 混元栈：槽位在 CMR，模型在别处</h3>
+<p>把腾讯侧拆成三层，错位才会清楚。</p>
+<p><strong>模型层（hy3 / hy4-preview）</strong>：会聊天、会 tools、会 json_schema、会调 <code>reasoning_effort</code>。用它做意图判断，得到的是生成出来的标签。延迟跟生成走，校准没有官方成绩单。这是「可以凑合」，不是 Decisions。</p>
+<p><strong>网关层（TokenHub）</strong>：一 Key 调混元和第三方，协议停在写字。Cursor、CodeBuddy、Claude Code 的官方接入指南都指向这里。它今天切的是 <code>model</code> 字符串，不是 <code>questions</code> 数组。</p>
+<p><strong>路由层（CMR）</strong>：已经认识「分类决策模型」这个模态，举例 Jev，意图路由可开关。Claude Code 用 <code>ModelRouter/auto</code> 时，分流发生在网关，应用无感。这是腾讯云最接近「让 tt-switch 接入」的现成答案：tt-switch 把上游指到 CMR，CMR 挂 Jev 或未来的混元决策模型。混元自己不出模型，这个开关挂的就永远是别人的决策头。</p>
+<p>智能体画布上的意图识别节点适合客服机器人，不适合 IDE 热路径。LLM-WAF 做的是放行/拦截/代答，是安全策略，不是给 Agent 当 Decisions 用的概率 API。</p>
+<h3 id="27-vs-tt-switch插头和插座-16">2.7 vs tt-switch：插头和插座</h3>
+<p>tt-switch 解决的问题是：Claude Code 今天打官方 Anthropic，明天打 TokenHub <code>hy3</code>，后天打腾讯内网，不要手改一堆环境变量。它是插头。Decisions 是一种新插座。</p>
+<p>插头很好做。CC Switch 已经在 Completions、Responses、Anthropic Messages、Gemini Native 之间转换。再加 <code>/v1/decisions</code> 或 <code>/v1/systemone</code>，对切换器作者是增量协议。TokenHub 官方既然已经为 CC Switch 写了两页文档，混元 Decisions 一旦存在，最省事的分发就是：TokenHub 暴露端点，CC Switch / tt-switch 加预设，内部论坛那句话就算落地。</p>
+<p>插头解决不了插座空着。Cursor 还不受 CC Switch 支持，内部若主力是 Cursor，tt-switch 接入也喂不到对话里。那条路径要手改 Cursor 的 OpenAI 兼容 Base URL，或自建 MCP 把 Decisions 包成 tool。后者能用，会把判断重新塞回「模型决定调不调工具」的慢循环。</p>
+<h3 id="28-这种-API-究竟怎么被调用-17">2.8 这种 API 究竟怎么被调用</h3>
+<p>用户问：是接入工作流，还是像 Cursor 这样的 IDE 会通过 MCP 嵌在对话里触发？答案是四条路同时存在，快慢差一个数量级。主路不是 MCP。</p>
+<p><strong>第一条，应用侧路。这是 OpenAI 官方设计。</strong> 工单系统、网关、语音后端在服务端 <code>POST /v1/decisions</code>，密钥不进浏览器、不进 IDE。返回值进业务 <code>if</code>：派哪个队列、是否退款、要不要升级模型。Vercel AI Gateway 已经暴露兼容的 <code>/v1/decisions</code>，模型 ID 写成 <code>openai/gpt-6-luna-decisions</code>，AI SDK 有 <code>experimental_decide</code>。LangChain 一类编排器把决策节点画在图里，和「工作流」是同一件事。</p>
+<p><strong>第二条，Agent 套件钩子，对话外拦截。</strong> Claude Code <code>PreToolUse</code>、Cursor <code>beforeShellExecution</code>、Codex 同名 hook，在工具真正执行前问决策模型：这次 <code>rm</code> 可不可逆、这次 <code>git push</code> 要不要人看。<code>jev-use hook gate</code> 写明：主模型零 token，Jev 不可达则 fail open。这是 IDE 里最值钱的用法，而且用户看不见一次「工具调用」气泡。判断发生在套件层，不发生在对话层。</p>
+<p><strong>第三条，MCP 工具，对话内触发。</strong> Cursor 读 <code>.cursor/mcp.json</code>，Jev 的 MCP 提供 <code>jev_classify</code> / <code>jev_score</code> / <code>jev_check</code> / <code>jev_gate</code> / <code>jev_decide</code>。Agent 在任务中途「想起来」可以问一句。代价是：主模型必须先决定调用这个 tool，判断的延迟叠在一轮 function calling 上。MCP 文档自己也写：Jev 看不见对话和本地文件，state 要调用方喂全。把 Decisions 理解成「Cursor 里自动冒出来的意图判断」，和现有实现不符。OpenAI 没有官方 Decisions MCP。</p>
+<p><strong>第四条，网关意图路由，调用方无感。</strong> CMR <code>ModelRouter/auto</code>、云原生网关的 NLU 分流、Semantic Router 论文里的「何时推理」，请求进门时已经被打到便宜或昂贵的后端。应用仍发聊天协议。这是 tt-switch 最容易接的形态：切换器只换 Base URL，决策发生在上游。</p>
+<p>语音是第一条的变体。GPT-Live 不停，Decisions 在旁边选动作。幻灯片「下一页」走 choice，<code>reason</code> 再转推理模型。Cursor 聊天没有对等的 delegation 窗口。</p>
+<p>把四条路放进一条内部编码任务里，快慢差会变得非常具体。假设用户在 Claude Code 里说「把这次的错误日志归到哪个组和要不要热修」。主模型若自己用 tools 分类，至少要生成一串 JSON，再被解析，再决定下一步，前后一两秒很常见。若 PreToolUse 或服务端先打 Decisions：choice 选出 <code>platform</code> / <code>backend</code> / <code>client</code>，predicate 给出「是否热修」的概率，50 到 200 毫秒后规则引擎已经分支。主模型接到的是已经切好的上下文，只负责改代码。MCP 路径夹在中间：主模型先「想到」要调 <code>jev_decide</code>，写一次 tool call，等 MCP 返回，再继续。能用，比全程生成稳，比 hook 慢，而且模型可能根本想不起来调。</p>
+<p>Cursor 对话里的情形更苛刻。Agent 已经带着一长串 MCP。每多一个 tool，选错工具的概率上升。把 Decisions 做成其中之一，等于用贵模型去决定要不要用便宜模型。官方设计把这个决定从模型手里拿走：应用或套件在模型开口之前就问完。这是「嵌在对话中被触发」听起来方便、做起来亏的原因。</p>
+<p>所以：工作流 / 网关 / 套件 hook 是 Decisions 的主场；MCP 是可选的慢封装；把希望寄托在「对话模型自己触发」上，会把这个品类做回去。内部若只让 tt-switch 把混元 Decisions 暴露成又一个 chat model，开发者仍会用 prompt 求 JSON，论坛想要的提效不会出现。</p>
+<h3 id="29-维度对照-18">2.9 维度对照</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>OpenAI Decisions</th>
+<th>Jev</th>
+<th>阿里 decision-model-preview</th>
+<th>微软 Decision-1</th>
+<th>混元现状</th>
+<th>tt-switch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>公开时间</td>
+<td>2026-10-06 beta</td>
+<td>2026-09-15</td>
+<td>文档见 2026-10-11</td>
+<td>2026-10-09</td>
+<td>无独立端点</td>
+<td>社区工具；TokenHub 文档已教接入</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>POST /v1/decisions</code></td>
+<td><code>/v1/systemone</code> 或 <code>/v1/decide</code></td>
+<td><code>/compatible-mode/v1/systemone</code></td>
+<td>Foundry <code>/v1/systemone</code></td>
+<td>Chat Completions / Responses / Messages</td>
+<td>本地转换上述写字协议</td>
+</tr>
+<tr>
+<td>模型</td>
+<td><code>gpt-6-luna</code></td>
+<td><code>jev-latest</code> 等</td>
+<td><code>decision-model-preview</code></td>
+<td>Microsoft-Decision-1</td>
+<td><code>hy3</code> / <code>hy4-preview</code></td>
+<td>不生产模型</td>
+</tr>
+<tr>
+<td>原语</td>
+<td>predicate / choice / score</td>
+<td>noul / choice / score</td>
+<td>同 Jev</td>
+<td>同 Jev</td>
+<td>JSON / tool calls</td>
+<td>无</td>
+</tr>
+<tr>
+<td>输入价</td>
+<td>0.10 美元/百万 token</td>
+<td>0.042 美元/百万</td>
+<td>限时免费（长期价暂缺）</td>
+<td>0.042 美元/百万</td>
+<td>按生成模型计</td>
+<td>本机免费</td>
+</tr>
+<tr>
+<td>官方延迟</td>
+<td>约 10× Responses；无 ms</td>
+<td>70–500 ms</td>
+<td>示例 52.9 ms</td>
+<td>相对 GPT-6 Sol ~35×</td>
+<td>生成时延</td>
+<td>本机代理开销</td>
+</tr>
+<tr>
+<td>图像</td>
+<td>inline 图</td>
+<td>无</td>
+<td>文本</td>
+<td>文本为主</td>
+<td>视具体 hy 模型</td>
+<td>透传</td>
+</tr>
+<tr>
+<td>IDE 主路径</td>
+<td>服务端；语音 delegation</td>
+<td>MCP + PreToolUse hook</td>
+<td>应用扩展 / API</td>
+<td>Foundry</td>
+<td>无</td>
+<td>切 Claude Code / Codex 供应商</td>
+</tr>
+<tr>
+<td>国内合规</td>
+<td>美欧 residency</td>
+<td>美西节点</td>
+<td>北京 / 新加坡</td>
+<td>Azure</td>
+<td>国内 TokenHub</td>
+<td>可指内网</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="210-生态位与格局-19">2.10 生态位与格局</h3>
+<p>品类已经从「Jev 一家定义」变成「协议竞赛」。接口几乎同构，差异在延迟、校准、能否看图、数据驻留。格局是百花齐放，没有两强争霸。混元缺席的是模型，不是认知：CMR 文档把 Jev 写进模态列表，说明腾讯云产品侧已经把分类决策当成一等公民。tt-switch 站在客户端，生态位是「让内部 IDE 换上游」，它填补的空白是配置，不是智能。</p>
+<p>用户真实选择很分层。能出海的团队，OpenAI Decisions 和 Jev 今天就能嵌进工作流。必须留在国内的团队，阿里 systemone 是现成插座，腾讯 CMR+Jev 是网关插座，混元自己是空的。写 Claude Code 的人会催 tt-switch；写 Cursor 的人催了也暂时接不上，要另开 MCP 或手改 Base URL。CodeBuddy 走 TokenHub 官方接入，和 Cursor 一样吃的是写字协议，短时间内不会因为 tt-switch 多一个预设就自动出现意图闸门。谁在哪一种 IDE 里编码，决定了「接入」三个字落在 hook、MCP 还是网关。论坛把它们写成同一个需求，落地时会拆成三条补丁。</p>
+<hr>
+<h2 id="三横纵交汇洞察-20">三、横纵交汇洞察</h2>
+<h3 id="31-历史如何塑造了当下位置-21">3.1 历史如何塑造了当下位置</h3>
+<p>Function calling 把判断塞进会写字的模型，锁死了 2023 到 2025 年所有「智能路由」的样子：先生成，再解析，再重试。Jev 把生成拿掉，协议才能薄到可以当函数。OpenAI 用 Luna 另开端点，承认品类，但继承了「大模型做判断」的实验室路径，所以贵一点、官方延迟叙事也只敢写相对 Responses 的 10 倍。阿里直接兼容 System One，用 typesafe-sdk，等于承认协议标准已经不在自己手里。</p>
+<p>混元的历史选择是另一条：把 functioncall、turbos、t1 收进 <code>hy3</code>，把思考开关收成 <code>reasoning_effort</code>，把网关做成 TokenHub 三协议。这些选择让混元在 Coding Agent 里很好用，也让它错过「输出长度为零」这一跳。CMR 愿意挂 Jev，说明产品经理看见了缺口；模型侧还在优化写代码。缺口于是表现为论坛提问。</p>
+<p>tt-switch 的历史更短，路径更窄。它跟着 Claude Code 的 Anthropic 协议长出来，官方被 TokenHub 收编进接入文档。它从来只转换「谁来生成下一串 token」。要它接入 Decisions，必须先有一种不是 chat 的上游。历史把它放在插头的位置上，插座却还没打孔。</p>
+<h3 id="32-优势与劣势的历史根源-22">3.2 优势与劣势的历史根源</h3>
+<p><strong>强项：判断从 prompt 里搬进了类型。</strong> 根源是 Almeida 拒绝再让模型对人说话。没有 9 月 15 日那一刀，10 月不会有五家抄同一张表。</p>
+<p><strong>强项：调用可以完全离开对话。</strong> 根源是 OpenAI 把密钥留服务端、Jev 把 gate 做成 hook。套件作者发现，最值钱的判断发生在工具执行前，不发生在聊天气泡里。</p>
+<p><strong>强项：腾讯云网关已经认识这个模态。</strong> 根源是 CMR 要把意图路由做成可卖的企业功能，Jev 是最快能填进去的外脑。</p>
+<p><strong>包袱：混元的产品惯性是生成。</strong> <code>hy3</code> 越会写代码、越会 tools，内部就越容易觉得「json_schema 已经够用」。够用生成标签，不够用当 50 毫秒的闸门。</p>
+<p><strong>包袱：tt-switch 覆盖不到 Cursor。</strong> 根源是 CC Switch 的工具名单里从来没有 Cursor。论坛如果混用「所有内部 IDE」，接入日会对不上。Cursor 吃 OpenAI 兼容协议，TokenHub 已经有 <code>/v1</code> 和 <code>/v1/chat/completions</code>；缺的仍是 Decisions 那条路径。即便混元明天开孔，Cursor 也要在模型设置里加一个自定义端点，或等某个内部 MCP 把 <code>hy-decisions</code> 包成 tool。切换器解决不了 IDE 厂商自己的协议清单。</p>
+<p><strong>包袱：choice 的校准陷阱。</strong> OpenAI 社区用硬币实验打过脸。混元若上线日只抄 choice、不提供可靠的 predicate/noul，工具链会把错误的高置信度写进自动执行。predicate 问的是「这件事是不是真的」，概率轴是连续的；choice 问的是「在这几个名字里选一个」，模型容易把质量压到看起来最像的那一项上。工单分流用 choice 没问题，安全闸门应当用 predicate。接口抄齐三种原语，不等于三种都能拿来设阈值。</p>
+<p>当初把 Function Calling 做进混元，是正确的 2024 年决策。2026 年 10 月，它变成一种错觉：有 tools 就等于有 Decisions。tools 是模型请求执行并填写参数；Decisions 是应用先判定再执行，模型不写参数。两件事在官方文档里被 OpenAI 写成并列的「不要混用」。</p>
+<h3 id="33-未来三个剧本-23">3.3 未来三个剧本</h3>
+<ul>
+<li>
+<p><strong>最可能</strong>：混元短期内不出对等的自研决策模型。内部要提效，走 CMR 挂 Jev 或直连百炼 / OpenAI Decisions；TokenHub 继续只做写字协议。tt-switch 加一个「决策上游」预设，指到 CMR 或外部 systemone，而不是等 <code>hy-decisions</code> 这个模型 ID。论坛提问会再出现几次，答案是「先用网关槽」。时间尺度：数周到一个季度能看到网关侧的说明，混元模型卡上出现独立决策 ID 的公开计划仍暂缺。<code>hy3</code> json_schema 会继续被当成权宜之计，延迟和校准都不会让人满意。</p>
+</li>
+<li>
+<p><strong>最危险</strong>：混元用 <code>hy4-preview</code> 套一层 schema，对外叫 Decisions，tt-switch 也接了。调用方以为拿到了 50 毫秒的闸门，实际仍在付生成时延，choice 置信度不可设阈值。IDE 热路径上的误拦截和漏拦截一起出现：该拦的 <code>rm</code> 没拦，不该拦的 <code>ls</code> 被 hook 挡住。品类在司内被写坏，再要推真正的并行打分模型，会先撞上一次「我们试过，不好用」。</p>
+</li>
+<li>
+<p><strong>最乐观</strong>：混元用现有权重做后训练，CMR 文档里的「分类决策模型」换上自研 ID，TokenHub 增加 <code>/v1/decisions</code> 或 <code>/v1/systemone</code>，tt-switch 加协议，Claude Code 的 PreToolUse 和内部工作流共用一个国内端点。阿里已经证明接口可以在 OpenAI 公测后数日内出现；微软证明 9B 后训练可以上架。混元有数据驻留优势，中文工单和中文代码 diff 是 Jev 文档自己划的弱区。这条剧本需要的不是再发一篇「混元更会思考」，而是年报式的产品页：最大输出长度 0、原语三选一、给出可复核的延迟和 ECE。</p>
+</li>
+</ul>
+<p>我的判断靠近「最可能」偏积极的一侧。积极在网关：CMR 已经把开关做出来，tt-switch 接 CMR 比等混元训头更快。保守在模型：公开材料里看不到混元决策头的训练叙事，不能把阿里的速度外推成混元的承诺。10 月 13 日 TokenHub 和 CMR 两页文档同一天更新，一边仍无 Decisions 路径，一边已能挂 Jev。产品侧的优先级，写在这两页的差异里。</p>
+<p>对「应该很容易吧」这个问题，可以分三层答。协议翻译很容易，CC Switch 一直在做这种活。网关挂 Jev 也很容易，文档开关已经在。自研一个让人敢把阈值写进生产的混元 Decisions，取决于校准数据、中文评测和是否肯把输出长度做成零。后一件事，OpenAI 用现成 Luna 开通道都还只敢标 beta；混元没有 Luna 那种现成的「决策专用推理路径」被写进模型卡。容易的是接入，不容易的是判断本身变得可依赖。</p>
+<p>若一定要给内部排期一个可操作的顺序，我愿意把「容易」写成三张工单，而不是一个上线日。工单 A：CMR 实例关联 Jev 或百炼 systemone，意图路由打开「分类决策模型」，tt-switch 增加一个 CMR 上游。这一张不碰混元权重，公开文档已经够写 runbook。工单 B：TokenHub 增加 <code>/v1/decisions</code> 或 <code>/v1/systemone</code> 的协议兼容，先把外部决策模型纳管进来，模型 ID 可以暂时不是 <code>hy-*</code>。工单 C：混元训决策头，最大输出长度写成 0，给出中文工单和代码 diff 上的延迟与校准。论坛问的是 C，开发者下周能用的是 A。把 C 的等待投射到 A 上，才会觉得「怎么还不让 tt-switch 接入」。tt-switch 能接的，今天就是 A 和 B。</p>
+<p>调用方式上，内部该怎么接，也可以说具体。工作流、客服、内容审核：服务端直打 Decisions / systemone，结果进规则引擎，不要进聊天记录。Claude Code / Codex：hook 闸门走决策模型，主模型继续写代码；tt-switch 只负责把 hook 的上游指到国内端点。Cursor：今天用 Jev MCP 或自建 MCP 包一层；不要等 tt-switch。CMR：把 ModelRouter 打开，分类决策挂 Jev 或未来的 hy 决策模型，应用继续发 Messages。四条路里，MCP 嵌在对话中是补充，不是主路径。论坛想要的「简单快速的意图判断」，发生在对话开始之前，以及工具执行之前。</p>
+<p>还有一种会被低估的接法：批量。客服夜里积压一万条评论，决策模型按条打 choice，置信度低于阈值的才进人工队列。Jev 和百炼的文档都把这一类写成主场景。它和 IDE 无关，和 tt-switch 也无关，却是「合适的使用 api」四个字里人数最多的那群人。如果混元只为 Coding Agent 做 Decisions，会把这条现金流和这条稳定性验证一起丢掉。校准必须在批量数据上度量，IDE 热路径的样本太少，不够把 ECE 跑出来。先服务工单，再服务 hook，顺序反过来，阈值会拍脑袋。</p>
+<p>把时间再拉长一格。2022 年的 Moderation 是固定类别的审核函数。2023 年的 Function calling 是模型请求工具。2024 年的 Structured Outputs 是生成被 schema 锁住。2026 年 9 月的 Jev 是生成被取消。2026 年 10 月的 Decisions API 是实验室承认：软件要的判断，不应该再从一段散文里挖。混元还站在 2024 年那一格，只是模型更强、网关更全。tt-switch 站在客户端，等的是 2026 年那一格的插座。插座一旦打孔，接入不会难。打孔之前，催 tt-switch 解决不了论坛里的那句话。</p>
+<p>我愿意把这句话翻译成内部能分发的口径。Decisions API 是给软件用的判断函数，不是给聊天用的新模型。tt-switch 是给 IDE 换上游的插头，公网对应 CC Switch 一类切换器，不是混元本体。调用主场在工作流、网关和工具钩子，MCP 只是对话里的慢封装。混元公开侧还没有这个函数；腾讯云 CMR 已经为 Jev 留了槽。想提效的人，先把槽用上。想等 hy 两个字母印在模型 ID 上的人，公开材料给不出日期。容易的是插头，缺的是插座。口径只此一段，后面都是证据。若有人追问「那我们自己用 hy3 先顶上行不行」，行，当作过渡，不要写进闸门的自动执行。json_schema 可以分流，不宜拿生成出来的「把握」去拦 <code>rm</code>。过渡期的正确姿势是：分类可以自动，破坏性动作仍然问人。等真正的决策端点给出可复核的概率，再把阈值往下拧。过渡期多花一点人工确认，比把未校准的 JSON 写进生产更便宜。闸门一旦误伤开发者日常命令，决策 API 会在内部先失去信任，再失去预算。信任要用批量评测换，不能用上线日换。评测集先放中文工单和代码 diff，再放英文公开题，顺序反了会重复 Jev 在 CJK 上已经写下的弱点。</p>
+<hr>
+<h2 class="sources-h" id="四信息来源-24">四、信息来源</h2>
+<ol>
+<li><a href="https://developers.openai.com/api/docs/guides/decisions">OpenAI Decisions 指南</a> — 访问日期 2026-10-14 — 端点、三类型、定价 0.10 美元/百万输入、约 10× Responses、SDK 版本、GA 预期</li>
+<li><a href="https://developers.openai.com/api/docs/guides/decisions-voice">Connect voice to Decisions</a> — 访问日期 2026-10-14 — client-delegation、choice 选动作、reason 转 Responses</li>
+<li><a href="https://community.openai.com/t/decisions-api-is-now-available-in-public-beta/1403877">OpenAI 开发者社区：Decisions API Public Beta</a> — 访问日期 2026-10-14 — 2026-10-06 20:53 UTC、社区延迟与校准讨论</li>
+<li><a href="https://github.com/openai/openai-python/pull/4033">openai-python PR #4033</a> — 访问日期 2026-10-14 — 2026-10-06 合并，<code>decisions.create</code></li>
+<li><a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe：Introducing System One Models &amp; Jev</a> — 访问日期 2026-10-14 — 2026-09-15、RLCD、0.042 美元/百万 token</li>
+<li><a href="https://help.aliyun.com/zh/model-studio/decision-model-api">阿里云：决策模型 System One API</a> — 访问日期 2026-10-14 — <code>decision-model-preview</code>、<code>/v1/systemone</code>、示例 latency_ms 52.9</li>
+<li><a href="https://www.alibabacloud.com/help/zh/model-studio/decision-model-preview">阿里云：decision-model-preview 模型信息</a> — 访问日期 2026-10-14 — 更新 2026-10-11、输出长度 0、限时免费</li>
+<li><a href="https://cloud.tencent.com/document/product/1829/134681">腾讯云 CMR：配置模型调度管理</a> — 访问日期 2026-10-14 — 更新 2026-10-13、分类决策模型如 Jev、开启分类决策模型</li>
+<li><a href="https://cloud.tencent.com/document/product/1823/130078">腾讯云 TokenHub API 使用说明</a> — 访问日期 2026-10-14 — 更新 2026-10-13、无 <code>/v1/decisions</code>、模型表示例 hy3</li>
+<li><a href="https://cloud.tencent.com/document/product/1823/136605">腾讯云 TokenHub × CC Switch 企业版</a> — 访问日期 2026-10-14 — 官方教 CC Switch 接 Token Plan</li>
+<li><a href="https://github.com/farion1231/cc-switch/releases/tag/v3.19.1">CC Switch v3.19.1</a> — 访问日期 2026-10-14 — Codex 腾讯混元预设、Cursor 不在支持列表</li>
+<li><a href="https://github.com/challenwang408408/share-storage-project/blob/main/opencode-zen-claude-code-compat.md">TT switch 公开笔记</a> — 访问日期 2026-10-14 — TT switch、腾讯内网、本地 <code>/v1/messages</code></li>
+<li><a href="https://www.jevtypesafeai.com/integrations/cursor">Jev × Cursor MCP</a> — 访问日期 2026-10-14 — <code>jev_decide</code> 等工具、<code>.cursor/mcp.json</code></li>
+<li><a href="https://jevwiki.ai/wiki/guides/jev-in-agent-harnesses.md">jevwiki：Jev in agent harnesses</a> — 访问日期 2026-10-14 — PreToolUse / beforeShellExecution</li>
+<li><a href="https://commandline.microsoft.com/microsoft-decision-1-model-foundry/">Microsoft-Decision-1</a> — 访问日期 2026-10-14 — 2026-10-09、0.042 美元/百万输入</li>
+<li><a href="https://blog.cloudflare.com/clef-decision-models/">Cloudflare Clef</a> — 访问日期 2026-10-14 — 2026-10-01、System One 兼容</li>
+<li><a href="https://arxiv.org/abs/2510.08731">arxiv 2510.08731</a> — 访问日期 2026-10-14 — Semantic Router 论文</li>
+<li><a href="https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-decisions">Vercel：OpenAI-Compatible Decisions</a> — 访问日期 2026-10-14 — 网关 <code>/v1/decisions</code></li>
+<li><a href="https://openai.com/index/devday-2026-recap/">OpenAI DevDay 2026 Recap</a> — 访问日期 2026-10-14 — 2026-09-29 limited preview</li>
+<li><a href="https://cloud.tencent.com/document/product/1729/105701">混元 ChatCompletions / Tools</a> — 访问日期 2026-10-14 — functioncall 仍为生成路径</li>
+</ol>
+<h2 id="五方法论说明-25">五、方法论说明</h2>
+<p>本文采用横纵分析法（Horizontal-Vertical Analysis）。纵轴沿时间还原决策模型从分类器、Function calling 到独立 Decisions 端点的历程，横轴对比 OpenAI、Jev、阿里、微软、混元栈与 tt-switch，交汇后回答「hy 何时能出、该怎么接、调用发生在哪一层」。方法论由数字生命卡兹克提出；本报告由玉笛百科撰写。</p>
+<p>司内论坛原帖、tt-switch 内部仓库与维护团队、混元 Decisions roadmap，公开检索均为暂缺，不编造。滚动延迟与校准数字以各厂商文档和社区实验为准，已标明性质。本报告不构成采购或接入承诺。</p>
+  </article>
+</div>
+
+<footer class="site-foot">
+  <p>玉笛百科 · 横纵分析法深度研究报告 · 玉笛百科 · 2026年10月14日</p>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var topbar = document.getElementById("topbar");
+  var bar = document.getElementById("progress-bar");
+  var themeBtn = document.getElementById("theme-toggle");
+  var tocWrap = document.getElementById("toc-wrap");
+  var tocToggle = document.getElementById("toc-toggle");
+  var tocClose = document.getElementById("toc-close");
+  var tocBackdrop = document.getElementById("toc-backdrop");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function stored(key, fallback) {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  var theme = stored("hv-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  var size = stored("hv-size", "md");
+  root.setAttribute("data-theme", theme);
+  root.setAttribute("data-size", size);
+
+  function syncThemeLabel() {
+    var dark = root.getAttribute("data-theme") === "dark";
+    themeBtn.textContent = dark ? "浅色" : "深色";
+    themeBtn.setAttribute("aria-pressed", dark ? "true" : "false");
+  }
+  syncThemeLabel();
+
+  themeBtn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    save("hv-theme", next);
+    syncThemeLabel();
+  });
+
+  var sizes = ["sm", "md", "lg"];
+  document.getElementById("size-down").addEventListener("click", function () {
+    var i = Math.max(0, sizes.indexOf(root.getAttribute("data-size")) - 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+  document.getElementById("size-up").addEventListener("click", function () {
+    var i = Math.min(sizes.length - 1, sizes.indexOf(root.getAttribute("data-size")) + 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+
+  var links = [].slice.call(document.querySelectorAll(".toc a"));
+  var headings = [].slice.call(document.querySelectorAll(".article h2, .article h3"));
+
+  function syncToc() {
+    var probe = topbar.offsetHeight + 48;
+    var activeId = null;
+    headings.forEach(function (h) {
+      if (h.id && h.getBoundingClientRect().top <= probe) activeId = h.id;
+    });
+    if (!activeId && headings[0]) activeId = headings[0].id;
+    links.forEach(function (a) {
+      var id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+      a.classList.toggle("is-active", id === activeId);
+    });
+  }
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = p + "%";
+    topbar.classList.toggle("is-scrolled", window.scrollY > 16);
+    syncToc();
+  }
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  function setToc(open) {
+    root.classList.toggle("toc-open", open);
+    tocToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  tocToggle.addEventListener("click", function () {
+    setToc(!root.classList.contains("toc-open"));
+  });
+  tocClose.addEventListener("click", function () { setToc(false); });
+  tocBackdrop.addEventListener("click", function () { setToc(false); });
+  links.forEach(function (a) {
+    a.addEventListener("click", function () { setToc(false); });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setToc(false);
+  });
+
+  if (reduce) return;
+})();
+</script>
+</body>
+</html>
