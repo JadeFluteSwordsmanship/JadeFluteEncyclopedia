@@ -26,7 +26,6 @@ sys.path.insert(0, str(SCRIPT_DIR))
 from md_to_pdf import (  # noqa: E402
     EMOJI_RE,
     extract_meta,
-    slugify,
     strip_first_h1,
     strip_leading_meta_block,
 )
@@ -79,7 +78,7 @@ def collect_toc(body: str) -> tuple[str, str]:
         inner = match.group(3)
         if re.search(r"目录", inner):
             return match.group(0)
-        heading_id = slugify(inner) + f"-{len(toc_items) + 1}"
+        heading_id = f"sec-{len(toc_items) + 1}"
         toc_items.append((level, inner, heading_id))
         attrs = re.sub(r'\s+id="[^"]*"', "", attrs)
         return f'<h{level}{attrs} id="{heading_id}">{inner}</h{level}>'
@@ -95,8 +94,9 @@ def collect_toc(body: str) -> tuple[str, str]:
         depth = "depth-2" if level == "2" else "depth-3"
         if level == "1":
             depth = "depth-2"
+        label = html_lib.escape(re.sub(r"<[^>]+>", "", html_lib.unescape(inner)))
         lines.append(
-            f'<li class="{depth}"><a href="#{heading_id}">{kind}{inner}</a></li>'
+            f'<li class="{depth}"><a href="#{heading_id}">{kind}{label}</a></li>'
         )
     return "\n".join(lines), body
 

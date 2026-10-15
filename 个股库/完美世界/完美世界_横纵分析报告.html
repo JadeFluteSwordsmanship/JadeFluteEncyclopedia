@@ -282,6 +282,7 @@ body {
   overflow: auto;
   border-right: 1px solid var(--hair);
   padding-right: 1.2rem;
+  z-index: 2;
 }
 .toc-close { display: none; }
 .toc-label {
@@ -299,6 +300,9 @@ body {
 .toc li { margin: 0; }
 .toc .depth-2 { margin-top: 0.55rem; }
 .toc .depth-2:first-child { margin-top: 0; }
+.article h1, .article h2, .article h3 {
+  scroll-margin-top: calc(var(--topbar) + 0.8rem);
+}
 .toc a {
   display: flex;
   align-items: baseline;
@@ -310,6 +314,10 @@ body {
   padding: 0.38rem 0.6rem 0.38rem 0.75rem;
   border-left: 2px solid transparent;
   border-radius: 0 var(--radius) var(--radius) 0;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
 }
 .toc a:hover { color: var(--ink); }
 .toc a.is-active {
@@ -605,36 +613,36 @@ body {
     <button class="icon-btn toc-close" id="toc-close" type="button">关闭</button>
     <p class="toc-label">目录</p>
     <nav aria-label="章节">
-      <ol class="toc"><li class="depth-2"><a href="#一一句话定义-1">一、一句话定义</a></li>
-<li class="depth-2"><a href="#二纵向分析从诞生到当下-2"><span class="toc-kind" aria-hidden="true">纵</span>二、纵向分析:从诞生到当下</a></li>
-<li class="depth-3"><a href="#21-起源技术狂人的第三次创业-3">2.1 起源:技术狂人的第三次创业</a></li>
-<li class="depth-3"><a href="#22-爆发2005-2010黄金五年-4">2.2 爆发:2005-2010,黄金五年</a></li>
-<li class="depth-3"><a href="#23-转型2011-2016从单引擎到双引擎-5">2.3 转型:2011-2016,从单引擎到双引擎</a></li>
-<li class="depth-3"><a href="#24-困境2017-2023失去的七年-6">2.4 困境:2017-2023,失去的七年</a></li>
-<li class="depth-3"><a href="#25-转机2025年Q1的曙光-7">2.5 转机?2025年Q1的曙光</a></li>
-<li class="depth-2"><a href="#三横向分析竞争图谱-8"><span class="toc-kind" aria-hidden="true">横</span>三、横向分析:竞争图谱</a></li>
-<li class="depth-3"><a href="#31-竞品场景判断场景C红海竞争-9">3.1 竞品场景判断:场景C——红海竞争</a></li>
-<li class="depth-3"><a href="#32-腾讯游戏社交生态的降维打击-10">3.2 腾讯游戏:社交生态的降维打击</a></li>
-<li class="depth-3"><a href="#33-网易游戏长线运营的匠人精神-11">3.3 网易游戏:长线运营的匠人精神</a></li>
-<li class="depth-3"><a href="#34-米哈游技术宅文化的极致产品主义-12">3.4 米哈游:技术宅文化的极致产品主义</a></li>
-<li class="depth-3"><a href="#35-三七互娱买量大厂的短线收割-13">3.5 三七互娱:买量大厂的短线收割</a></li>
-<li class="depth-3"><a href="#36-生态位分析完美世界在哪-14">3.6 生态位分析:完美世界在哪?</a></li>
-<li class="depth-2"><a href="#四横纵交汇洞察-15"><span class="toc-kind" aria-hidden="true">汇</span>四、横纵交汇洞察</a></li>
-<li class="depth-3"><a href="#41-历史如何塑造了当下的位置-16">4.1 历史如何塑造了当下的位置</a></li>
-<li class="depth-3"><a href="#42-竞品的纵向对比-17">4.2 竞品的纵向对比</a></li>
-<li class="depth-3"><a href="#43-优势的历史根源-18">4.3 优势的历史根源</a></li>
-<li class="depth-3"><a href="#44-劣势的历史根源-19">4.4 劣势的历史根源</a></li>
-<li class="depth-3"><a href="#45-未来三个剧本-20">4.5 未来三个剧本</a></li>
-<li class="depth-3"><a href="#46-最后一问完美世界还能重回巅峰吗-21">4.6 最后一问:完美世界还能重回巅峰吗?</a></li>
-<li class="depth-2"><a href="#五信息来源-22">五、信息来源</a></li></ol>
+      <ol class="toc"><li class="depth-2"><a href="#sec-1">一、一句话定义</a></li>
+<li class="depth-2"><a href="#sec-2"><span class="toc-kind" aria-hidden="true">纵</span>二、纵向分析:从诞生到当下</a></li>
+<li class="depth-3"><a href="#sec-3">2.1 起源:技术狂人的第三次创业</a></li>
+<li class="depth-3"><a href="#sec-4">2.2 爆发:2005-2010,黄金五年</a></li>
+<li class="depth-3"><a href="#sec-5">2.3 转型:2011-2016,从单引擎到双引擎</a></li>
+<li class="depth-3"><a href="#sec-6">2.4 困境:2017-2023,失去的七年</a></li>
+<li class="depth-3"><a href="#sec-7">2.5 转机?2025年Q1的曙光</a></li>
+<li class="depth-2"><a href="#sec-8"><span class="toc-kind" aria-hidden="true">横</span>三、横向分析:竞争图谱</a></li>
+<li class="depth-3"><a href="#sec-9">3.1 竞品场景判断:场景C——红海竞争</a></li>
+<li class="depth-3"><a href="#sec-10">3.2 腾讯游戏:社交生态的降维打击</a></li>
+<li class="depth-3"><a href="#sec-11">3.3 网易游戏:长线运营的匠人精神</a></li>
+<li class="depth-3"><a href="#sec-12">3.4 米哈游:技术宅文化的极致产品主义</a></li>
+<li class="depth-3"><a href="#sec-13">3.5 三七互娱:买量大厂的短线收割</a></li>
+<li class="depth-3"><a href="#sec-14">3.6 生态位分析:完美世界在哪?</a></li>
+<li class="depth-2"><a href="#sec-15"><span class="toc-kind" aria-hidden="true">汇</span>四、横纵交汇洞察</a></li>
+<li class="depth-3"><a href="#sec-16">4.1 历史如何塑造了当下的位置</a></li>
+<li class="depth-3"><a href="#sec-17">4.2 竞品的纵向对比</a></li>
+<li class="depth-3"><a href="#sec-18">4.3 优势的历史根源</a></li>
+<li class="depth-3"><a href="#sec-19">4.4 劣势的历史根源</a></li>
+<li class="depth-3"><a href="#sec-20">4.5 未来三个剧本</a></li>
+<li class="depth-3"><a href="#sec-21">4.6 最后一问:完美世界还能重回巅峰吗?</a></li>
+<li class="depth-2"><a href="#sec-22">五、信息来源</a></li></ol>
     </nav>
   </aside>
   <article class="article" id="article">
-<section class="lead-band"><h2 id="一一句话定义-1">一、一句话定义</h2>
+<section class="lead-band"><h2 id="sec-1">一、一句话定义</h2>
 <p>完美世界是中国最早自主研发3D游戏引擎的游戏公司,凭借《完美世界》《诛仙》等经典MMO IP在2005-2015年辉煌十年后,试图通过"游戏+影视"双轮驱动和技术革新走出低谷,但在新品类冲击、口碑透支和战略迷失中艰难求生的老牌游戏厂商。</p>
 <hr>
-</section><h2 id="二纵向分析从诞生到当下-2">二、纵向分析:从诞生到当下</h2>
-<h3 id="21-起源技术狂人的第三次创业-3">2.1 起源:技术狂人的第三次创业</h3>
+</section><h2 id="sec-2">二、纵向分析:从诞生到当下</h2>
+<h3 id="sec-3">2.1 起源:技术狂人的第三次创业</h3>
 <p>2004年,池宇峰33岁。</p>
 <p>他已经成功过两次。第一次是洪恩教育软件,从清华化学系毕业后放弃宝洁的offer南下深圳创办,成为中国教育软件的龙头企业。第二次还没开始,但他已经看到了方向——网络游戏。</p>
 <p>那一年的中国游戏市场是盛大和网易的天下。《传奇》让陈天桥登顶中国首富,《梦幻西游》证明了国产自研的力量。但池宇峰看到的不是商业模式,而是技术代差。</p>
@@ -648,7 +656,7 @@ body {
 <p>但池宇峰顶住了。他有洪恩的现金流支撑,更重要的是他相信自己的判断:中国游戏行业早晚要从"拿来主义"走向自主创新,谁先掌握核心技术,谁就能在未来十年占据高地。</p>
 <p>2005年,完美世界的第一款自研引擎Angelica 3D完成。它的技术指标在当时的国产引擎里是顶级的:支持大规模多人在线、可以实现飞行系统、画面表现力远超国内同行。</p>
 <p>基于这个引擎,《完美世界》端游在2005年正式上线。</p>
-<h3 id="22-爆发2005-2010黄金五年-4">2.2 爆发:2005-2010,黄金五年</h3>
+<h3 id="sec-4">2.2 爆发:2005-2010,黄金五年</h3>
 <p>《完美世界》一上线就惊艳了市场。</p>
 <p>不是因为玩法有多创新——说到底还是传统的打怪升级+PK+副本那一套。但它有三个"国产网游第一次":</p>
 <ul>
@@ -679,7 +687,7 @@ body {
 <p>2008-2010年,完美世界进入收获期。《完美世界》《诛仙》两款游戏撑起了年营收从几亿到十几亿的跨越。2010年,完美世界在纳斯达克上市,成为继盛大、网易之后第三家在美上市的中国游戏公司。</p>
 <p>那几年池宇峰的公开表态都很自信:"我们不追求快,追求做得好。""技术是游戏公司的生命线。""完美世界要做百年企业。"</p>
 <p>但没人知道,危机已经在路上了。</p>
-<h3 id="23-转型2011-2016从单引擎到双引擎-5">2.3 转型:2011-2016,从单引擎到双引擎</h3>
+<h3 id="sec-5">2.3 转型:2011-2016,从单引擎到双引擎</h3>
 <p>2011年开始,池宇峰感觉到不对劲了。</p>
 <p>《完美世界》和《诛仙》的在线人数和流水都在下滑。不是断崖式的,而是温水煮青蛙式的——每个季度比上个季度少一点,每年比上一年低一点。老玩家在流失,新玩家进不来。</p>
 <p>更要命的是,市场风向变了。</p>
@@ -709,7 +717,7 @@ body {
 </ol>
 <p>池宇峰在2016年年报致股东信里写道:"我们正处于转型的关键期,未来将加大新品类、新技术的研发投入。"</p>
 <p>他没说的是,转型的代价会比他预想的大得多。</p>
-<h3 id="24-困境2017-2023失去的七年-6">2.4 困境:2017-2023,失去的七年</h3>
+<h3 id="sec-6">2.4 困境:2017-2023,失去的七年</h3>
 <p>2017年到2023年,是完美世界"失去的七年"。</p>
 <p>表面上,公司还在增长。营收从2016年的70亿增长到2019年的80亿,净利润保持在15-20亿区间。但如果仔细看结构,会发现一个残酷的事实:增长几乎全部来自老游戏的存量挖掘,新游戏没有一款能打的。</p>
 <p><strong>2017-2019:吃老本的三年</strong></p>
@@ -742,7 +750,7 @@ body {
 <p>亏损的原因是:新游戏不赚钱(《诛仙世界》研发投入巨大但收益不确定),老游戏在衰退,影视业务利润率低。</p>
 <p>池宇峰在2024年年报中写道:"2024年是公司最动荡的一年。"</p>
 <p>这是罕见的公开示弱。</p>
-<h3 id="25-转机2025年Q1的曙光-7">2.5 转机?2025年Q1的曙光</h3>
+<h3 id="sec-7">2.5 转机?2025年Q1的曙光</h3>
 <p>2025年一季度,完美世界终于交出了一份"不那么难看"的财报:</p>
 <ul>
 <li>营收20.23亿元,同比增长52.22%</li>
@@ -777,8 +785,8 @@ body {
 <p>完美世界如果不能在2026-2027年拿出一款真正的爆款新游,很可能会从"第二梯队"继续下滑,变成"腰部偏下"的长尾公司。</p>
 <p>20年前,池宇峰用自研引擎证明了"技术可以改变命运"。20年后,他需要再次证明,这家公司还配得上"完美世界"这个名字。</p>
 <hr>
-<h2 id="三横向分析竞争图谱-8">三、横向分析:竞争图谱</h2>
-<h3 id="31-竞品场景判断场景C红海竞争-9">3.1 竞品场景判断:场景C——红海竞争</h3>
+<h2 id="sec-8">三、横向分析:竞争图谱</h2>
+<h3 id="sec-9">3.1 竞品场景判断:场景C——红海竞争</h3>
 <p>完美世界所处的游戏行业,是典型的"场景C":竞品充分,市场高度内卷。</p>
 <p>中国游戏市场2024年实际销售收入3257.83亿元,参与者超过2万家,但头部集中度极高:腾讯+网易+米哈游三家占据80-85%的市场份额,剩下十几个百分点被上百家公司瓜分。</p>
 <p>完美世界的直接竞品可以分为三类:</p>
@@ -794,7 +802,7 @@ body {
 </li>
 </ol>
 <p>完美世界目前在第二梯队的中下游位置,2024年前三季度营收40.73亿元,市场份额不足2%,远低于巅峰时期的5%。</p>
-<h3 id="32-腾讯游戏社交生态的降维打击-10">3.2 腾讯游戏:社交生态的降维打击</h3>
+<h3 id="sec-10">3.2 腾讯游戏:社交生态的降维打击</h3>
 <p><strong>核心差异</strong></p>
 <p>腾讯游戏的核心竞争力不是单款游戏有多强,而是"社交生态+产品矩阵"的组合拳。</p>
 <p>《王者荣耀》《和平精英》不只是游戏,而是社交工具。你玩王者不是因为它玩法最好,而是因为"你的朋友都在玩"。这种网络效应一旦形成,几乎无法撼动。</p>
@@ -813,7 +821,7 @@ body {
 <p>腾讯的用户黏性来自社交关系链,完美世界的用户黏性来自IP情怀。前者可以传代(你爸妈可能也玩微信小游戏),后者会老化(00后不知道《诛仙》是啥)。</p>
 <p><strong>完美世界的差距</strong></p>
 <p>完美世界在社交生态、产品矩阵、氪金模式、技术储备上全面落后于腾讯。唯一的优势是"老IP的情怀价值",但这个优势正在快速贬值。</p>
-<h3 id="33-网易游戏长线运营的匠人精神-11">3.3 网易游戏:长线运营的匠人精神</h3>
+<h3 id="sec-11">3.3 网易游戏:长线运营的匠人精神</h3>
 <p><strong>核心差异</strong></p>
 <p>网易游戏的特点是"自研为主+长线运营"。</p>
 <p>《梦幻西游》运营了20年,《大话西游》运营了23年,《逆水寒》从端游做到手游,《蛋仔派对》一年流水破百亿。网易的游戏生命周期普遍比同行长,原因是运营策略稳健:不急于榨干用户,而是细水长流。</p>
@@ -832,7 +840,7 @@ body {
 <p>完美世界呢?玩家吐槽"客服是AI""Bug半年不修""运营只会搞逼氪活动"。</p>
 <p><strong>完美世界的差距</strong></p>
 <p>完美世界在长线运营能力、产品化能力、用户体验上明显落后于网易。技术储备不是问题,但"把技术变成玩家喜欢的游戏"的能力是问题。</p>
-<h3 id="34-米哈游技术宅文化的极致产品主义-12">3.4 米哈游:技术宅文化的极致产品主义</h3>
+<h3 id="sec-12">3.4 米哈游:技术宅文化的极致产品主义</h3>
 <p><strong>核心差异</strong></p>
 <p>米哈游是完美世界最应该学习,但最学不会的公司。</p>
 <p>为什么?因为两家公司的底层逻辑完全不同。</p>
@@ -862,7 +870,7 @@ body {
 <p>完美世界和米哈游的差距,本质上是"守成思维 vs 创新文化"的差距。</p>
 <p>米哈游敢赌《原神》,敢投5亿美元,敢全球同服,敢跟索尼任天堂谈主机移植。</p>
 <p>完美世界不敢。池宇峰的风格是"稳健+技术理想主义",但在需要冒险的时候,他选择了保守。</p>
-<h3 id="35-三七互娱买量大厂的短线收割-13">3.5 三七互娱:买量大厂的短线收割</h3>
+<h3 id="sec-13">3.5 三七互娱:买量大厂的短线收割</h3>
 <p><strong>核心差异</strong></p>
 <p>三七互娱和完美世界完全是两个物种。</p>
 <p>完美世界是"重研发、轻买量",研发强度接近30%,买量费用占比不到10%。</p>
@@ -881,7 +889,7 @@ body {
 <p><strong>完美世界的差距</strong></p>
 <p>完美世界和三七互娱的差距,本质上是"长线 vs 短线"的战略选择差异。</p>
 <p>三七的模式不适合完美世界学习,但完美世界可以学习三七的"出海效率"和"买量能力"。</p>
-<h3 id="36-生态位分析完美世界在哪-14">3.6 生态位分析:完美世界在哪?</h3>
+<h3 id="sec-14">3.6 生态位分析:完美世界在哪?</h3>
 <p>在整个中国游戏市场的生态位图谱中,完美世界的位置是:</p>
 <p><strong>品类</strong>:传统MMO(端游基因强)<br>
 <strong>用户群</strong>:70后-85前(老龄化严重)<br>
@@ -910,8 +918,8 @@ body {
 </section><section class="scenario scenario-down"><p><strong>剧本三:被并购或私有化</strong>(概率20%)<br>
 如果2026-2027年业绩继续恶化,池宇峰可能会选择卖给腾讯/网易,或者私有化退市。</p>
 <hr>
-</section><h2 id="四横纵交汇洞察-15">四、横纵交汇洞察</h2>
-<h3 id="41-历史如何塑造了当下的位置-16">4.1 历史如何塑造了当下的位置</h3>
+</section><h2 id="sec-15">四、横纵交汇洞察</h2>
+<h3 id="sec-16">4.1 历史如何塑造了当下的位置</h3>
 <p>完美世界今天的困境,不是2024年才出现的,而是2011年就埋下的种子。</p>
 <p>2011年,池宇峰做了一个关键决策:不押注新品类(MOBA、卡牌、吃鸡),继续深耕MMO赛道。</p>
 <p>这个决策在当时看起来很理性:MMO是完美世界的优势品类,技术和经验都积累了十年,为什么要冒险去做不熟悉的东西?</p>
@@ -920,7 +928,7 @@ body {
 <p>米哈游为什么能成功?因为它2011年成立时,MMO红利期已经结束,它一开始就选了"二次元动作"这个新赛道,没有历史包袱。</p>
 <p>腾讯和网易为什么能转型?因为它们有足够的资金和人才储备,可以同时押注多个赛道,失败了也不伤筋动骨。</p>
 <p>完美世界呢?既没有米哈游的"白纸优势",也没有腾讯网易的"容错能力",只能守着MMO这块老阵地,看着市场一点点萎缩。</p>
-<h3 id="42-竞品的纵向对比-17">4.2 竞品的纵向对比</h3>
+<h3 id="sec-17">4.2 竞品的纵向对比</h3>
 <p>如果把完美世界、网易、米哈游放到时间线上对比:</p>
 <p><strong>起点不同</strong>:<br>
 - 完美世界:2004年,MMO黄金时代,自研引擎切入<br>
@@ -939,7 +947,7 @@ body {
 2016年所有人都说"手游是未来",池宇峰也信了,但动作太慢。<br>
 2020年所有人都说"开放世界是趋势",池宇峰还是信了,但《幻塔》做砸了。</p>
 <p>完美世界不是不懂趋势,而是"看见了趋势,但动作永远慢半拍"。</p>
-<h3 id="43-优势的历史根源-18">4.3 优势的历史根源</h3>
+<h3 id="sec-18">4.3 优势的历史根源</h3>
 <p>完美世界今天还有什么优势?</p>
 <p><strong>技术储备</strong>。20年自研引擎经验,虚幻引擎深度应用能力,AI技术储备,这些都是真金白银投出来的。</p>
 <p>这个优势来自池宇峰2004年的那个决定:"我要做自研引擎。"那时候中国游戏行业还没人这么干,池宇峰愿意冒险,才有了今天的技术积累。</p>
@@ -953,7 +961,7 @@ body {
 <li>IP资产老化,年轻用户不认,情怀价值在消耗。</li>
 <li>影视业务利润率低,短剧虽然火,但不赚钱。</li>
 </ul>
-<h3 id="44-劣势的历史根源-19">4.4 劣势的历史根源</h3>
+<h3 id="sec-19">4.4 劣势的历史根源</h3>
 <p>完美世界今天的每个劣势,都能在历史上找到根源:</p>
 <p><strong>新游创新不足</strong><br>
 → 根源:2011年选择守成而非创新,团队基因固化<br>
@@ -970,7 +978,7 @@ body {
 <p><strong>人才流失</strong><br>
 → 根源:2024年大规模裁员+大股东减持,团队士气受挫<br>
 → 当初的"成本优化"变成了今天的"人才危机"</p>
-<h3 id="45-未来三个剧本-20">4.5 未来三个剧本</h3>
+<h3 id="sec-20">4.5 未来三个剧本</h3>
 <p>基于纵向趋势和横向竞争格局,完美世界的未来有三种可能:</p>
 <section class="scenario scenario-up"><p><strong>剧本一:《异环》逆袭,重回巅峰</strong>(概率30%)</p>
 <p><strong>剧情推演</strong>:<br>
@@ -1013,7 +1021,7 @@ body {
 <p><strong>为什么概率20%?</strong><br>
 因为池宇峰不到万不得已不会卖公司。他是理想主义者,完美世界是他的"第三个孩子",卖掉等于承认失败。但如果2026-2027年继续亏损,股东压力+资金压力可能会逼他做出选择。</p>
 <hr>
-</section><h3 id="46-最后一问完美世界还能重回巅峰吗-21">4.6 最后一问:完美世界还能重回巅峰吗?</h3>
+</section><h3 id="sec-21">4.6 最后一问:完美世界还能重回巅峰吗?</h3>
 <p>答案取决于你怎么定义"巅峰"。</p>
 <p>如果巅峰是指"A股游戏公司第一、市值600亿、市场份额5%",那么概率接近于零。因为那个时代已经过去了,腾讯网易米哈游的护城河太深,完美世界不可能再回到2016年的位置。</p>
 <p>但如果巅峰是指"做出一款真正让玩家认可的好游戏,重新证明完美世界的产品力",那么还有机会。</p>
@@ -1023,7 +1031,7 @@ body {
 <p>如果会,完美世界还有希望。<br>
 如果不会,那20年前的那个"完美世界",可能只能活在老玩家的回忆里了。</p>
 <hr>
-<h2 class="sources-h" id="五信息来源-22">五、信息来源</h2>
+<h2 class="sources-h" id="sec-22">五、信息来源</h2>
 <p><strong>权威报告</strong>:<br>
 - 伽马数据《2024年中国游戏产业报告》<br>
 - Sensor Tower《2024全球移动游戏市场报告》<br>
@@ -1130,8 +1138,8 @@ body {
     save("hv-size", sizes[i]);
   });
 
-  var links = [].slice.call(document.querySelectorAll(".toc a"));
-  var headings = [].slice.call(document.querySelectorAll(".article h2, .article h3"));
+  var links = [].slice.call(document.querySelectorAll(".toc a[href^='#']"));
+  var headings = [].slice.call(document.querySelectorAll(".article h1[id], .article h2[id], .article h3[id]"));
 
   function syncToc() {
     var probe = topbar.offsetHeight + 48;
@@ -1165,14 +1173,29 @@ body {
   });
   tocClose.addEventListener("click", function () { setToc(false); });
   tocBackdrop.addEventListener("click", function () { setToc(false); });
-  links.forEach(function (a) {
-    a.addEventListener("click", function () { setToc(false); });
+  links.forEach(function (a, i) {
+    a.addEventListener("click", function (e) {
+      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
+      var id = raw;
+      try { id = decodeURIComponent(raw); } catch (err) {}
+      var target = (id && document.getElementById(id)) || headings[i];
+      if (!target) return;
+      e.preventDefault();
+      var y = target.getBoundingClientRect().top + window.pageYOffset - (topbar.offsetHeight + 12);
+      if (window.scrollTo) {
+        window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
+      } else {
+        target.scrollIntoView(true);
+      }
+      try {
+        if (id && history.replaceState) history.replaceState(null, "", "#" + id);
+      } catch (err) {}
+      setToc(false);
+    });
   });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") setToc(false);
   });
-
-  if (reduce) return;
 })();
 </script>
 </body>
