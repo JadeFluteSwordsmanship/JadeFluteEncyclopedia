@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-size="md">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>桌面破坏神横纵分析报告</title>
+<style>
+:root {
+  --ink: #15232c;
+  --ink-soft: #2a3d46;
+  --paper: #f2f5f3;
+  --paper-2: #e7eeea;
+  --jade: #2f7a64;
+  --jade-deep: #1f5648;
+  --jade-soft: rgba(47, 122, 100, 0.12);
+  --muted: #4a5c61;
+  --hair: #cdd8d3;
+  --card: #ffffff;
+  --shadow: 0 18px 40px rgba(21, 35, 44, 0.08);
+  --cover: #15232c;
+  --cover-ink: #eaf3ef;
+  --cover-muted: rgba(234, 243, 239, 0.68);
+  --warn: #8b4a3a;
+  --warn-soft: rgba(139, 74, 58, 0.1);
+  --ok-soft: rgba(47, 122, 100, 0.1);
+  --base-soft: rgba(74, 92, 97, 0.08);
+  --radius: 8px;
+  --sidebar: 17.25rem;
+  --measure: 42rem;
+  --topbar: 3.5rem;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SFMono-Regular", "Cascadia Mono", "Consolas", "Liberation Mono", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --ink: #e4ece8;
+  --ink-soft: #c5d2cc;
+  --paper: #12181a;
+  --paper-2: #1a2225;
+  --jade: #6eb89f;
+  --jade-deep: #8fd0ba;
+  --jade-soft: rgba(110, 184, 159, 0.14);
+  --muted: #9aada8;
+  --hair: #2c3a3d;
+  --card: #1a2225;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --cover: #101618;
+  --cover-ink: #e4ece8;
+  --cover-muted: rgba(228, 236, 232, 0.64);
+  --warn: #d08978;
+  --warn-soft: rgba(208, 137, 120, 0.14);
+  --ok-soft: rgba(110, 184, 159, 0.14);
+  --base-soft: rgba(154, 173, 168, 0.1);
+}
+
+[data-size="sm"] { --body-size: 15.5px; }
+[data-size="md"] { --body-size: 17px; }
+[data-size="lg"] { --body-size: 19px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  scroll-padding-top: calc(var(--topbar) + 0.8rem);
+}
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-size: var(--body-size);
+  line-height: 1.85;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .topbar, .progress span, .toc a, .theme-btn, .toc-drawer {
+    transition: background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.skip {
+  position: absolute;
+  left: 0.8rem;
+  top: -3rem;
+  background: var(--jade);
+  color: #f4faf7;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius);
+  z-index: 80;
+}
+.skip:focus { top: 0.6rem; }
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--jade);
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.1rem;
+  color: var(--cover-ink);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+.topbar.is-scrolled {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border-bottom-color: var(--hair);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .topbar.is-scrolled { background: var(--paper); backdrop-filter: none; }
+}
+
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  font-weight: 650;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.brand small {
+  display: block;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 0.68rem;
+}
+
+.top-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar.is-scrolled .top-title { opacity: 0.86; }
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.icon-btn:focus-visible,
+.toc a:focus-visible,
+.article a:focus-visible {
+  outline: 2px solid var(--jade);
+  outline-offset: 2px;
+}
+.icon-btn[aria-pressed="true"] { border-color: color-mix(in srgb, currentColor 28%, transparent); }
+.toc-toggle { display: none; }
+
+.cover {
+  min-height: 100dvh;
+  background: var(--cover);
+  color: var(--cover-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5.5rem 8vw 4.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -18% auto;
+  width: min(52vw, 34rem);
+  height: min(52vw, 34rem);
+  background: radial-gradient(circle, rgba(47, 122, 100, 0.22), transparent 68%);
+  pointer-events: none;
+}
+.cover-inner {
+  position: relative;
+  max-width: 48rem;
+}
+.cover-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--jade);
+  font-weight: 650;
+  margin: 0 0 1.1rem;
+}
+.cover h1 {
+  font-size: clamp(2.35rem, 6vw, 4.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 670;
+  margin: 0;
+  max-width: 14ch;
+  padding-bottom: 0.15em;
+}
+.cover-sub {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.45;
+  color: var(--cover-muted);
+  max-width: 28ch;
+  font-weight: 400;
+}
+.cover-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--jade);
+  border: 0;
+  margin: 1.7rem 0 1.4rem;
+}
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  color: var(--cover-muted);
+  font-size: 0.92rem;
+}
+.cover-meta span { white-space: nowrap; }
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  gap: 0 2.5rem;
+}
+
+.toc-wrap {
+  position: sticky;
+  top: var(--topbar);
+  align-self: start;
+  height: calc(100dvh - var(--topbar));
+  padding: 2rem 0 2.5rem;
+  overflow: auto;
+  border-right: 1px solid var(--hair);
+  padding-right: 1.2rem;
+}
+.toc-close { display: none; }
+.toc-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin: 0 0 0.9rem;
+  font-weight: 650;
+}
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc li { margin: 0; }
+.toc .depth-2 { margin-top: 0.55rem; }
+.toc .depth-2:first-child { margin-top: 0; }
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  padding: 0.38rem 0.6rem 0.38rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.toc a:hover { color: var(--ink); }
+.toc a.is-active {
+  color: var(--jade-deep);
+  border-left-color: var(--jade);
+  background: var(--jade-soft);
+  font-weight: 600;
+}
+.toc .depth-3 a {
+  font-size: 0.8rem;
+  padding-left: 1.35rem;
+}
+.toc-kind {
+  display: inline-block;
+  width: 0.9rem;
+  font-size: 0.68rem;
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.article {
+  max-width: var(--measure);
+  padding: 2.4rem 0 5rem;
+  min-width: 0;
+}
+
+.article > .summary,
+.article > .lead-band {
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--jade);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.4rem 1.2rem;
+  margin: 0 0 2.4rem;
+  box-shadow: none;
+}
+.article > .summary > h2:first-child,
+.article > .lead-band > h2:first-child {
+  margin-top: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--jade-deep);
+}
+.article > .summary > h2:first-child::after,
+.article > .lead-band > h2:first-child::after {
+  display: none;
+}
+.article > .summary > p:first-of-type,
+.article > .lead-band > p:first-of-type {
+  font-size: 1.12em;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.article h2 {
+  font-size: 1.58rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 2.8rem 0 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.article h2::after {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 2px;
+  background: var(--jade);
+  margin-top: 0.7rem;
+}
+.article h3 {
+  font-size: 1.18rem;
+  line-height: 1.4;
+  margin: 2rem 0 0.7rem;
+  font-weight: 680;
+  color: var(--ink);
+}
+.article h4 {
+  font-size: 1.02rem;
+  margin: 1.5rem 0 0.45rem;
+  color: var(--ink-soft);
+  font-weight: 650;
+}
+
+.article p { margin: 0.85rem 0; }
+.article p:first-child { margin-top: 0; }
+
+.article a {
+  color: var(--jade-deep);
+  text-underline-offset: 0.18em;
+}
+.article a:hover { color: var(--jade); }
+
+.article strong { font-weight: 670; color: var(--ink); }
+
+.article ul, .article ol {
+  margin: 0.7rem 0 1rem;
+  padding-left: 1.35rem;
+}
+.article li { margin: 0.28rem 0; }
+.article li::marker { color: var(--jade); }
+
+.article blockquote {
+  margin: 1.3rem 0;
+  padding: 0.2rem 0 0.2rem 1.05rem;
+  border-left: 3px solid var(--jade);
+  color: var(--ink-soft);
+  background: transparent;
+  font-style: normal;
+}
+.article blockquote p { margin: 0.35rem 0; }
+
+.article hr {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 2rem 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.3rem 0 1.6rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+}
+.article thead th {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: left;
+  font-weight: 650;
+  padding: 0.7rem 0.85rem;
+  white-space: nowrap;
+}
+[data-theme="dark"] .article thead th {
+  background: #0c1214;
+  color: var(--ink);
+}
+.article td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: top;
+}
+.article tbody tr:last-child td { border-bottom: 0; }
+.article tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+
+.article pre, .article code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+.article code {
+  background: var(--paper-2);
+  padding: 0.08em 0.35em;
+  border-radius: 4px;
+}
+.article pre {
+  background: var(--cover);
+  color: var(--cover-ink);
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.article pre code { background: none; padding: 0; color: inherit; }
+.article img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.scenario {
+  margin: 1.2rem 0 1.6rem;
+  padding: 1.15rem 1.2rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--hair);
+  background: var(--card);
+}
+.scenario > h3:first-child,
+.scenario > h4:first-child {
+  margin-top: 0;
+}
+.scenario-up { background: var(--ok-soft); border-color: color-mix(in srgb, var(--jade) 35%, var(--hair)); }
+.scenario-base { background: var(--base-soft); }
+.scenario-down { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, var(--hair)); }
+
+.article .sources-h + *,
+.sources {
+  font-size: 0.92em;
+  color: var(--ink-soft);
+}
+
+.site-foot {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.site-foot p { margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--hair); }
+
+.toc-backdrop {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  html.toc-open { overflow: hidden; }
+  .toc-toggle { display: inline-flex; }
+  .toc-close { display: inline-flex; position: absolute; top: 0.85rem; right: 0.7rem; }
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 0 1.1rem 3rem;
+  }
+  .toc-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: min(20rem, 86vw);
+    background: var(--paper);
+    z-index: 70;
+    padding: 4.4rem 1rem 1.5rem;
+    transform: translateX(-105%);
+    border-right: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+  }
+  html.toc-open .toc-wrap { transform: translateX(0); }
+  .toc-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 24, 26, 0.42);
+    z-index: 65;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.toc-open .toc-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .cover { padding: 5rem 1.25rem 3rem; }
+  .cover h1 { max-width: none; }
+  .article { padding-top: 1.6rem; }
+}
+
+@media print {
+  .progress, .topbar, .toc-wrap, .toc-backdrop, .site-foot { display: none !important; }
+  .layout { display: block; max-width: none; padding: 0; }
+  .cover { min-height: auto; padding: 1.5cm 0; break-after: page; }
+  .article { max-width: none; padding: 0; }
+  a { text-decoration: none; color: inherit; }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#article">跳到正文</a>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#cover">玉笛百科<small>JADE FLUTE</small></a>
+  <div class="top-title" id="top-title">桌面破坏神</div>
+  <div class="top-actions">
+    <button class="icon-btn toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-wrap">目录</button>
+    <button class="icon-btn" id="size-down" type="button" title="减小字号" aria-label="减小字号">A-</button>
+    <button class="icon-btn" id="size-up" type="button" title="增大字号" aria-label="增大字号">A+</button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false">深色</button>
+  </div>
+</header>
+
+<section class="cover" id="cover">
+  <div class="cover-inner">
+    <p class="cover-kicker">横纵分析</p>
+    <h1>桌面破坏神</h1>
+    <p class="cover-sub">横纵分析法深度研究报告</p>
+    <hr class="cover-rule">
+    <div class="cover-meta"><span>游戏 / 桌面放置 / 挂机ARPG · 产品</span><span>2026年10月15日</span><span>约 14377 字</span><span>阅读 32 分钟</span><span>玉笛百科</span></div>
+  </div>
+</section>
+
+<div class="toc-backdrop" id="toc-backdrop"></div>
+
+<div class="layout">
+  <aside class="toc-wrap" id="toc-wrap">
+    <button class="icon-btn toc-close" id="toc-close" type="button">关闭</button>
+    <p class="toc-label">目录</p>
+    <nav aria-label="章节">
+      <ol class="toc"><li class="depth-2"><a href="#核心结论速览-1">核心结论速览</a></li>
+<li class="depth-2"><a href="#一纵向分析从诞生到当下-2"><span class="toc-kind" aria-hidden="true">纵</span>一、纵向分析：从诞生到当下</a></li>
+<li class="depth-3"><a href="#11-起源暗黑玩家想在上班时刷宝-3">1.1 起源：暗黑玩家想在上班时刷宝</a></li>
+<li class="depth-3"><a href="#12-桌面底边怎么变成一条赛道20002025-4">1.2 桌面底边怎么变成一条赛道（2000—2025）</a></li>
+<li class="depth-3"><a href="#13-试玩把窗口做成产品2026年4月7月-5">1.3 试玩把窗口做成产品（2026年4月—7月）</a></li>
+<li class="depth-3"><a href="#14-从封闭测试到-19-元发售2026年8月9月28日-6">1.4 从封闭测试到 19 元发售（2026年8月—9月28日）</a></li>
+<li class="depth-3"><a href="#15-发售后两周四万人在线中文区先冷2026年9月28日10月15日-7">1.5 发售后两周：四万人在线，中文区先冷（2026年9月28日—10月15日）</a></li>
+<li class="depth-2"><a href="#二横向分析竞争图谱-8"><span class="toc-kind" aria-hidden="true">横</span>二、横向分析：竞争图谱</a></li>
+<li class="depth-3"><a href="#21-竞品地图-9">2.1 竞品地图</a></li>
+<li class="depth-3"><a href="#22-桌面破坏神当前画像-10">2.2 《桌面破坏神》当前画像</a></li>
+<li class="depth-3"><a href="#23-vs-TBH塔斯克巴英雄-11">2.3 vs TBH：塔斯克巴·英雄</a></li>
+<li class="depth-3"><a href="#24-vs-Rustys-Retirement底边挂机的好评标杆-12">2.4 vs Rusty's Retirement：底边挂机的好评标杆</a></li>
+<li class="depth-3"><a href="#25-vs动物栏桌面牧场同一发行商的另一条桌面线-13">2.5 vs《动物栏：桌面牧场》：同一发行商的另一条桌面线</a></li>
+<li class="depth-3"><a href="#26-vs-Melvor-Idle关游戏之后仍在变强的标杆-14">2.6 vs Melvor Idle：关游戏之后仍在变强的标杆</a></li>
+<li class="depth-3"><a href="#27-挂卡砸屏钱包把收益三个字拆开-15">2.7 挂卡、砸屏、钱包：把「收益」三个字拆开</a></li>
+<li class="depth-3"><a href="#28-维度对照-16">2.8 维度对照</a></li>
+<li class="depth-3"><a href="#29-生态位与格局-17">2.9 生态位与格局</a></li>
+<li class="depth-2"><a href="#三横纵交汇洞察-18"><span class="toc-kind" aria-hidden="true">汇</span>三、横纵交汇洞察</a></li>
+<li class="depth-3"><a href="#31-历史如何塑造了当下位置-19">3.1 历史如何塑造了当下位置</a></li>
+<li class="depth-3"><a href="#32-优势与劣势的历史根源-20">3.2 优势与劣势的历史根源</a></li>
+<li class="depth-3"><a href="#33-未来三个剧本-21">3.3 未来三个剧本</a></li>
+<li class="depth-2"><a href="#四信息来源-22">四、信息来源</a></li>
+<li class="depth-2"><a href="#五方法论说明-23">五、方法论说明</a></li></ol>
+    </nav>
+  </aside>
+  <article class="article" id="article">
+<section class="summary"><h2 id="核心结论速览-1">核心结论速览</h2>
+<p><strong>一句话定义</strong>：《桌面破坏神：挂机ARPG》（英文名 Deskrawl: Idle ARPG，Steam AppID 4623570）是 First Day Games 开发、First Day Games 与 Gamersky Games 联合发行的付费买断桌面放置动作 RPG，2026年9月28日在 Steam 上架，窗口缩在桌面底部自动刷怪捡装，极稀有掉落可上 Steam 社区市场换成钱包余额。</p>
+<p><strong>直接回答用户的五个问题</strong>：</p>
+<ol>
+<li><strong>它是游戏。</strong> 全名《桌面破坏神：挂机ARPG》，不是屏保、不是砸桌面玩具，也不是微信小程序。中文互联网在 2026 年秋说到这个名字，指的就是 Steam 上这一款。</li>
+<li><strong>它干什么。</strong> 把暗黑式刷宝压成一条贴在屏幕底边的窗口：英雄自动下本、打怪、捡装备，仆从拉车，人负责换装、点天赋、选图、清垃圾。上班、写文档、看剧时可以开着。</li>
+<li><strong>它是挂机游戏，也带「卖装换 Steam 钱包」的系统；它不是挂机掉交易卡、再把卡卖掉当收入的那种。</strong> 商店功能列表里没有 Steam 集换式卡牌。能上架的只有黑雾、神圣、传奇符文、套装符文、传奇缰绳、金条、开光石等最稀有一档。卖出所得进 Steam 钱包，不能提现。玩家自测要挂到能顺刷最高难度，大约 100 到 130 小时才期望出一件可上架装备。把它当收益工具，账算不平。</li>
+<li><strong>目前只有 Steam 上的 Windows。</strong> SteamDB 支持系统栏只有 Windows，最低 Windows 10 64 位。没有官方 Mac、Linux、iOS、Android、微信小程序客户端。4399 上的「安卓版」页面卖的是电脑端 Steam CDKEY。</li>
+<li><strong>品类是独立放置动作 RPG，叠了三层标签。</strong> Steam 商店类型写动作、冒险、休闲、独立、角色扮演；用户标签最靠前的是 Idler、Desktop Companion、Action RPG、Loot。中文玩家和发行侧叫它暗黑 like、桌面放置、挂机刷宝、摸鱼搬砖。</li>
+</ol>
+<p><strong>关键判断</strong>：</p>
+<ol>
+<li>2026 年桌面底边已经从「陪你种地」走到「陪你搬砖」。游民星空用「摸鱼也能搬砖」给它发售，游民星空旗下的 Gamersky Games 同时是发行商。这句话是发行渠道的宣传口径，不是收益承诺，却把玩家预期钉死在「挂着能换钱」上。</li>
+<li>发售后两周，同时在线还能维持四万以上，历史峰值 48,222（2026年10月9日）。体量已经不像两人工作室的第二款游戏，口碑却按语言撕开：英文 75% 好评，简中 43% 好评，全语言混合 54.8%。中文区在用 TBH 的失败经验审视它。</li>
+<li>试玩版曾到约 82% 好评。正式版把拍卖行、在线模式、可交易物做成默认路径之后，游戏从「桌面角落的暗黑」变成「带真钱压力的刷宝」。官方在 1.0.0h 关掉家庭共享进在线，承认工作室已经进来了。</li>
+</ol>
+<p><strong>机会与风险</strong>：</p>
+<ul>
+<li>机会：桌面挂机加暗黑刷宝的形态，在 2026 年仍有明确空位；两人团队两周内日更补丁，说明他们接得住反馈。如果把可交易物的期望讲清楚、把工作室压住、把战士之外的职业拉平，它有机会从「TBH 后继」活成自己的品类标杆。</li>
+<li>风险：中文口碑已经掉到 43%。掉率、工作室、钱包买装仍是随机词条，这三件事叠在一起，会把「上班摸鱼」的核心用户赶去 Rusty's Retirement 和《动物栏》。市场地板价已经出现 0.17 美元级别的黑雾挂单，搬砖叙事自己会碎。</li>
+</ul>
+<hr>
+</section><h2 id="一纵向分析从诞生到当下-2">一、纵向分析：从诞生到当下</h2>
+<blockquote>
+<p><strong>叙事主线</strong>：两个在《暗黑破坏神》里耗掉几千小时的人，想做一款上班也能刷的暗黑。他们把窗口压到桌面底部，又把最稀有的掉落送进 Steam 市场。前半段赢在形态，后半段被「搬砖」预期反噬。整条线只有半年，节点却密。</p>
+</blockquote>
+<h3 id="11-起源暗黑玩家想在上班时刷宝-3">1.1 起源：暗黑玩家想在上班时刷宝</h3>
+<p>2026年5月18日，Steam 社区出现一篇署名 First Day Dev 的介绍帖。原文不长，信息却够用：</p>
+<p>「我们是 First Day Games，一家只有 2 人的工作室，正在制作我们的第二款游戏 Deskrawl。我们俩都是资深 ARPG 玩家，在《暗黑破坏神》里投入了数千小时。我们一直想要一款无论工作还是追剧都能随时玩的游戏。」</p>
+<p>这句话把动机写死了。他们要的不是再做一个全屏暗黑，也不是再做一个点屏幕加数字的增量游戏。他们要的是：人在写文档、看剧、开会，角色还在桌面底部砍怪。</p>
+<p>工作室的第一款游戏可以核到。同一 Steam 开发商名下，2026年3月19日发过《Heroes of Magic &amp; Cards》，扑克式构筑 Roguelike，英文评测 Very Positive，87 篇里 86% 好评。Deskrawl 是第二款，和公告对得上。Steam 开发商页上还有未上线的《Monkeys Overdrive: Survivor》。</p>
+<p>第一款和第一款的体量差，能说明这支团队在 2026 年押了什么。扑克 Roguelike 的峰值在线，SteamDB 开发商页记到过 100；Deskrawl 的峰值是 48,222。口碑方向也反着来：第一款小而好评，第二款大而分裂。两人工作室用半年时间，从「几十个人喜欢的牌」走到「四万人挂着的暗黑」。速度本身是成绩，也是风险——社区规模放大五百倍时，客服、反作弊、经济调控都不会按线性长。10月13日「十月规划」的开头承认「游戏还有不少不足」，写的就是这种错位：产品已经按爆款的人数在跑，团队还按两人工作室的班底在打补丁。</p>
+<p>人员名字要分开写。公开 LinkedIn 上有一家 First Day Entertainment / First Day Games，联合创始人写作 Stephen Zhen Gou 与 Mike Mei，2023 年前后成立，驻加州圣马特奥，对外说做 AI 游戏。第三方索引会把这家公司和 Deskrawl 的新闻叠在一起。官方 Deskrawl 公告从未点过这两个人的名，发售帖署名是 AllenLan23，日常补丁多署 First Day Dev。两人工作室的具体分工、谁写系统谁做数值，目前暂缺。报告后文按官方自称处理：两人、暗黑老玩家、第二款游戏。</p>
+<p>SteamDB 第一次见到 App 4623570 是 2026年4月13日 18:48:49 UTC，changelist #35199255。介绍帖比首次入库晚一个月。中间那一个月他们在准备愿望单和社群入口：Discord <code>discord.gg/vq6HQXVeQ8</code>，QQ <code>qm.qq.com/q/qzitUPWLPa</code>，YouTube <code>@deskrawl</code>。</p>
+<p>中文名选「桌面破坏神」，英文名 Deskrawl，是 Desktop 和 crawl 的拼法。破坏神对着 Diablo，桌面对着窗口位置。这个名字后来会惹出一点误会：2000 年前后，英文玩家把 Gemtree 的免费砸屏小工具叫 Desktop Destroyer；2020 年 Daniel Brendel 在 Steam 上做过粉丝重制《Casual Desktop Game》。2026 年中文搜索「桌面破坏神」，结果页已经是这一款挂机 ARPG。后文会单开一节把同名对象拆开。</p>
+<p>他们要借的不只是名字。商店页把城镇 NPC 写成铁匠、炼金、神秘商人、拍卖行，职业写成战士、巫师、武僧、猎人，终局写成秘境和更高难度。这是一套被暗黑玩家认过几十年的骨架：回城强化、词缀赌博、抓一套能用的技能组合、再去推更深的层。Deskrawl 做的减法是把「走位、卡墙、手搓技能」拿掉，把「看词缀、点天赋、换仆从」留下。加法是把窗口压到任务栏上方，让这套骨架能在 Excel 或浏览器旁边跑。5 月那篇介绍帖没有提市场，也没有提工作室。当时他们要解决的问题只有一个：暗黑太占手，上班的人玩不了。</p>
+<p>发行侧在发售当天补上了另一句口号。游民星空 2026年9月28日发稿，标题是「摸鱼也能搬砖！」，作者老壮，来源栏写「互联网」。Gamersky Games 同时是本作联合发行商。媒体稿和发行商是同一条线。19 元首发价、暗黑 like、上班挂机、Steam 市场，四件事被捏成一句能转发的话。玩家后来用这四个字衡量它，也用这四个字骂它。</p>
+<h3 id="12-桌面底边怎么变成一条赛道20002025-4">1.2 桌面底边怎么变成一条赛道（2000—2025）</h3>
+<p>要看懂 Deskrawl 为什么一出来就有人懂，得先看这条窗口是怎么长出来的。</p>
+<p>2000 年前后，Gemtree Inc. 做过一套 Windows 免费小游戏 Stress Reducers，玩家口语里常叫 Desktop Destroyer。锤子、电锯、白蚁、水枪砸在桌面截图上，文件大概 370 KB，没有养成，没有经济。2013 年前后，Isotope244 还做过一款 3D 屏保 Desktop Destroyer：把桌面切成方块炸开。这些东西满足的是「对着屏幕发泄三分钟」，和刷宝无关。</p>
+<p>2018 到 2020 年，桌面小玩意换了一代气质。samperson 的 Desktop Goose 在 itch.io 上放一只鹅捣乱，页面评分 4.8/5（1,981 人）。Daniel Brendel 的《Casual Desktop Game》2020年2月14日在 Steam 正式版上线，免费，创意工坊能加锤子、喷火器、坦克和异形，评测 Very Positive。它们仍是玩具，窗口可以是全屏覆盖，经济循环是零。</p>
+<p>真正把「屏幕底边」做成一种游戏形态的，是 2024年4月26日的《Rusty's Retirement》。Mister Morris Games 自研自发，标价 6.99 美元，Windows 和 macOS 都能跑。机器人在底边种地、浇水、收菜、做生物燃料，人继续干活。Steam 后来甚至出现过名叫 Bottom-Of-Your-Screen 的捆绑包。英文评测 Overwhelmingly Positive，6,603 篇里 97% 好评。它证明一件事：玩家愿意付钱，让一个完整游戏缩在任务栏上方，陪自己上班。</p>
+<p>2025年2月17日，《动物栏：桌面牧场》（Tiny Pasture）上线。开发 CaveLiquid，发行 Gamersky Games。兔子、狐狸、羊驼、史莱姆在底边跑，点金币扩栏，窗口可拖、可改长度。英文评测 Very Positive，1,203 篇里 93% 好评。Polygon 写过发售当周同时在线过一万。Gamersky Games 由此先摸到了「桌面挂机」在中文区的发行手感。一年半之后，同一发行商把 Deskrawl 带进同一条货架。</p>
+<p>2026年5月27日，《TBH: 塔斯克巴·英雄》发售。Nugem Studio 与 Tesseract Studio 开发，本体免费，任务栏里的像素勇者自动打怪，传说及以上道具可上 Steam 市场。它把「底边挂机」和「可卖道具」焊在一起。发售后四个月，简中评测掉到 10,066 篇里 24% 好评，评级「多半差评」。Deskrawl 在 6 月新品节上试玩时，TBH 的中文区已经在崩。游民星空后来称 Deskrawl「堪称 TBH 的后继新作」。这句话是媒体表述，不是开发商声明，却点出了玩家会拿谁来比。</p>
+<p>Deskrawl 出生的位置，因此非常具体：形态学 Rusty，发行线沾《动物栏》，经济预期撞上 TBH。它自己的差异化，是把暗黑的词缀、职业、仆从和城镇塞进同一条窗口。</p>
+<p>2024 到 2026 年，桌面底边能长成赛道，背后还有一层更干的办公现实。远程和混合办公把「屏幕上同时开着十个窗口」变成默认状态；Steam Deck 和轻薄本让「永远开着一个小游戏」的电量账能算过来；独立游戏在 Steam 上的发现位，又刚好给了 Bottom-Of-Your-Screen 这种捆绑包生存空间。Rusty 证明用户愿意为陪伴付钱，《动物栏》证明中文发行能把同一形态卖进国内愿望单，TBH 证明有人愿意为「挂着出货」点进免费游戏。Deskrawl 出场时，这三件事都已经被别人验证过。它要做的是把第三件事用暗黑皮肤再做一遍，并收 28 元门票。</p>
+<h3 id="13-试玩把窗口做成产品2026年4月7月-5">1.3 试玩把窗口做成产品（2026年4月—7月）</h3>
+<p>2026年6月8日，工作室宣布试玩版将于 6月15日 0:00 PDT 上线，赶上 Steam Next Fest。可玩内容写得很克制：战士，等级上限 20，一百多件装备，12 个随从，9 个地图节点，1 座主城。试玩版 AppID 4765010。</p>
+<p>6月15日试玩开了。第二天，0.1.9 补丁把这款游戏的形态钉死：窗口可缩放、可拖动，Steam Cloud 存档，误卖可回购。公告原文把这些写成「呼声较高的功能」。玩家在新品节里第一天就反馈：窗口太死、存档不放心、手滑卖错装。两人团队隔夜做完。</p>
+<p>此后十天几乎日更。</p>
+<p>6月18日，0.1.10 加入生活技能。货车可以按稀有度自动筛选、自动出售。挂机不再等于回城清包。6月19日，0.1.11 把试玩等级上限提到 25，打开奥尔登里奇南面的腐化森林。6月21日，0.1.12 加入远古传奇：传奇掉落有小概率变成满物品等级、词缀取最大值。6月22日，0.1.12a 让老板键可以自定义。6月27日，0.1.13 一次塞进第 20 层天赋、在线模式、排行榜和反作弊。</p>
+<p>0.1.13 是试玩期最重要的一次转向。在线模式意味着存档上服务器、排行榜可比、反作弊要跑。两人工作室从「单机桌面暗黑」跨到「需要服务器的挂机」。当天到 7月17日，热修从 0.1.13a 打到 0.1.13f：货车超载报错、复活后不掉落、部分地区要代理才能连、城镇复活丢档、超宽屏界面被裁、点击游戏导致视频网站暂停。最后一条特别能说明用户是谁。他们一边挂着 Deskrawl，一边在浏览器里看视频。游戏点一下，YouTube 或 B 站黑屏，摸鱼体验当场碎掉。</p>
+<p>7月17日，树人首领活动结束。官方说大约 4,000 人打过这只 Boss。7月22日，排行榜前 100 获得 8 月封闭测试资格。7月25日，再宣布额外抽出 1,000 个密钥。试玩期的社区已经大到需要抽签。</p>
+<p>试玩版商店页的口碑，后来被 233 乐园和 Demo 页抓取记到约 82% 至 83% 好评。这个数字很重要。玩家在「只有战士、一座城、没有完整拍卖行压力」的时候，接受这套循环。他们骂的是正式版把循环接到市场上之后发生的事。</p>
+<p>试玩期真正被打磨出来的，是一套「人可以离开」的操作层。生活技能让货车按稀有度自动出售、自动分解，满载不再等于强制回城。生命药水和回城卷轴改成可点击，最低经验获取被兜底到 1，窗口能拖到第二块屏幕。0.1.12a 让老板键可自定义，发售后的 1.0.2a 又让老板键顺便藏掉任务栏图标。这些看起来像边角料，对目标用户却是产品本身：游戏必须能在领导回头的半秒里消失，也必须能在你看视频时不把网页点黑。0.1.13f 修「点击游戏导致视频网站暂停」，写的就是这个用户。</p>
+<p>B 站上，相关视频最早可见 2026年5月17日，比官方介绍帖还早一天。中文区的传播不是从发售稿开始的，是从试玩录屏开始的。窗口缩在桌面底部、小人自己砍、地上掉发光装备，这种画面天然适合短视频。试玩版没有把「能卖钱」放在第一句，视频里的情绪是「摸鱼神器」而不是「搬砖工具」。两种情绪后来在正式版里撞车。</p>
+<h3 id="14-从封闭测试到-19-元发售2026年8月9月28日-6">1.4 从封闭测试到 19 元发售（2026年8月—9月28日）</h3>
+<p>8月19日封闭 Beta 开了，持续到 8月28日。当天公告预告了法师与武僧、沙漠生态、等级上限 35、宝石与镶孔、符文、黑雾传奇、新的最终首领。8月26日测试向所有人开放。8月31日官宣发售日：9月28日太平洋时间上午。</p>
+<p>9月25日倒计时公告把各地时间写全。北京时间晚上 8:00，洛杉矶上午 5:00。同一篇公告宣布试玩版将于 9月26日晚间 PDT 关闭，「以便把资源集中到正式版，并统计排行榜、发放大树人挑战奖励随从」。</p>
+<p>9月28日正式上线。AllenLan23 发售帖的中文版把规模写死：战士、巫师、武僧、猎人；3 大主城，10 个地区，80 个地图关卡节点。商店简介补了玩法骨架：所有敌人包括 Boss 都可捕获；仆从拉战利品车，战斗里给增益或放技能；城镇用金币解锁铁匠、炼金、神秘商人、拍卖行；不适合自己的极品可以上 Steam 市场。</p>
+<p>价格是买断。美国区 6.99 美元，中国区 28 元人民币，台湾区 NT$159。首周七折，SteamDB 记到的最低价出现在发售当天：4.89 美元 / 19.60 元 / NT$111。游民星空稿写成「19 元」，取了整数。同步上架的《Supporter Pack》（AppID 5216710）卖 1.99 美元 / 8 元，内容是额外一页仓库、独占传奇翅膀、独占传奇铠马。支持者包评测 Mixed，约 42 到 45 篇里 54% 好评。</p>
+<p>发售当天还有一条热修：旧版 Steam 客户端连不上在线模式；新建角色默认改成在线。从这一刻起，拍卖行不再是进阶选项，是新号的默认路径。</p>
+<p>系统需求压得很低。最低 Windows 10 64 位、i3、4 GB 内存、GT 730 或 R7 240、5 GB 硬盘。推荐 i5、16 GB、GTX 660 或 R9 270。语言 13 种，界面和字幕都有，没有完全音频。Steam Deck 兼容性在 Steambase 上写未知。Mac、Linux、手机客户端，商店页和 SteamDB 都未提供。</p>
+<p>正式版把试玩里缺的骨架一次性补齐，也把暗黑谱系铺到明面上。三座主城对应不同进度：第一座奥尔登里奇能用几十金币解锁货商和炼金，拍卖师要等级，铁匠要 800 金币加材料，宝石商人亨利要 20,000 金币和 30 级。这是典型的暗黑城镇节奏——你不是在经营一座城，你是在给刷宝解锁工具。货车载重量决定一次能捡多少，生活技能决定垃圾装在战斗里就能卖掉。治疗药水自动喝，炼金做的食物和增益放进自动使用槽，到点自己补。人要做的事被收成：选下一张图、换一套词缀、决定哪些稀有度进背包、哪些当场变金币。</p>
+<p>职业四人，对应四种刷法。战士在试玩里打了三个月，旋风、烈焰打击、对眩晕目标的加成，是最先被理论化的一条。巫师走冰火雷和控制，武僧走近身连击和减伤，猎人走陷阱、多重射击和风筝。8 月测试才让后三个职业完整露面，9 月 30 日的 1.0.0h 还在抬猎人和武僧的技能系数。先上线三个月的职业，会变成「正确职业」，排行榜会替工作室完成一次自然选择。</p>
+<p>仆从系统是它和多数放置暗黑最不像的地方。怪物和 Boss 都能抓，抓来的东西拉车、给被动、放技能。绯红谷之主这种高载重拉车手，会被玩家当生产力工具培养；传奇缰绳进市场之后，仆从本身也变成可交易物。商店写「甚至是 Boss」，短视频写「抓来打工」。这个梗好传播，也好被理解成「我的号在给我打工」。打工两个字，后面会从趣味滑向账本。</p>
+<h3 id="15-发售后两周四万人在线中文区先冷2026年9月28日10月15日-7">1.5 发售后两周：四万人在线，中文区先冷（2026年9月28日—10月15日）</h3>
+<p>发售后的补丁密度，比试玩期还密。</p>
+<p>9月29日，1.0.0g。仓库加「全部存入 / 全部取出」，内存减约 130 MB，掉落按装备栏位均分（猎人因为武器类型少，此前吃亏）。同一补丁写了两句硬的：修复盗版进入在线；修复反作弊误封。第二天，1.0.0h 加强猎人和武僧，并改掉一条核心规则：在线模式必须拥有自己的游戏副本。家庭共享、免费周末、网吧授权仍可单人。公告原文把原因写成「防止部分工作室 / 作弊者利用该机制」。</p>
+<p>工作室在发售 48 小时内已经大到需要改规则。两人团队选择先砍共享、保在线，而不是先关市场。</p>
+<p>10月2日 1.0.0i，拍卖行购买按钮改到 Steam 客户端内打开，不再跳浏览器。10月5日至6日，1.0.1 加 32 枚可交易传奇符文、金条、开光石、装备开光、自动下一关。金条卖给商人换 2,500,000 游戏金币，自己也能上架。开光让 +10 装备再抬两次，每次全属性 +5%。10月8日至10日，1.0.2 开放符文转化，并给单人模式的「离线角色」加极稀有掉落双倍。这里的离线角色指单人模式角色，不是关掉客户端继续爆可交易装。10月9日 1.0.2a，老板键可同时隐藏任务栏图标。10月12日至13日，1.0.2b 把伤害减免和冷却缩减加上限，再修一轮猎人、武僧。</p>
+<p>10月13日，官方发「十月规划」。开头承认「游戏还有不少不足」，并说十月还有新内容。规划条目的完整清单，本次抓取未抽出正文，暂缺。姿态已经清楚：他们知道口碑在掉，选择继续日更。对只有 17 天正式寿命的游戏，日更是在用补丁密度换时间。玩家计算器更新得同样快，官方每加一种可交易物、每抬一次掉率，评论区都会在 24 小时内重算「多少小时出一件」。这场赛跑里，工作室的对手不是 TBH，是自己两周前许下的预期。</p>
+<p>体量方面，SteamDB 图表页在 2026年10月15日显示：当时在线约 41,990；24 小时峰值 43,907；历史峰值 48,222，日期 2026年10月9日。商店数据：日活排名第 201，热销第 750，愿望单活跃第 981，关注 8,231，评测 2,831。第三方拥有量估计——PlayTracker 约 10.49 万，Gamalytic 约 16.55 万，VG Insights 约 17.23 万——是估算，不是 Valve 官方销量。即便取最低一档，发售两周过十万拥有，对 6.99 美元的独立游戏已经很猛。</p>
+<p>口碑按语言拆开，差得很远。</p>
+<p>SteamDB 全语言：2,831 篇，好评 1,551（54.8%），差评 1,280（45.2%），评级 Mixed，SteamDB 分 54.35%。英文商店：Mostly Positive，384 篇里 75% 好评。简中商店：褒贬不一，1,537 篇里 43% 好评。评测总量里，简中超过一半。中文区既是量的来源，也是分的拖油瓶。</p>
+<p>简中差评反复出现的点，可以收成四条。第一，可交易物极稀有。有人按资料站基础掉率估算：普通 70 级炼狱 Boss 出黑雾，期望大约五千多个 Boss、约 140 小时；出神圣更到三万个 Boss 量级。这些是评论区计算，不是官方掉率表。第二，职业不平衡，战士在排行榜上过强，后续补丁才开始抬猎人、武僧、巫师。第三，用钱包买来的黑雾装仍是随机词条，花钱买的是抽奖券。第四，外挂和工作室多开。有评论写群里有人吹「一台电脑挂 50 个号」「朋友挂 500 个号，一天收益上万」，并喊「想挂机赚点电费的你就别想了」。这些是玩家指控。官方能对上的动作，是 1.0.0h 的正版校验和 1.0.0g 的盗版拦截。</p>
+<p>好评和介绍帖站在另一边：桌面角落自动刷，职业和词条有构筑，抓 Boss 拉车有记忆点，不适合自己的稀有物能上架。巴哈姆特玩家心得把机制讲得更冷静：本体上市折扣约新台币 111 元；远征营地关掉游戏后仍累积经验和金币，不要把它当成装备挂机；能上架的装很少，市集曾出现接近游戏售价的挂单；卖出只能进 Steam 钱包，不能提现。作者自己估算，DPS 破百万、最高难度末王能压到 1 分 20 秒一趟时，平均 100 到 130 小时才出一件可上架装备。</p>
+<p>10月15日打开社区市场，地板价已经很难支撑「搬砖」两个字。市场搜索页最低可见挂单大约 0.28 美元。黑雾裤子有从 0.17 美元起的单。开光石约 364 个在售，最低约 0.64 美元。神圣武器有的从一两美元起，也有 The Grandmother 这类从 8.32 美元起的。金条曾见 0.27 美元、大约 500 件在售。玩家资料站 X1X 统计可交易种类约 214 种，价格快照日是 2026年10月13日，站点自己声明非官方。发售头几天第三方维基记过几十到上百美元的传说缰绳，那是首日稀缺，不能当成两周后的收入。</p>
+<p>社区在这两周里长出了两套并行的基础设施。官方给 Discord 和 QQ。玩家给 X1X 资料站和 deskrawl.info。X1X 自称数据从游戏本体提取，版本号跟到 1.0.2b，把掉率、拍卖行原文、市场种类摊开给不会翻公告的人看。差评里那些「平均 5,556 个 Boss 出一件黑雾」的计算，原料就来自这类站点。官方不公布完整掉率表时，玩家会用拆包数据给自己一个期望；期望一旦被写成数字，就会变成验收标准。工作室日更补丁，玩家日更计算器，两边都很快。</p>
+<p>Twitch 数据说明它还没有变成观赏游戏。SteamDB 记到的当时观看约 75 人，24 小时峰值 89，历史峰值 5,438。挂机画面不适合直播：窗口太扁，事件密度低，爆点隔几十小时一次。它的传播介质是短视频和办公室口口相传，不是主播带货。四万在线、不到一百观众，这个比本身就是品类签名——人在用它，不在看它。</p>
+<p>发售后两周的经济补丁，可以单独看成一条短线。1.0.1 把传奇符文、金条、开光石送进可交易池，等于承认「只有黑雾和神圣能卖」太窄，玩家在市场上看不见货。金条是纯货币商品，卖给 NPC 换 250 万金币，自己也能挂到市场上，于是游戏金币和 Steam 钱包之间出现了一层薄薄的兑换。开光石让 +10 装备再抬两次全属性，珍贵材料有了新去处。1.0.2 的符文转化更进一步：9 个同稀有度合成 1 个随机更高档，垃圾符文能进回收。单人角色的极稀有掉落双倍、黑雾掉率上调，是在用数值回应用户计算器。</p>
+<p>这些改动的方向一致：让市场上看得到东西，让挂机的时间不全浪费在「等一件不存在的货」上。风险也一致。可交易种类从「最稀有几档」扩到金条和开光石之后，工作室的单位时间产出会跟着扩。10 月 15 日开光石 364 个在售、最低 0.64 美元，已经是扩容后的样子。官方在供给和预期之间走钢丝，每加一种可交易物，地板价就多一个泄压阀，也多一个被刷穿的孔。</p>
+<p>一条半年的产品线，至此收束在一个刺眼的截面上：人还在，钱的故事先塌了。</p>
+<hr>
+<h2 id="二横向分析竞争图谱-8">二、横向分析：竞争图谱</h2>
+<blockquote>
+<p><strong>切面时间</strong>：2026年10月15日。竞品按场景 C 处理，取四款代表：TBH、Rusty's Retirement、《动物栏：桌面牧场》、Melvor Idle。另用一小节把砸桌面玩具和挂卡游戏排除出对比池。</p>
+</blockquote>
+<h3 id="21-竞品地图-9">2.1 竞品地图</h3>
+<p>名字会把人带进三条错的池子。</p>
+<p>砸桌面压力玩具：Desktop Destroyer / Stress Reducers、《Casual Desktop Game》、Desktop Goose。它们满足的是发泄和陪伴，没有职业、词缀、拍卖行。九游上还有一条「桌面破坏王」，开发者写成「互联网」，商店链接核验不住，和「桌面破坏神」不是同一个名字。</p>
+<p>压力释放 App、Smash Hit、Getting Over It：产品身份已经落到付费桌面挂机 ARPG，这组不构成同期竞品。</p>
+<p>集换式卡牌挂机、点卡号、CS2 饰品兑现：玩家问「是不是 Steam 上挂机获取收益的那种」，指的多半是这一组。Deskrawl 的商店功能列表没有 Steam Trading Cards。2026年10月15日打开的社区市场搜索结果全是装备、符文、缰绳、商品。卡牌挂机这条，对比时只用来划界，不拿来当主竞品。</p>
+<p>应该对比的是两层。第一层，窗口贴在任务栏或屏幕底边、人去上班它继续跑的桌面挂机。第二层，带 Steam 社区市场、玩家期待「挂着刷能卖的东西」的战利品放置 RPG。主竞品按贴合度排序：TBH 最近，Rusty 和《动物栏》同形态，《Melvor Idle》同「挂机变强」的深度标杆。IdleOn 是放置 MMO，不贴任务栏，只作参照。</p>
+<h3 id="22-桌面破坏神当前画像-10">2.2 《桌面破坏神》当前画像</h3>
+<p>定位：买断制桌面放置暗黑。开发 First Day Games，发行 First Day Games 与 Gamersky Games。仅 Windows。13 种语言。功能标签是单人、成就、云存档、排行榜、家庭共享。社区市场开关是开的。</p>
+<p>玩法循环可以压成四步。选职业，把窗口拖到屏幕底部。设好货车筛选和生活技能，英雄自己清图。空档回来换装、点天赋、抓仆从、推下一张图。极稀有物进拍卖行，上架到 Steam 库存，挂给别人。玩家资料站 X1X 自称数据来自游戏本体，版本 1.0.2b，build 25895065，2026年10月13日提取。拍卖行原文限定：只有在线角色能交易；目前可交易的是黑雾、神圣、传奇符文、套装符文、传奇缰绳；同时最多上架 8 件；强化过、打过孔、装备过的符文不能交易。1.0.1 之后，金条和开光石也进了可交易清单。</p>
+<p>商业模式是买断加小额支持者包，没有在已读页面看到官方现金装备商城。游戏内消耗的是金币、材料、头骨。扎希尔的幸运轮盘用游戏金币转，1.0.2b 时每次 12,500 金币。玩家之间的流通走 Steam 钱包。Steam 订阅协议写明：钱包不是银行账户，资金在 Steam 之外没有价值，不能兑换现金，不可转让。社区市场单独的手续费比例，本作页面本次未抽出，暂缺，不能把 CS2 的 5%+10% 直接套过来。</p>
+<p>目标用户有两层，官方写的是一层，发行稿写的是另一层。官方要的是「工作或休闲时在桌面底部刷传奇」。发行稿要的是「摸鱼也能搬砖」。前一层用户在英文评测里还在，后一层用户在中文差评里已经翻脸。</p>
+<p>短板也已经暴露。窗口必须开着才算完整挂机，远征营地的离线收益主要是经验和金币。清包、选图、换图仍要人点，资料站提醒 Forest Raptor 完成率 92.2%，后续地区不会自己切。职业平衡靠发售后补丁追。可交易物的供给一旦被工作室放大，地板价会先于官方数值崩掉。</p>
+<p>还有一层体验短板，官方补丁已经在修，玩家仍会在差评里写：窗口偏大，必须占一条桌面；内存发售首日偏高，1.0.0g 才减了约 130 MB；竖屏弹窗位置会错；低画质下战士和猎人预览会黑一块。这些不是经济问题，是「桌面伴侣」验收。Rusty 和《动物栏》把窗口克制当成第一功能。Deskrawl 先做暗黑，后做克制，顺序决定了它在办公显示器上的第一印象。</p>
+<h3 id="23-vs-TBH塔斯克巴英雄-11">2.3 vs TBH：塔斯克巴·英雄</h3>
+<p>TBH 是 Deskrawl 在玩家脑子里的直接前任。</p>
+<p>2026年5月27日发售，比 Deskrawl 早四个月。本体免费，商店包里挂着职业、仓库、交易船、支持者包、原声。小窗口像素砍杀，3 章 4 难度，商店声称 500 余种道具、50 余种怪物。品质从普通排到宇宙。第三方攻略写：游戏开着并最小化才掉宝箱和装备；关掉客户端只结金币和经验，离线上限约 8 小时；传说及以上才能上 Steam 市场。</p>
+<p>简中评测 10,066 篇、24% 好评，评级「多半差评」。英文 8,555 篇、62% 好评，近 30 天 1,442 篇、59% 好评。中文区已经用脚投票。游民星空攻略页把 Deskrawl 写成「TBH 的后继新作」，中文玩家入坑时带着这层记忆。</p>
+<p>用户选 TBH 的原始理由很朴素：免费、占任务栏一角、挂着能出能卖的东西。用户离开它的理由同样朴素：掉率、工作室、物价、付费点把「免费」变成了资格门槛。</p>
+<p>和 Deskrawl 最本质的差别有三条。TBH 免费入口，Deskrawl 先收 28 元。TBH 是像素任务栏 RPG，Deskrawl 是暗黑刷宝加仆从拉车加城镇 NPC。两者共享同一条玩家预期：挂机产出可卖道具。TBH 的中文差评是这预期兑现失败的前车。Deskrawl 发售两周就走到 43% 简中好评，说明同一条路可以走得很快。</p>
+<p>我的判断是：Deskrawl 在形态上比 TBH 完整，在预期管理上重复了 TBH 的错误。买断本来可以过滤「纯来搬砖」的人，发行稿却把这批人又请回来了。</p>
+<p>TBH 的中文崩溃还有一个 Deskrawl 正在重复的细节：市场存在本身会改变挂机的心理时钟。没有市场时，玩家衡量的是「我比昨天强了多少」。有市场时，玩家衡量的是「这一小时折合多少钱包」。前一种时钟能容忍一百小时不出神装，因为强度仍在涨。后一种时钟不能，因为地板价在掉、别人的号在出、自己的号被怀疑「分到了不出货的种子」。Deskrawl 的差评里已经出现「有的号就是不出东西」这种句式。真假暂缺，句式本身说明时钟已经切换。</p>
+<h3 id="24-vs-Rustys-Retirement底边挂机的好评标杆-12">2.4 vs Rusty's Retirement：底边挂机的好评标杆</h3>
+<p>Rusty 证明桌面底边可以做成高口碑品类。</p>
+<p>2024年4月26日发售，Mister Morris Games 自研自发。Windows 和 macOS。英文 6,603 篇、97% 好评，近 30 天 55 篇、98% 好评。循环是种地、养机器人、做生物燃料、再扩大农场。有 Focus Mode 把生产放慢，也有竖屏模式贴在屏幕侧面。功能列表里有 Steam 集换式卡牌。没有玩家间装备市场。</p>
+<p>2026年10月15日打开的商店页标题是 “Save 40%”。SteamDB 子包页记过促销价 4.19 美元、写明促销到 2026年10月22日，该页更新时间停在 2026年9月13日，当日实付以结账页为准。标价 6.99 美元，和 Deskrawl 同档。</p>
+<p>用户选它的理由几乎从不涉及赚钱。他们要的是：开着它，自己还能干活；机器人可爱；循环干净；不会突然跳出一个拍卖行让人算电费。它和 Deskrawl 的窗口位置几乎一样，情绪完全相反。一个让人放松，一个让人盯掉率。</p>
+<p>形态学上，Deskrawl 学的是 Rusty 的「永远在底边」。经济学上，Deskrawl 走的是 TBH 的「东西能卖」。把 Rusty 的形态和 TBH 的经济焊在一起，得到的就是现在这款 43% 好评的中文口碑。</p>
+<h3 id="25-vs动物栏桌面牧场同一发行商的另一条桌面线-13">2.5 vs《动物栏：桌面牧场》：同一发行商的另一条桌面线</h3>
+<p>《动物栏》和 Deskrawl 共享发行商 Gamersky Games。</p>
+<p>2025年2月17日发售（SteamDB 区域记录有写 2月18日），开发 CaveLiquid。Windows 和 macOS。SteamRaw 在 2026年10月9日记录的美国区现价 5.99 美元。另有 Azure Waters（2.99 美元）、支持者包（1.99 美元）等 DLC。英文 1,203 篇、93% 好评，近 30 天 55 篇、89% 好评。</p>
+<p>玩法是买幼崽、喂食、繁殖、点金币扩栏。商店功能没有集换式卡牌，也没有社区市场。金币停在游戏里面。发行商显然知道「桌面底边」能卖，也知道「陪伴」和「搬砖」是两种货。</p>
+<p>用户选《动物栏》，是因为它不和自己抢注意力，也不和自己抢对金钱的想象。同一发行商在 2026 年秋把 Deskrawl 按「搬砖」推出去，等于在已经验证过的桌面货架上，换了一套更刺激、也更脆的卖点。</p>
+<p>我的判断是：Gamersky Games 会发 Deskrawl，因为他们已经有桌面挂机的渠道和中文用户心智。《动物栏》的 93% 好评帮他们建立信任，Deskrawl 的 43% 简中好评在消耗这层信任。发行商自己的发售稿标题，要负一部分责任。</p>
+<h3 id="26-vs-Melvor-Idle关游戏之后仍在变强的标杆-14">2.6 vs Melvor Idle：关游戏之后仍在变强的标杆</h3>
+<p>Melvor Idle 不贴任务栏。把它放进来，是为了标定「挂机」这两个字可以有多深。</p>
+<p>抢先体验 2020年11月19日，正式版 2021年11月18日。开发 Games by Malcs，发行 Jagex。Windows、macOS、Linux。SteamRaw 记录 2026年10月8日美国区回到 9.99 美元。三部资料片各 4.99 美元。英文 8,642 篇、92% 好评。商店明确写有离线进度，明确写没有微交易，「玩的人应在同一起跑线」。需要联网。没有集换式卡牌，没有社区市场。</p>
+<p>循环是 20 多项技能互相喂养，战斗、地下城、Boss，1,100 件以上物品。人离开，进度仍走。经济封闭，强度来自时间加构筑，不来自挂单。</p>
+<p>Deskrawl 的挂机是「进程开着，窗口缩小」。Melvor 的挂机是「客户端可以关」。前者卖的是桌面存在感，后者卖的是进度安全感。把 Deskrawl 的玩家期待校正到 Melvor，会发现官方从来没承诺过关游戏之后继续爆黑雾。巴哈帖写的远征营地，给的是经验和金币。1.0.2 的「离线角色掉落双倍」，给的是单人模式角色。三条「离线」不是同一件事，中文讨论里经常被揉成一句「挂着就能出货」。</p>
+<h3 id="27-挂卡砸屏钱包把收益三个字拆开-15">2.7 挂卡、砸屏、钱包：把「收益」三个字拆开</h3>
+<p>用户原话是：「steam上挂机获取收益的那种游戏吗？」这句话在中文 Steam 语境里通常有三种指向。</p>
+<p>第一种，挂机掉集换式卡牌，集齐合成徽章，散卡上市场换几分到几块钱包。Valve 的规则是：只有加入该计划的游戏才会掉卡，掉落次数有限。Deskrawl 的商店功能列表没有这一项。Rusty 反而有卡。Deskrawl 走的不是这条。</p>
+<p>第二种，CS2 饰品、刀、盾，在官方市场进钱包，在第三方站讲「变现」。Deskrawl 有没有稳定的第三方兑现渠道，本次没查到可靠一手页面，暂缺。官方路径只到钱包。Steam 订阅协议把钱包锁死在平台内。</p>
+<p>第三种，游戏自己做道具市场，稀有掉落能挂单。Deskrawl 属于这一种。TBH 也属于这一种。官方商店写：「在 Steam 市场中与其他玩家交易珍贵的装备、材料和随从，自由定价、市场浮动。」系统存在，收益叙事不成立。理由有四条。要先付 28 元买断。可交易物只占最稀有一档。玩家自测 100 到 130 小时出一件。卖了也是钱包，不能当工资。10月15日的地板价还说明：供给一旦上来，单价会先于官方掉率一起掉。</p>
+<p>所以，问句的精确答复是：它是挂机游戏，它有市场，它不是那种靠挂机稳定获取收益的游戏。</p>
+<h3 id="28-维度对照-16">2.8 维度对照</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>桌面破坏神</th>
+<th>TBH</th>
+<th>Rusty's Retirement</th>
+<th>动物栏</th>
+<th>Melvor Idle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发售</td>
+<td>2026-09-28</td>
+<td>2026-05-27</td>
+<td>2024-04-26</td>
+<td>2025-02-17</td>
+<td>正式 2021-11-18</td>
+</tr>
+<tr>
+<td>开发 / 发行</td>
+<td>First Day Games / 联合 Gamersky Games</td>
+<td>Nugem + Tesseract / Nugem</td>
+<td>Mister Morris 自研自发</td>
+<td>CaveLiquid / Gamersky Games</td>
+<td>Games by Malcs / Jagex</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>Steam Windows</td>
+<td>Steam Windows</td>
+<td>Steam Win / macOS</td>
+<td>Steam Win / macOS</td>
+<td>Steam Win / macOS / Linux</td>
+</tr>
+<tr>
+<td>定价</td>
+<td>买断 6.99 美元 / 28 元，支持者包 1.99 美元</td>
+<td>免费 + 职业等 DLC</td>
+<td>买断 6.99 美元</td>
+<td>买断约 5.99 美元 + DLC</td>
+<td>买断 9.99 美元 + 资料片</td>
+</tr>
+<tr>
+<td>窗口形态</td>
+<td>桌面底部完整 ARPG</td>
+<td>任务栏迷你 RPG</td>
+<td>底边农场</td>
+<td>底边牧场</td>
+<td>常规窗口，不贴边</td>
+</tr>
+<tr>
+<td>核心循环</td>
+<td>自动刷宝、配装、抓仆从</td>
+<td>自动砍杀、改词条</td>
+<td>种地、机器人、生物燃料</td>
+<td>养成动物、点金币</td>
+<td>技能网、离线进度</td>
+</tr>
+<tr>
+<td>Steam 卡牌</td>
+<td>无</td>
+<td>商店未作为卖点强调</td>
+<td>有</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>玩家市场</td>
+<td>有，极稀有道具</td>
+<td>有，传说及以上</td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>英文口碑</td>
+<td>75% / 384 篇</td>
+<td>62% / 8,555 篇</td>
+<td>97% / 6,603 篇</td>
+<td>93% / 1,203 篇</td>
+<td>92% / 8,642 篇</td>
+</tr>
+<tr>
+<td>简中口碑</td>
+<td>43% / 1,537 篇</td>
+<td>24% / 10,066 篇</td>
+<td>未作为主要对比口径</td>
+<td>未作为主要对比口径</td>
+<td>未作为主要对比口径</td>
+</tr>
+<tr>
+<td>同时在线体量</td>
+<td>约 4.2 万，峰值 48,222</td>
+<td>本次未取到一手数字</td>
+<td>本次未取到一手数字</td>
+<td>发售当周媒体写过万</td>
+<td>本次未取到一手数字</td>
+</tr>
+</tbody>
+</table></div>
+<p>表里的在线数字，Deskrawl 来自 2026年10月15日 SteamDB 图表页；其余标「未取到」的，不编。</p>
+<h3 id="29-生态位与格局-17">2.9 生态位与格局</h3>
+<p>2026 年秋的桌面挂机，不是一家独大，是分层清楚的货架。</p>
+<p>陪伴层：Rusty、《动物栏》、Desktop Goose。好评高，经济封闭或根本没有经济。</p>
+<p>搬砖层：TBH、Deskrawl。带 Steam 市场，中文口碑差，在线人数可以在崩盘前先冲一波。</p>
+<p>深度放置层：Melvor、IdleOn。窗口不一定贴边，进度可以更硬，用户要的是长线养成。</p>
+<p>Deskrawl 同时踩了三层：窗口学陪伴，循环学暗黑深度，经济学搬砖。它填补的空白很具体——底边还没有一款像样的暗黑刷宝。它正面竞争的对象也很具体：和 TBH 抢「挂着能出货」的中文用户，和 Rusty、《动物栏》抢「上班时开着也不心烦」的桌面位置。</p>
+<p>当前格局里，陪伴层已经有标杆，搬砖层还没有赢家。Deskrawl 的四万在线说明空位是真的。43% 的简中好评说明空位里站着的人，对「收益」两个字过敏。谁先把预期从搬砖改回刷宝，谁才有机会把这层做稳。</p>
+<hr>
+<h2 id="三横纵交汇洞察-18">三、横纵交汇洞察</h2>
+<h3 id="31-历史如何塑造了当下位置-19">3.1 历史如何塑造了当下位置</h3>
+<p>纵轴上每一个「当时看来正确」的决定，都在横轴上变成了现在的坐标。</p>
+<p>5 月介绍帖把用户定义成「和我们一样的暗黑玩家，只是现在要上班」。这个定义让英文评测仍有 75% 好评。9 月发售稿把用户改写成「摸鱼搬砖」。这个改写让简中评测掉到 43%。同一款游戏，两套用户画像，口碑按语言裂开。</p>
+<p>6 月 16 日的可缩放窗口，把 Deskrawl 送进 Rusty 和《动物栏》的货架。没有这次补丁，它只是又一个小窗暗黑。有了这次补丁，它获得了「桌面伴侣」标签，也必须接受「开着不能烦人」的验收标准。点击游戏导致视频暂停，会变成 0.1.13f 的必修题，因为用户真的在一边看视频一边挂。</p>
+<p>6 月 27 日的在线模式、排行榜和反作弊，是两人工作室最贵的一次加码。它让树人活动能统计出 4,000 名通关者，让封闭测试有名单可抽，也让工作室、外挂、家庭共享成了正式版的必答题。9 月 28 日把新建角色默认改成在线，等于把大多数新玩家直接送进带市场的服务器。1.0.0h 再把家庭共享踢出在线，是在为 6 月那次加码付账。</p>
+<p>发行选择 Gamersky Games，让中文区的量来得很快。同一发行商刚用《动物栏》证明过桌面挂机能卖。渠道、愿望单、游民星空发稿，是现成的。量来了之后，中文区也把 TBH 的仇恨带了过来。10,066 篇 24% 好评的前车，就停在三个月前。Deskrawl 没有时间让玩家忘记。</p>
+<p>买断定价 28 元，本来可以当过滤器。七折 19.60 元，又把过滤器开大。支持者包 8 元卖仓库和外观，评测 54%，说明连愿意见钱的人都没被取悦。市场开启之后，28 元不再是「买一款桌面暗黑的价格」，而被一部分人理解成「搬砖的入场费」。入场费越低，对回报的催促越狠。</p>
+<h3 id="32-优势与劣势的历史根源-20">3.2 优势与劣势的历史根源</h3>
+<p>今天能看见的强项，都能追溯到具体节点。</p>
+<p>桌面底部自动刷，来自 5 月的动机和 6 月 16 日的窗口补丁。仆从拉车、抓 Boss，来自商店一开始就写死的设计，试玩期就有 12 个随从。日更能力，来自两人团队在新品节被 4,000 人树人活动逼出来的节奏，发售后两周没有断。低配置需求，来自「挂在桌面角落」的自我限制，GT 730 就能跑，摸鱼机也能开。这些是真优势。</p>
+<p>今天能看见的包袱，同样有生日。</p>
+<p>可交易物太稀有，和「珍贵装备才能上架」的设计是同一枚硬币。官方要避免普通蓝装淹没市场，玩家就觉得挂一百小时看不见货。1.0.2 给单人角色加极稀有双倍、提高黑雾掉率，是在承认这枚硬币已经偏了。</p>
+<p>工作室进场，生日是 6 月 27 日的在线模式加 9 月 28 日的默认在线。没有服务器，就没有可同步的拍卖行；有了拍卖行，就有人开五十个号。1.0.0h 的正版校验是补丁，不是根治。评论区那个「有的号就是不出东西」如果属实，问题在随机数和反作弊之间；目前只能标成玩家指控，官方尚未公布掉落种子是否分号。</p>
+<p>简中口碑，生日是发行话术。游民星空可以写「19 元就能搬砖」，玩家就会按搬砖验收。Rusty 从来没对自己的用户许过钱包，所以 97% 好评还在。Deskrawl 许了，就要被钱包验收。</p>
+<p>职业不平衡，生日是试玩期只有战士。战士打了三个月，数值最熟，排行榜最密。猎人、武僧、巫师是 8 月测试和 9 月发售才完整露面，10 月的补丁还在补课。先上线的职业会成为「正确职业」，这是几乎所有多人刷宝游戏的老路。 Deskrawl 走得更快，因为挂机把刷的时间拉长，领先者领先的小时数是按天加的。</p>
+<p>还有一个容易被忽略的包袱：名字。中文「破坏神」对着暗黑，英文 Deskrawl 对着桌面爬行。老玩家如果只搜 Desktop Destroyer，会找到 2000 年的砸屏玩具和 2020 年的免费重制。这个误会在 2026 年 10 月已经不大，因为 Steam 中文搜索已经被 App 4623570 占住。它提醒的是另一件事：Deskrawl 的中文名一开始就在借用暗黑的文化资本。借用成功，预期就被抬到「我要刷神装」；神装又被接到市场上，预期再被抬到「神装能换钱」。名字是第一级杠杆。</p>
+<h3 id="33-未来三个剧本-21">3.3 未来三个剧本</h3>
+<ul>
+<li>
+<p><strong>最可能</strong>：它活成一款「能玩、能挂、别指望回本」的桌面暗黑，在线从四万慢慢掉到几千到一万的长尾，英文区维持大多数好评，中文区在 40% 上下震荡。官方继续按现在的节奏改职业、改掉率、改反作弊，十月规划落地一批新图或新终局。市场还在，地板价更低，搬砖党离开，暗黑党留下。对两人工作室，这已经是一款能养活下一部游戏的成功。对发行稿里的「搬砖」，这是一次话术失败。支撑这条的事实是：峰值已过、补丁仍勤、买断盘不大、陪伴层竞品不会来抢暗黑用户。</p>
+</li>
+<li>
+<p><strong>最危险</strong>：工作室和掉率争议在中文区烧穿，简中好评跌进 TBH 那个 24% 区间，Steam 近期评测变成「多半差评」，日活排名离开前 300。市场被低价垃圾单填满，普通玩家觉得「出了也卖不掉」，付费意愿停在 19 元首发那一档，不再买支持者包、不再带新号。官方若此时用提高可交易掉率来救预期，供给会再砸一次地板；若关市场，当初被「自由定价」吸引来的人会集体差评。两条路都窄。更危险的叠加是外挂脱机——评论区已有「连客户端都不需要」的指控。若被坐实且官方压不住，挂机游戏的核心承诺「你的时间在变强」会先于收益承诺一起碎。</p>
+</li>
+<li>
+<p><strong>最乐观</strong>：官方把话术从搬砖改回刷宝，把可交易物的期望时间写进游戏内提示，把工作室压到不影响地板价，把四个职业的清图效率拉到同一数量级。中文好评回到 70% 以上，桌面暗黑成为独立的用户标签，而不再是「TBH 后继」。Windows 之外出现官方认可的 Steam Deck 认证，甚至一条轻量的 Mac 版本，让它真正进入 Rusty 那个跨系统的底边货架。市场还在，但被重新解释成「多余神装的交换所」，而不是「上班工资」。这条路要求发行商愿意改自己的标题。游民星空写过「摸鱼也能搬砖」，也要写得回去。两人团队做得到补丁，做不做得到叙事，是另一件事。</p>
+</li>
+</ul>
+<p>三个剧本共享一个前提：2026 年 10 月 15 日这款游戏还年轻，只有 17 天正式寿命。历史峰值和中文差评是同一周的孩子。它还没有资格被写成已定的成败，它已经有资格被写成一次关于预期的事故。</p>
+<p>回看 5 月 18 日那句「我们一直想要一款无论工作还是追剧都能随时玩的游戏」。那句话是干净的。后来叠上去的市场、默认在线、19 元搬砖，把干净的动机焊上了一根会漏电的线。Deskrawl 值不值得买，取决于你要买的是哪一句。要买底边暗黑，28 元对得起窗口和日更。要买挂机收益，钱包协议和 100 小时一件货，已经把账算完了。</p>
+<hr>
+<h2 class="sources-h" id="四信息来源-22">四、信息来源</h2>
+<ol>
+<li><a href="https://store.steampowered.com/app/4623570/Deskrawl_Idle_ARPG/">Deskrawl: Idle ARPG 英文商店页</a> — 2026-10-15 — 英文名、玩法简介、英文评测 75% / 384 篇、发售日、开发发行、系统需求、市场卖点</li>
+<li><a href="https://store.steampowered.com/app/4623570/_/?l=schinese">桌面破坏神：挂机ARPG 简中商店页</a> — 2026-10-15 — 中文名、简中评测 43% / 1,537 篇、商店类型、中文玩法文案</li>
+<li><a href="https://steamdb.info/app/4623570/">SteamDB App 4623570</a> — 2026-10-15 — 首次入库 2026-04-13、发售 UTC 时间、仅 Windows、13 语言、现价与最低价、market_presence、社交链接</li>
+<li><a href="https://steamdb.info/app/4623570/charts/">SteamDB 图表页</a> — 2026-10-15 — 在线约 41,990、24 小时峰值 43,907、历史峰值 48,222（2026-10-09）、评测 2,831 / 54.8%、第三方拥有量估计</li>
+<li><a href="https://steamcommunity.com/app/4623570/announcements/?l=schinese">Steam 中文新闻中心</a> — 2026-10-15 — 发售公告、1.0.0g 至 1.0.2b、十月规划开头、在线须正版、职业补丁</li>
+<li><a href="https://deskrawl.info/zh-CN/patches/">deskrawl.info 补丁时间线</a> — 2026-10-15 — 5 月 18 日工作室介绍原文转述、试玩与 0.1.9–0.1.13f、树人 4,000 人、测试日程</li>
+<li><a href="https://x1x.tw/deskrawl/zh-CN/news/">X1X 官方公告列表</a> — 2026-10-15 — 里程碑日期、1.0.x 补丁英文摘要、资料版本 1.0.2b / build 25895065</li>
+<li><a href="https://x1x.tw/deskrawl/zh-CN/guide/gear/">X1X 装备与交易说明</a> — 2026-10-15 — 拍卖行原文限定可交易物、强化与开光规则</li>
+<li><a href="https://x1x.tw/deskrawl/zh-CN/market/">X1X 市场统计</a> — 2026-10-15 — 可交易种类约 214、价格快照日 2026-10-13，站点声明非官方</li>
+<li><a href="https://www.gamersky.com/news/202609/2218799.shtml">游民星空发售稿</a> — 2026-10-15 — 「摸鱼也能搬砖」、首发 7 折 19 元、正式版内容介绍</li>
+<li><a href="https://www.gamersky.com/handbook/397062/">游民星空攻略汇</a> — 2026-10-15 — 「堪称 TBH 的后继新作」的媒体表述</li>
+<li><a href="https://forum.gamer.com.tw/C.php?bsn=60599&amp;snA=54984">巴哈姆特玩家心得</a> — 2026-10-15 — 售价、远征营地、钱包不能提现、100–130 小时一件可上架装</li>
+<li><a href="https://steamcommunity.com/app/4623570/reviews/?l=schinese">Steam 简中评测区</a> — 2026-10-15 — 掉率估算、工作室与外挂指控、「想挂机赚电费就别想了」</li>
+<li><a href="https://steamcommunity.com/market/search?appid=4623570">Steam 社区市场 App 4623570</a> — 2026-10-15 — 在售为游戏道具而非卡牌、部分地板价</li>
+<li><a href="https://steamdb.info/developer/First+Day+Games/">Steam 开发商 First Day Games</a> — 2026-10-15 — 同主体作品《Heroes of Magic &amp; Cards》、试玩与支持者包、峰值 48,222</li>
+<li><a href="https://store.steampowered.com/app/3843360/Heroes_of_Magic__Cards/">Heroes of Magic &amp; Cards 商店页</a> — 2026-10-15 — 第一款游戏 2026-03-19、英文 86% 好评</li>
+<li><a href="https://store.steampowered.com/app/3678970/TBH_Task_Bar_Hero/?l=schinese">TBH 简中商店页</a> — 2026-10-15 — 免费、任务栏放置、可交易道具、简中 24% 好评</li>
+<li><a href="https://store.steampowered.com/app/2666510/Rustys_Retirement/">Rusty's Retirement 商店页</a> — 2026-10-15 — 底边农场、97% 好评、有集换式卡牌、Win / macOS</li>
+<li><a href="https://store.steampowered.com/app/3167550/Tiny_Pasture/">Tiny Pasture 商店页</a> — 2026-10-15 — Gamersky Games 发行、93% 好评、无玩家市场</li>
+<li><a href="https://store.steampowered.com/app/1267910/Melvor_Idle/">Melvor Idle 商店页</a> — 2026-10-15 — 离线进度、无微交易、92% 好评</li>
+<li><a href="https://store.steampowered.com/app/1001860/Casual_Desktop_Game/">Casual Desktop Game 商店页</a> — 2026-10-15 — 砸桌面重制、免费、与 Deskrawl 同名易混</li>
+<li><a href="https://store.steampowered.com/subscriber_agreement/en/">Steam 订阅协议</a> — 2026-10-15 — 钱包不能兑换现金、不可转让</li>
+<li><a href="https://steamcommunity.com/tradingcards/faq/steam?l=schinese">Steam 集换式卡牌 FAQ</a> — 2026-10-15 — 卡牌只在加入计划的游戏中掉落</li>
+<li><a href="https://store.steampowered.com/app/5216710/Deskrawl_Idle_ARPG__Supporter_Pack/">支持者包商店页</a> — 2026-10-15 — 1.99 美元、仓库与独占外观、Mixed 评测</li>
+<li><a href="https://www.kalendarhrace.cz/aktualizace/deskrawl-idle-arpg-introduction-of-deskrawl">KalendářHráče 转载的介绍帖</a> — 2026-10-15 — 两人工作室、第二款游戏、暗黑数千小时的原文转述</li>
+<li><a href="https://x1x.tw/deskrawl/zh-CN/guide/start/">X1X 新手入门</a> — 2026-10-15 — 城镇 NPC 解锁费用、货车自动出售、药水自动使用</li>
+<li><a href="https://deskrawl.info/zh-CN/desktop-idle/">deskrawl.info 桌面挂机说明</a> — 2026-10-15 — 窗口不是覆盖层、Forest Raptor 完成率、挂机操作建议</li>
+<li><a href="https://www.bilibili.com/video/BV19o5r6LEYm/">B 站相关视频 BV19o5r6LEYm</a> — 2026-10-15 — 中文区试玩传播早于官方介绍帖的旁证</li>
+</ol>
+<p>人员对应关系的旁证（LinkedIn 上的 First Day Entertainment / Stephen Zhen Gou / Mike Mei）未写入正文结论，因官方公告未点名，避免把同名公司或未确认职务写成事实。</p>
+<h2 id="五方法论说明-23">五、方法论说明</h2>
+<p>本文采用横纵分析法（Horizontal-Vertical Analysis）。纵轴沿时间还原对象的生命历程，横轴在当前截面与同类对比，两条轴交汇后给出判断。方法论由数字生命卡兹克提出；本报告由玉笛百科撰写。</p>
+  </article>
+</div>
+
+<footer class="site-foot">
+  <p>玉笛百科 · 横纵分析法深度研究报告 · 玉笛百科 · 2026年10月15日</p>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var topbar = document.getElementById("topbar");
+  var bar = document.getElementById("progress-bar");
+  var themeBtn = document.getElementById("theme-toggle");
+  var tocWrap = document.getElementById("toc-wrap");
+  var tocToggle = document.getElementById("toc-toggle");
+  var tocClose = document.getElementById("toc-close");
+  var tocBackdrop = document.getElementById("toc-backdrop");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function stored(key, fallback) {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  var theme = stored("hv-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  var size = stored("hv-size", "md");
+  root.setAttribute("data-theme", theme);
+  root.setAttribute("data-size", size);
+
+  function syncThemeLabel() {
+    var dark = root.getAttribute("data-theme") === "dark";
+    themeBtn.textContent = dark ? "浅色" : "深色";
+    themeBtn.setAttribute("aria-pressed", dark ? "true" : "false");
+  }
+  syncThemeLabel();
+
+  themeBtn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    save("hv-theme", next);
+    syncThemeLabel();
+  });
+
+  var sizes = ["sm", "md", "lg"];
+  document.getElementById("size-down").addEventListener("click", function () {
+    var i = Math.max(0, sizes.indexOf(root.getAttribute("data-size")) - 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+  document.getElementById("size-up").addEventListener("click", function () {
+    var i = Math.min(sizes.length - 1, sizes.indexOf(root.getAttribute("data-size")) + 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+
+  var links = [].slice.call(document.querySelectorAll(".toc a"));
+  var headings = [].slice.call(document.querySelectorAll(".article h2, .article h3"));
+
+  function syncToc() {
+    var probe = topbar.offsetHeight + 48;
+    var activeId = null;
+    headings.forEach(function (h) {
+      if (h.id && h.getBoundingClientRect().top <= probe) activeId = h.id;
+    });
+    if (!activeId && headings[0]) activeId = headings[0].id;
+    links.forEach(function (a) {
+      var id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+      a.classList.toggle("is-active", id === activeId);
+    });
+  }
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = p + "%";
+    topbar.classList.toggle("is-scrolled", window.scrollY > 16);
+    syncToc();
+  }
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  function setToc(open) {
+    root.classList.toggle("toc-open", open);
+    tocToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  tocToggle.addEventListener("click", function () {
+    setToc(!root.classList.contains("toc-open"));
+  });
+  tocClose.addEventListener("click", function () { setToc(false); });
+  tocBackdrop.addEventListener("click", function () { setToc(false); });
+  links.forEach(function (a) {
+    a.addEventListener("click", function () { setToc(false); });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setToc(false);
+  });
+
+  if (reduce) return;
+})();
+</script>
+</body>
+</html>
