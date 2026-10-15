@@ -6,7 +6,11 @@
   python md_to_pdf.py input.md output.pdf [--title "..."] [--author "玉笛百科"]
 
 依赖: pip install weasyprint markdown
-中文乱码根因：必须把本机真实存在的 CJK 字体写入 @font-face，不能依赖 Droid Sans Fallback。
+中文乱码根因（两层）：
+1. 不能依赖 Droid Sans Fallback 这类拉丁字体。
+2. WeasyPrint 把 CFF/OTF（OTTO）嵌进 PDF 后，企业 IM / 微信等预览器常把中文渲成乱码。
+   必须嵌入 TrueType（glyf，文件头 00 01 00 00）的 Noto Sans SC，并分别注册 Regular(400) 与 Bold(700)。
+   禁止对静态 Regular 写 font-weight: 100 900——标题全是 700，匹配失败会掉进无 CJK 的西文字体。
 """
 
 from __future__ import annotations
@@ -26,28 +30,42 @@ import markdown
 SCRIPT_DIR = Path(__file__).resolve().parent
 BUNDLED_FONT_DIR = SCRIPT_DIR / "fonts"
 
-NOTO_SC_URL = (
-    "https://cdn.jsdelivr.net/gh/notofonts/noto-cjk@main/"
-    "Sans/SubsetOTF/SC/NotoSansSC-Regular.otf"
-)
+# TrueType glyf（IM 预览可认）。不要用 SubsetOTF 的 CFF .otf。
+NOTO_SC_TTF_URLS = {
+    400: (
+        "https://cdn.jsdelivr.net/fontsource/fonts/"
+        "noto-sans-sc@5.2.9/chinese-simplified-400-normal.ttf"
+    ),
+    700: (
+        "https://cdn.jsdelivr.net/fontsource/fonts/"
+        "noto-sans-sc@5.2.9/chinese-simplified-700-normal.ttf"
+    ),
+}
 
-CJK_FONT_CANDIDATES = [
-    BUNDLED_FONT_DIR / "NotoSansSC-Regular.otf",
+CJK_TTF_REGULAR_CANDIDATES = [
     BUNDLED_FONT_DIR / "NotoSansSC-Regular.ttf",
-    Path("/usr/local/share/fonts/cjk/NotoSansSC-Regular.otf"),
-    Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
-    Path("/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf"),
-    Path("/usr/share/fonts/truetype/noto/NotoSansSC-Regular.otf"),
-    Path("/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"),
-    Path("/usr/share/fonts/truetype/arphic/uming.ttc"),
-    Path("/System/Library/Fonts/PingFang.ttc"),
-    Path("/System/Library/Fonts/STHeiti Light.ttc"),
-    Path("/Library/Fonts/Arial Unicode.ttf"),
-    Path("C:/Windows/Fonts/msyh.ttc"),
-    Path("C:/Windows/Fonts/msyhbd.ttc"),
+    Path("/usr/local/share/fonts/cjk/NotoSansSC-Regular.ttf"),
+    Path("/usr/share/fonts/truetype/noto/NotoSansSC-Regular.ttf"),
+    Path("/usr/share/fonts/truetype/noto/NotoSansCJKsc-Regular.ttf"),
+    Path("C:/Windows/Fonts/msyh.ttf"),
     Path("C:/Windows/Fonts/simhei.ttf"),
-    Path("C:/Windows/Fonts/simsun.ttc"),
-    Path("C:/Windows/Fonts/NotoSansSC-Regular.otf"),
+]
+
+CJK_TTF_BOLD_CANDIDATES = [
+    BUNDLED_FONT_DIR / "NotoSansSC-Bold.ttf",
+    Path("/usr/local/share/fonts/cjk/NotoSansSC-Bold.ttf"),
+    Path("/usr/share/fonts/truetype/noto/NotoSansSC-Bold.ttf"),
+    Path("C:/Windows/Fonts/msyhbd.ttf"),
+]
+
+# CFF/OTF 与 TTC 仅作最后兜底，生成的 PDF 在部分阅读器会乱码。
+CJK_CFF_FALLBACK = [
+    Path("/usr/local/share/fonts/cjk/NotoSansSC-Regular.otf"),
+    BUNDLED_FONT_DIR / "NotoSansSC-Regular.otf",
+    Path("/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf"),
+    Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
+    Path("/System/Library/Fonts/PingFang.ttc"),
+    Path("C:/Windows/Fonts/msyh.ttc"),
 ]
 
 LATIN_FONT_CANDIDATES = [
@@ -91,11 +109,25 @@ def path_to_css_url(path: Path) -> str:
     return path.resolve().as_uri()
 
 
+def sfnt_kind(path: Path) -> str:
+    try:
+        magic = path.read_bytes()[:4]
+    except OSError:
+        return "unknown"
+    if magic == b"\x00\x01\x00\x00" or magic == b"true":
+        return "truetype"
+    if magic == b"OTTO":
+        return "cff"
+    if magic == b"ttcf":
+        return "collection"
+    return "unknown"
+
+
 def font_format(path: Path) -> str:
-    suffix = path.suffix.lower()
-    if suffix == ".otf":
+    kind = sfnt_kind(path)
+    if kind == "cff":
         return "opentype"
-    if suffix == ".ttc":
+    if kind == "collection":
         return "collection"
     return "truetype"
 
@@ -127,18 +159,21 @@ def fonts_from_fc_list() -> list[Path]:
     return found
 
 
-def download_noto_sc() -> Path | None:
+def download_noto_sc_ttf(weight: int) -> Path | None:
     BUNDLED_FONT_DIR.mkdir(parents=True, exist_ok=True)
-    dest = BUNDLED_FONT_DIR / "NotoSansSC-Regular.otf"
-    if dest.is_file() and dest.stat().st_size > 1024:
+    name = "NotoSansSC-Regular.ttf" if weight == 400 else "NotoSansSC-Bold.ttf"
+    dest = BUNDLED_FONT_DIR / name
+    if dest.is_file() and dest.stat().st_size > 1024 and sfnt_kind(dest) == "truetype":
         return dest
-    print("[..] 未发现中文字体，正在下载 Noto Sans SC …")
+    url = NOTO_SC_TTF_URLS[weight]
+    print(f"[..] 正在下载 Noto Sans SC TTF ({weight}) …")
     try:
-        with urlopen(NOTO_SC_URL, timeout=60) as resp:
+        with urlopen(url, timeout=60) as resp:
             dest.write_bytes(resp.read())
-        if dest.stat().st_size > 1024:
+        if dest.stat().st_size > 1024 and sfnt_kind(dest) == "truetype":
             print(f"[OK] 字体已保存: {dest}")
             return dest
+        dest.unlink(missing_ok=True)
     except Exception as exc:
         if dest.exists():
             dest.unlink(missing_ok=True)
@@ -146,40 +181,55 @@ def download_noto_sc() -> Path | None:
     return None
 
 
-def resolve_cjk_font() -> Path:
-    found = first_existing(CJK_FONT_CANDIDATES) or first_existing(fonts_from_fc_list())
-    if found:
+def _pick_ttf(paths) -> Path | None:
+    found = first_existing(paths)
+    if found and sfnt_kind(found) == "truetype":
         return found
-    downloaded = download_noto_sc()
-    if downloaded:
-        return downloaded
+    return None
+
+
+def resolve_cjk_fonts() -> tuple[Path, Path | None]:
+    regular = _pick_ttf(CJK_TTF_REGULAR_CANDIDATES) or download_noto_sc_ttf(400)
+    bold = _pick_ttf(CJK_TTF_BOLD_CANDIDATES) or download_noto_sc_ttf(700)
+    if regular:
+        kind = sfnt_kind(regular)
+        if kind != "truetype":
+            print(f"[WARN] CJK Regular 不是 TrueType（{kind}），IM 预览可能乱码: {regular}", file=sys.stderr)
+        return regular, bold
+
+    fallback = first_existing(CJK_CFF_FALLBACK) or first_existing(fonts_from_fc_list())
+    if fallback:
+        print(
+            f"[WARN] 只用到 CFF/OTF 或 TTC（{sfnt_kind(fallback)}）: {fallback}\n"
+            "         部分 PDF 阅读器会把中文显示成乱码。请改用 scripts/fonts 下的 TTF。",
+            file=sys.stderr,
+        )
+        return fallback, None
     raise SystemExit(
-        "未找到中文字体，PDF 会出现乱码。请安装 Noto Sans SC / 微软雅黑 / PingFang，\n"
-        f"或把字体文件放到: {BUNDLED_FONT_DIR}"
+        "未找到中文 TrueType 字体，PDF 会乱码。请把 NotoSansSC-Regular.ttf 放到:\n"
+        f"{BUNDLED_FONT_DIR}"
     )
 
 
-def build_font_css(cjk_font: Path) -> str:
-    latin = first_existing(LATIN_FONT_CANDIDATES)
+def build_font_css(cjk_regular: Path, cjk_bold: Path | None = None) -> str:
     mono = first_existing(MONO_FONT_CANDIDATES)
     chunks = [
         f"""
 @font-face {{
     font-family: "JadeCJK";
-    src: url("{path_to_css_url(cjk_font)}") format("{font_format(cjk_font)}");
-    font-weight: 100 900;
+    src: url("{path_to_css_url(cjk_regular)}") format("{font_format(cjk_regular)}");
+    font-weight: 400;
     font-style: normal;
-    font-display: swap;
 }}
 """
     ]
-    if latin:
+    if cjk_bold:
         chunks.append(
             f"""
 @font-face {{
-    font-family: "JadeLatin";
-    src: url("{path_to_css_url(latin)}") format("{font_format(latin)}");
-    font-weight: 400;
+    font-family: "JadeCJK";
+    src: url("{path_to_css_url(cjk_bold)}") format("{font_format(cjk_bold)}");
+    font-weight: 700;
     font-style: normal;
 }}
 """
@@ -218,7 +268,7 @@ html { font-size: 10.5pt; }
 
     @top-left {
         content: "玉笛百科";
-        font-family: "JadeCJK", "JadeLatin", sans-serif;
+        font-family: "JadeCJK", sans-serif;
         font-size: 8pt;
         color: #8a969e;
         letter-spacing: 0.12em;
@@ -227,7 +277,7 @@ html { font-size: 10.5pt; }
     }
     @top-right {
         content: "HEADER_TEXT";
-        font-family: "JadeCJK", "JadeLatin", sans-serif;
+        font-family: "JadeCJK", sans-serif;
         font-size: 8pt;
         color: #8a969e;
         padding-bottom: 3mm;
@@ -235,7 +285,7 @@ html { font-size: 10.5pt; }
     }
     @bottom-left {
         content: "横纵分析法深度研究报告";
-        font-family: "JadeCJK", "JadeLatin", sans-serif;
+        font-family: "JadeCJK", sans-serif;
         font-size: 8pt;
         color: #8a969e;
         padding-top: 3mm;
@@ -243,7 +293,7 @@ html { font-size: 10.5pt; }
     }
     @bottom-right {
         content: "第 " counter(page) " 页";
-        font-family: "JadeCJK", "JadeLatin", sans-serif;
+        font-family: "JadeCJK", sans-serif;
         font-size: 8pt;
         color: #8a969e;
         padding-top: 3mm;
@@ -262,12 +312,13 @@ html { font-size: 10.5pt; }
 * { box-sizing: border-box; }
 
 body {
-    font-family: "JadeCJK", "JadeLatin", "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-family: "JadeCJK", sans-serif;
     color: var(--ink);
     line-height: 1.78;
     font-size: 10.5pt;
     text-align: left;
     background: #fff;
+    font-synthesis: none;
 }
 
 .cover {
@@ -631,7 +682,8 @@ def md_to_html(
     author: str = "玉笛百科",
     subtitle: str = "横纵分析法深度研究报告",
     meta: dict[str, str] | None = None,
-    cjk_font: Path | None = None,
+    cjk_regular: Path | None = None,
+    cjk_bold: Path | None = None,
 ) -> str:
     md_text = EMOJI_RE.sub("", md_text)
     extracted_title, body_md = strip_first_h1(md_text)
@@ -648,8 +700,9 @@ def md_to_html(
     html_body = wrap_special_sections(html_body)
     toc_html, html_body = collect_toc(html_body)
 
-    cjk_font = cjk_font or resolve_cjk_font()
-    font_css = build_font_css(cjk_font)
+    if cjk_regular is None:
+        cjk_regular, cjk_bold = resolve_cjk_fonts()
+    font_css = build_font_css(cjk_regular, cjk_bold)
     header_text = title.replace('"', "")
     if len(header_text) > 28:
         header_text = header_text[:28] + "…"
@@ -765,15 +818,20 @@ def main() -> None:
             print("[WARN] 先改 Markdown 标点，再重新生成 PDF。", file=sys.stderr)
     except ImportError:
         pass
-    cjk_font = resolve_cjk_font()
-    print(f"[OK] 中文字体: {cjk_font}")
+    cjk_regular, cjk_bold = resolve_cjk_fonts()
+    print(f"[OK] 中文字体 Regular: {cjk_regular} ({sfnt_kind(cjk_regular)})")
+    if cjk_bold:
+        print(f"[OK] 中文字体 Bold: {cjk_bold} ({sfnt_kind(cjk_bold)})")
+    else:
+        print("[WARN] 未找到 Bold TTF，标题粗体可能回退异常", file=sys.stderr)
 
     html = md_to_html(
         md_text,
         title=args.title or "横纵分析报告",
         author=args.author,
         subtitle=args.subtitle,
-        cjk_font=cjk_font,
+        cjk_regular=cjk_regular,
+        cjk_bold=cjk_bold,
     )
 
     dest.parent.mkdir(parents=True, exist_ok=True)

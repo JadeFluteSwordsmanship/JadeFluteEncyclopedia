@@ -1,6 +1,6 @@
 ---
 name: hv-analysis
-description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown、网页 HTML 与 PDF。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。"
+description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown 与网页 HTML（仓库可另存 PDF）。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。"
 ---
 
 # 横纵分析法深度研究
@@ -8,13 +8,13 @@ description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）
 > **方法论溯源**
 > 横纵分析法由数字生命卡兹克（Khazix）提出，融合了语言学中的历时-共时分析（Saussure）、社会科学中的纵向-横截面研究设计、商学院案例研究法、以及竞争战略分析的核心思想，形成了一套适用于产品/公司/概念/人物的通用研究框架。核心原则不变：纵向追时间深度，横向追同期广度，最终交汇出判断。
 
-你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。最终产出三件套：Markdown 定稿、网页阅读版 HTML、排版可用的 PDF。
+你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。交付件是 Markdown 定稿 + 网页阅读版 HTML。仓库里可以再留一份 PDF 归档；**群聊 / htalk 只发 HTML，不要发 PDF**。
 
 ## 前置准备
 
 ### 环境准备
 
-1. **确认转换脚本可用**：本 Skill 自带 `scripts/md_to_html.py`（网页阅读版）和 `scripts/md_to_pdf.py`（PDF）。依赖：`pip install weasyprint markdown`。PDF 脚本会自动发现本机中文字体（Noto Sans SC / 微软雅黑 / PingFang / 文泉驿）；找不到时会尝试下载 Noto Sans SC。不要改用已废弃的 `Droid Sans Fallback` 字体栈，那是乱码的根因。
+1. **确认转换脚本可用**：本 Skill 自带 `scripts/md_to_html.py`（网页阅读版，**群聊交付必须用这个**）和 `scripts/md_to_pdf.py`（仓库归档用 PDF）。依赖：`pip install weasyprint markdown`。PDF 必须嵌入 **TrueType（glyf）** 的 Noto Sans SC Regular + Bold（脚本自带 `scripts/fonts/*.ttf`）。**禁止用 CFF/OTF（OTTO）**：WeasyPrint 把 CFF 嵌进 PDF 后，企业 IM / 微信预览会把中文渲成乱码。也不要对静态 Regular 写 `font-weight: 100 900`，标题全是 700，匹配失败会掉进没有汉字的西文字体。更不要用已废弃的 `Droid Sans Fallback`。
 2. **报告模板**：写作时严格遵循 [references/report-template.md](references/report-template.md)。网页视觉规范见 [references/html-design.md](references/html-design.md)，模板是 [references/web-report.html](references/web-report.html)。
 3. **写作风格**：本Skill已内置完整的写作风格指南（见下文"写作风格"部分），无需额外加载其他skill。网页 HTML 不要为单篇报告手写 CSS，一律走转换脚本。
 
@@ -236,9 +236,11 @@ python [skill目录]/scripts/md_to_html.py input.md output.html --title "研究�
 
 不要做：紫雾落地页、三列功能卡、每个小节加英文眉题、为装饰生成假截图。
 
-## 第六步：生成PDF报告
+## 第六步：生成 PDF（仅仓库归档，不要发群）
 
-报告写完后，使用本Skill自带的 `scripts/md_to_pdf.py` 将 Markdown 转为 PDF。完整章节骨架见 [references/report-template.md](references/report-template.md)。网页阅读版已经由上一步单独生成；PDF 脚本默认不再覆盖 `.html`。
+报告写完后，可用本 Skill 自带的 `scripts/md_to_pdf.py` 把 Markdown 转成 PDF，放进研究对象目录归档。网页阅读版已经由上一步单独生成；PDF 脚本默认不再覆盖 `.html`。
+
+**htalk / 深度研究群只发 HTML。** 不要 `htalk send --file *.pdf`。IM 内置阅读器对 CFF 字体不友好，用户要的交付物是网页 HTML。
 
 ### 转换流程
 
@@ -255,7 +257,7 @@ python [skill目录]/scripts/md_to_html.py input.md output.html --title "研究�
 - **页面**：A4；封面满版墨蓝/玉色，正文页边距约 22mm
 - **封面**：自动抽取首个 H1 与元信息（研究时间、领域、类型、研究员）
 - **目录**：根据 H1/H2/H3 自动生成，带页码引导线
-- **字体**：运行时解析本机 CJK 字体，用 `@font-face` 嵌入；禁止依赖 Droid Sans Fallback
+- **字体**：优先嵌入 `scripts/fonts/NotoSansSC-Regular.ttf` 与 `NotoSansSC-Bold.ttf`（TrueType glyf）。禁止嵌入 CFF/OTF，禁止 `font-weight: 100 900` 套在单档 Regular 上，禁止 Droid Sans Fallback
 - **正文**：JadeCJK，10.5pt，行距 1.78，左对齐（避免 WeasyPrint 对中文两端对齐造成重叠/乱码）
 - **「核心结论速览」**：自动套成封面后的结论卡片
 - **页眉页脚**：玉笛百科 / 标题 / 第 X 页（封面不显示）
@@ -323,13 +325,13 @@ feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
 用 HEREDOC 传 message。不要 `--no-verify`，不要 `--force`。
 
 4. `git push` 到当前跟踪的 remote 分支。失败则报告错误并停下。
-5. **任务来自 htalk 时，立刻把网页 HTML 发到来源群**，不要只 git push、不要在群里贴长文摘要：
+5. **任务来自 htalk 时，立刻把网页 HTML 发到来源群**，不要只 git push、不要发 PDF、不要在群里贴长文摘要：
 
 ```bash
 htalk send --group <groupID> --file <研究对象目录>/<研究对象>_横纵分析报告.html
 ```
 
-群里的交付物就是这个 HTML 文件。Agent 自动回群的 result 只留一两句（已发送 / 路径），禁止再贴一遍报告正文。
+群里的交付物就是这个 HTML 文件。**不要附带 PDF。** Agent 自动回群的 result 只留一两句（已发送 / 路径），禁止再贴一遍报告正文。
 
 ---
 
@@ -375,10 +377,10 @@ htalk send --group <groupID> --file <研究对象目录>/<研究对象>_横纵�
 - [ ] 中文正文没有半角逗号 / 半角括号 / 半角冒号？`lint_cjk_punct.py` 已通过？
 - [ ] 所有关键事实标注了信息来源？
 - [ ] 搜不到的信息诚实标注了「暂缺」，没有编造？
-- [ ] PDF 中文正常、无方框/乱码，封面、目录、结论卡片完整？
+- [ ] 若生成了仓库 PDF：嵌入的是 TrueType 而非 CFF/OTF，中文正常、无方框/乱码？
 - [ ] 网页 HTML 由 `md_to_html.py` 生成，可单文件打开，目录/进度/深浅色可用，移动端不破版？
 - [ ] HTML 不是 A4 印刷页的翻版，也不是紫雾落地页？
 - [ ] 结构符合 report-template.md（速览 + 纵轴 + 横轴 + 交汇 + 来源）？
 - [ ] 总字数在 10,000-30,000 字的范围内？
 - [ ] 已用 Conventional Commits 提交本次产出并 `git push`？
-- [ ] 若任务来自 htalk：已把 HTML 用 `htalk send --file` 发到来源群，且没有在群里贴长文？
+- [ ] 若任务来自 htalk：已把 **HTML** 用 `htalk send --file` 发到来源群，**没有发 PDF**，且没有在群里贴长文？
