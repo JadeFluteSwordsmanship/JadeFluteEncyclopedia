@@ -10,6 +10,38 @@ description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）
 
 你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。交付件是 Markdown 定稿 + 网页阅读版 HTML。仓库里可以再留一份 PDF 归档；**群聊 / htalk 只发 HTML，不要发 PDF**。
 
+---
+
+## 交付事故（必读，禁止再犯）
+
+2026-10-15 深度研究群连续两次翻车：网页目录点了不跳、群里 PDF 中文乱码。**生成任何 HTML / PDF 之前先读完这一节。** 不要靠「脚本大概对了」蒙混过关。下面两条是硬规则，质检清单必须逐条勾。
+
+### 事故 1：HTML 侧边目录无法跳转
+
+- **现象**：阅读版左侧目录点了，IM 内置预览 / 部分浏览器不跳到对应章节。
+- **根因**：用中文标题当 fragment（`id="核心结论速览"`、`href="#核心结论"`）。非 ASCII hash 在企业 IM webview 里经常是死链。
+- **必须**：
+  1. 只用本 Skill 的 `scripts/md_to_html.py` + `references/web-report.html`，不要手写 HTML、不要 `slugify(中文标题)`。
+  2. 标题 `id` 只能是 ASCII：`sec-1`、`sec-2`、`sec-3` …
+  3. TOC 只能 `href="#sec-N"`。**禁止** `href="#核心结论"`、`href="#纵向分析"` 或任何中文锚点。
+  4. 模板点击必须先 `preventDefault`，再 `window.scrollTo`（可加 `history.replaceState`）；章节保留 `scroll-margin-top`。
+- **质检**：用编辑器或浏览器打开 HTML，点侧边目录前 3 条，必须跳到对应 `h2/h3`。再搜一遍：不应出现 `href="#[^"]*[\u4e00-\u9fff]`；应出现 `id="sec-1"` 和 `href="#sec-1"`。转换脚本写出后会自检，失败即停。
+
+### 事故 2：PDF 中文乱码
+
+- **现象**：群里发的 PDF（如《桌面破坏神》）在企业 IM / 微信预览里中文花屏、方块。
+- **根因（两层，缺一都会炸）**：
+  1. WeasyPrint 把 **CFF/OTF（文件头 `OTTO`）** 嵌进 PDF 后，IM 阅读器不会渲 CFF CID，中文变乱码。
+  2. 对静态 Regular 写 `font-weight: 100 900`。标题实际是 700，匹配失败会掉进没有汉字的西文字体。
+- **必须**：
+  1. 只用 `scripts/md_to_pdf.py`，只嵌入 **TrueType glyf**（文件头 `00 01 00 00`，表里有 `glyf`）的 `scripts/fonts/NotoSansSC-Regular.ttf` + `NotoSansSC-Bold.ttf`。
+  2. `@font-face` 分别注册 Regular **400** 与 Bold **700**。禁止 CFF/OTF/TTC，找不到 TTF 就停，**禁止静默回退**系统宋体 / PingFang / Noto OTF。脚本会隔离 fontconfig，不让系统 `.otf` 混进 PDF。
+  3. 禁止 `font-weight: 100 900` 套在单档 Regular 上，禁止 `Droid Sans Fallback`。
+  4. **htalk / 深度研究群只发 HTML，不要发 PDF。** 仓库可以留 PDF 归档。
+- **质检**：转换脚本写出后会自检：必须有 `/FontFile2` + `/Subtype /CIDFontType2` + `JadeCJK`，且不得出现 `OTTO` / `CIDFontType0` / `FontFile3`。失败即停。不要自己拿 CFF 去「试一试」。
+
+---
+
 ## 前置准备
 
 ### 环境准备
@@ -195,7 +227,7 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
 
 ### 中英文标点（硬规则）
 
-中文报告用中文标点。半角标点只留给英文单词、数字、代码和 URL。完美世界那一版把「已经成功过两次,第一次是…」写成了英文逗号，属于撰写事故，定稿前必须拦住。
+中文报告用中文标点。半角标点只留给英文单词、数字、代码和 URL。完美世界那一版把 `已经成功过两次,第一次是…` 写成了英文逗号，属于撰写事故，定稿前必须拦住。
 
 | 语境 | 用 | 不用 |
 |------|----|------|
@@ -232,7 +264,7 @@ Markdown 定稿后，**必须**再用本 Skill 的网页模板生成独立 HTML�
 python [skill目录]/scripts/md_to_html.py input.md output.html --title "研究对象名称" --author "玉笛百科"
 ```
 
-脚本会抽出封面标题/副标题、元信息、目录、结论带和「剧本」卡片，正文保持原 Markdown 结构。产出必须可单文件打开（CSS/JS 内联），含：粘滞目录、阅读进度、深浅色、字号、移动端目录抽屉、`prefers-reduced-motion`。侧边目录锚点必须用 ASCII `id`（`sec-1` 起），并用脚本点击滚动；不要用中文 `href="#核心结论"`——IM 预览和部分浏览器点了不会跳。网页模板已于 2026-10-13 在深度研究审定，后续报告按此生成，不要另起视觉方案。
+脚本会抽出封面标题/副标题、元信息、目录、结论带和「剧本」卡片，正文保持原 Markdown 结构。产出必须可单文件打开（CSS/JS 内联），含：粘滞目录、阅读进度、深浅色、字号、移动端目录抽屉、`prefers-reduced-motion`。**侧边目录规则见上文「交付事故」：ASCII `sec-N` + `preventDefault`/`scrollTo`，禁止中文 href。** 网页模板已于 2026-10-13 在深度研究审定，后续报告按此生成，不要另起视觉方案。
 
 不要做：紫雾落地页、三列功能卡、每个小节加英文眉题、为装饰生成假截图。
 
@@ -377,8 +409,10 @@ htalk send --group <groupID> --file <研究对象目录>/<研究对象>_横纵�
 - [ ] 中文正文没有半角逗号 / 半角括号 / 半角冒号？`lint_cjk_punct.py` 已通过？
 - [ ] 所有关键事实标注了信息来源？
 - [ ] 搜不到的信息诚实标注了「暂缺」，没有编造？
-- [ ] 若生成了仓库 PDF：嵌入的是 TrueType 而非 CFF/OTF，中文正常、无方框/乱码？
-- [ ] 网页 HTML 由 `md_to_html.py` 生成，可单文件打开，侧边目录可点击跳转，目录/进度/深浅色可用，移动端不破版？
+- [ ] **HTML 目录事故复查**：由 `md_to_html.py` 生成；标题 `id` 是 `sec-1` 起的 ASCII；TOC 是 `href="#sec-N"`；源码里没有中文 `href="#…"`；打开后点目录能跳（脚本已 `preventDefault` + `scrollTo`）？
+- [ ] **PDF 乱码事故复查**（若生成了仓库 PDF）：`md_to_pdf.py` 自检通过；只嵌入 TrueType glyf 的 NotoSansSC Regular/Bold；没有 CFF/OTF、没有 `font-weight: 100 900`；中文正常、无方框/乱码？
+- [ ] **群聊只发 HTML**：`htalk send --file` 没有附带 PDF？
+- [ ] 网页 HTML 可单文件打开，目录/进度/深浅色可用，移动端不破版？
 - [ ] HTML 不是 A4 印刷页的翻版，也不是紫雾落地页？
 - [ ] 结构符合 report-template.md（速览 + 纵轴 + 横轴 + 交汇 + 来源）？
 - [ ] 总字数在 10,000-30,000 字的范围内？

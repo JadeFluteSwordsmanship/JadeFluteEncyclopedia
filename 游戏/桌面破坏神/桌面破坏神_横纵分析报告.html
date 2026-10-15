@@ -600,7 +600,7 @@ body {
   <div class="cover-inner">
     <p class="cover-kicker">横纵分析</p>
     <h1>桌面破坏神</h1>
-    <p class="cover-sub">贴在任务栏上的暗黑，和「挂机赚钱」只隔一层钱包</p>
+    <p class="cover-sub">横纵分析法深度研究报告</p>
     <hr class="cover-rule">
     <div class="cover-meta"><span>游戏 / 桌面放置 / 挂机ARPG · 产品</span><span>2026年10月15日</span><span>约 14377 字</span><span>阅读 32 分钟</span><span>玉笛百科</span></div>
   </div>
@@ -1047,12 +1047,14 @@ body {
   tocBackdrop.addEventListener("click", function () { setToc(false); });
   links.forEach(function (a, i) {
     a.addEventListener("click", function (e) {
-      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
-      var id = raw;
-      try { id = decodeURIComponent(raw); } catch (err) {}
-      var target = (id && document.getElementById(id)) || headings[i];
-      if (!target) return;
       e.preventDefault();
+      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
+      try { raw = decodeURIComponent(raw); } catch (err) {}
+      if (!/^sec-\d+$/.test(raw)) {
+        raw = (headings[i] && headings[i].id) || "";
+      }
+      var target = (raw && document.getElementById(raw)) || headings[i];
+      if (!target) return;
       var y = target.getBoundingClientRect().top + window.pageYOffset - (topbar.offsetHeight + 12);
       if (window.scrollTo) {
         window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
@@ -1060,7 +1062,9 @@ body {
         target.scrollIntoView(true);
       }
       try {
-        if (id && history.replaceState) history.replaceState(null, "", "#" + id);
+        if (raw && /^sec-\d+$/.test(raw) && history.replaceState) {
+          history.replaceState(null, "", "#" + raw);
+        }
       } catch (err) {}
       setToc(false);
     });

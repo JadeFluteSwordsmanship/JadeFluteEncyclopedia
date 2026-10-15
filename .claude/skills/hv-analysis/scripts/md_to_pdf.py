@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 from urllib.request import urlopen
 import tempfile
+import zlib
 
 import markdown
 
@@ -56,16 +57,6 @@ CJK_TTF_BOLD_CANDIDATES = [
     Path("/usr/local/share/fonts/cjk/NotoSansSC-Bold.ttf"),
     Path("/usr/share/fonts/truetype/noto/NotoSansSC-Bold.ttf"),
     Path("C:/Windows/Fonts/msyhbd.ttf"),
-]
-
-# CFF/OTF 与 TTC 仅作最后兜底，生成的 PDF 在部分阅读器会乱码。
-CJK_CFF_FALLBACK = [
-    Path("/usr/local/share/fonts/cjk/NotoSansSC-Regular.otf"),
-    BUNDLED_FONT_DIR / "NotoSansSC-Regular.otf",
-    Path("/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf"),
-    Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
-    Path("/System/Library/Fonts/PingFang.ttc"),
-    Path("C:/Windows/Fonts/msyh.ttc"),
 ]
 
 LATIN_FONT_CANDIDATES = [
@@ -109,17 +100,39 @@ def path_to_css_url(path: Path) -> str:
     return path.resolve().as_uri()
 
 
+def _table_tags(path: Path) -> set[bytes]:
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return set()
+    if len(data) < 12:
+        return set()
+    import struct
+
+    n = struct.unpack(">H", data[4:6])[0]
+    tags = set()
+    for i in range(n):
+        start = 12 + 16 * i
+        tags.add(data[start : start + 4])
+    return tags
+
+
 def sfnt_kind(path: Path) -> str:
     try:
         magic = path.read_bytes()[:4]
     except OSError:
         return "unknown"
-    if magic == b"\x00\x01\x00\x00" or magic == b"true":
-        return "truetype"
     if magic == b"OTTO":
         return "cff"
     if magic == b"ttcf":
         return "collection"
+    if magic in (b"\x00\x01\x00\x00", b"true"):
+        tags = _table_tags(path)
+        if b"CFF " in tags or b"CFF2" in tags:
+            return "cff"
+        if b"glyf" in tags:
+            return "truetype"
+        return "unknown"
     return "unknown"
 
 
@@ -188,27 +201,51 @@ def _pick_ttf(paths) -> Path | None:
     return None
 
 
-def resolve_cjk_fonts() -> tuple[Path, Path | None]:
+def resolve_cjk_fonts() -> tuple[Path, Path]:
     regular = _pick_ttf(CJK_TTF_REGULAR_CANDIDATES) or download_noto_sc_ttf(400)
     bold = _pick_ttf(CJK_TTF_BOLD_CANDIDATES) or download_noto_sc_ttf(700)
-    if regular:
-        kind = sfnt_kind(regular)
-        if kind != "truetype":
-            print(f"[WARN] CJK Regular 不是 TrueType（{kind}），IM 预览可能乱码: {regular}", file=sys.stderr)
-        return regular, bold
-
-    fallback = first_existing(CJK_CFF_FALLBACK) or first_existing(fonts_from_fc_list())
-    if fallback:
-        print(
-            f"[WARN] 只用到 CFF/OTF 或 TTC（{sfnt_kind(fallback)}）: {fallback}\n"
-            "         部分 PDF 阅读器会把中文显示成乱码。请改用 scripts/fonts 下的 TTF。",
-            file=sys.stderr,
+    missing = []
+    if not regular or sfnt_kind(regular) != "truetype":
+        missing.append("NotoSansSC-Regular.ttf（TrueType glyf）")
+    if not bold or sfnt_kind(bold) != "truetype":
+        missing.append("NotoSansSC-Bold.ttf（TrueType glyf）")
+    if missing:
+        raise SystemExit(
+            "PDF 只允许嵌入 TrueType glyf 的 Noto Sans SC Regular + Bold。"
+            "禁止 CFF/OTF（OTTO）静默回退，否则 IM 预览中文会乱码。\n缺少: "
+            + "、".join(missing)
+            + f"\n请放到: {BUNDLED_FONT_DIR}"
         )
-        return fallback, None
-    raise SystemExit(
-        "未找到中文 TrueType 字体，PDF 会乱码。请把 NotoSansSC-Regular.ttf 放到:\n"
-        f"{BUNDLED_FONT_DIR}"
+    return regular, bold
+
+
+def install_isolated_fontconfig(font_files: list[Path]) -> Path:
+    """只让 Pango/WeasyPrint 看见指定 TTF，避免系统 Noto CFF/OTF 被嵌进 PDF。"""
+    dirs = {str(path.parent.resolve()) for path in font_files if path}
+    conf_dir = Path(tempfile.mkdtemp(prefix="jade-fc-"))
+    (conf_dir / "cache").mkdir(exist_ok=True)
+    dir_xml = "\n".join(f"  <dir>{item}</dir>" for item in sorted(dirs))
+    conf = conf_dir / "fonts.conf"
+    conf.write_text(
+        '<?xml version="1.0"?>\n'
+        '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">\n'
+        "<fontconfig>\n"
+        f"{dir_xml}\n"
+        f"  <cachedir>{conf_dir / 'cache'}</cachedir>\n"
+        "  <selectfont>\n"
+        "    <rejectfont>\n"
+        "      <glob>*.otf</glob>\n"
+        "      <glob>*.OTF</glob>\n"
+        "      <glob>*.ttc</glob>\n"
+        "      <glob>*.TTC</glob>\n"
+        "    </rejectfont>\n"
+        "  </selectfont>\n"
+        "</fontconfig>\n",
+        encoding="utf-8",
     )
+    os.environ["FONTCONFIG_FILE"] = str(conf)
+    os.environ.pop("FONTCONFIG_PATH", None)
+    return conf
 
 
 def build_font_css(cjk_regular: Path, cjk_bold: Path | None = None) -> str:
@@ -223,9 +260,10 @@ def build_font_css(cjk_regular: Path, cjk_bold: Path | None = None) -> str:
 }}
 """
     ]
-    if cjk_bold:
-        chunks.append(
-            f"""
+    if not cjk_bold:
+        raise SystemExit("必须同时注册 NotoSansSC-Bold.ttf。禁止只用 Regular 再写 font-weight: 100 900。")
+    chunks.append(
+        f"""
 @font-face {{
     font-family: "JadeCJK";
     src: url("{path_to_css_url(cjk_bold)}") format("{font_format(cjk_bold)}");
@@ -233,7 +271,7 @@ def build_font_css(cjk_regular: Path, cjk_bold: Path | None = None) -> str:
     font-style: normal;
 }}
 """
-        )
+    )
     if mono:
         chunks.append(
             f"""
@@ -245,7 +283,42 @@ def build_font_css(cjk_regular: Path, cjk_bold: Path | None = None) -> str:
 }}
 """
         )
-    return "\n".join(chunks)
+    css = "\n".join(chunks)
+    if "100 900" in css or re.search(r"font-weight:\s*100\s+900", css):
+        raise SystemExit("禁止对静态 Regular 写 font-weight: 100 900，标题 700 会匹配失败并掉进西文字体。")
+    if font_format(cjk_regular) != "truetype" or font_format(cjk_bold) != "truetype":
+        raise SystemExit("JadeCJK 必须用 format(truetype)，禁止 opentype/CFF。")
+    return css
+
+
+def inflate_pdf_bytes(path: Path) -> bytes:
+    data = path.read_bytes()
+    chunks = [data]
+    for match in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S):
+        raw = match.group(1)
+        for decoder in (lambda b: zlib.decompress(b), lambda b: zlib.decompress(b, -15)):
+            try:
+                chunks.append(decoder(raw))
+                break
+            except Exception:
+                continue
+    return b"\n".join(chunks)
+
+
+def assert_pdf_truetype(path: Path) -> None:
+    """企业 IM 预览不认 CFF。写出后必须能看到 TrueType CID + FontFile2。"""
+    blob = inflate_pdf_bytes(path)
+    if b"OTTO" in blob or b"/Subtype /CIDFontType0" in blob or b"/FontFile3" in blob:
+        raise SystemExit(
+            f"PDF 嵌入了 CFF/OTF（OTTO / CIDFontType0 / FontFile3）: {path}\n"
+            "IM 预览会把中文渲成乱码。请只用 scripts/fonts 下的 NotoSansSC TTF。"
+        )
+    if b"/FontFile2" not in blob or b"/Subtype /CIDFontType2" not in blob:
+        raise SystemExit(f"PDF 未嵌入 TrueType glyf（缺少 FontFile2 / CIDFontType2）: {path}")
+    if b"JadeCJK" not in blob:
+        raise SystemExit(f"PDF 未嵌入 JadeCJK（Noto Sans SC）: {path}")
+    if b"100 900" in blob:
+        raise SystemExit("PDF 中间样式含 font-weight: 100 900，禁止。")
 
 
 REPORT_CSS = """
@@ -333,7 +406,7 @@ body {
     font-size: 11pt;
     letter-spacing: 0.42em;
     color: #c4a35a;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .cover-kicker {
@@ -753,10 +826,19 @@ def md_to_html(
 """
 
 
-def write_pdf_weasyprint(html: str, output: Path, base_url: Path) -> None:
+def write_pdf_weasyprint(
+    html: str,
+    output: Path,
+    base_url: Path,
+    font_files: list[Path] | None = None,
+) -> None:
     from weasyprint import HTML
     from weasyprint.text.fonts import FontConfiguration
 
+    files = list(font_files or [])
+    files += [p for p in (first_existing(LATIN_FONT_CANDIDATES), first_existing(MONO_FONT_CANDIDATES)) if p]
+    if files:
+        install_isolated_fontconfig(files)
     font_config = FontConfiguration()
     HTML(
         string=html,
@@ -820,10 +902,7 @@ def main() -> None:
         pass
     cjk_regular, cjk_bold = resolve_cjk_fonts()
     print(f"[OK] 中文字体 Regular: {cjk_regular} ({sfnt_kind(cjk_regular)})")
-    if cjk_bold:
-        print(f"[OK] 中文字体 Bold: {cjk_bold} ({sfnt_kind(cjk_bold)})")
-    else:
-        print("[WARN] 未找到 Bold TTF，标题粗体可能回退异常", file=sys.stderr)
+    print(f"[OK] 中文字体 Bold: {cjk_bold} ({sfnt_kind(cjk_bold)})")
 
     html = md_to_html(
         md_text,
@@ -850,11 +929,19 @@ def main() -> None:
     for engine in engines:
         try:
             if engine == "weasyprint":
-                write_pdf_weasyprint(html, dest, html_path.parent)
+                write_pdf_weasyprint(
+                    html,
+                    dest,
+                    html_path.parent,
+                    font_files=[cjk_regular, cjk_bold],
+                )
             else:
                 write_pdf_playwright(html_path, dest)
             size_kb = dest.stat().st_size / 1024
             print(f"[OK] PDF ({engine}): {dest} ({size_kb:.1f} KB)")
+            if engine == "weasyprint":
+                assert_pdf_truetype(dest)
+                print("[OK] PDF 字体自检通过：TrueType glyf / JadeCJK / 无 CFF")
             return
         except Exception as exc:
             last_error = exc

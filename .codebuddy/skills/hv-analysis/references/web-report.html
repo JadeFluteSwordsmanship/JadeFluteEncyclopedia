@@ -716,12 +716,14 @@ body {
   tocBackdrop.addEventListener("click", function () { setToc(false); });
   links.forEach(function (a, i) {
     a.addEventListener("click", function (e) {
-      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
-      var id = raw;
-      try { id = decodeURIComponent(raw); } catch (err) {}
-      var target = (id && document.getElementById(id)) || headings[i];
-      if (!target) return;
       e.preventDefault();
+      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
+      try { raw = decodeURIComponent(raw); } catch (err) {}
+      if (!/^sec-\d+$/.test(raw)) {
+        raw = (headings[i] && headings[i].id) || "";
+      }
+      var target = (raw && document.getElementById(raw)) || headings[i];
+      if (!target) return;
       var y = target.getBoundingClientRect().top + window.pageYOffset - (topbar.offsetHeight + 12);
       if (window.scrollTo) {
         window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
@@ -729,7 +731,9 @@ body {
         target.scrollIntoView(true);
       }
       try {
-        if (id && history.replaceState) history.replaceState(null, "", "#" + id);
+        if (raw && /^sec-\d+$/.test(raw) && history.replaceState) {
+          history.replaceState(null, "", "#" + raw);
+        }
       } catch (err) {}
       setToc(false);
     });

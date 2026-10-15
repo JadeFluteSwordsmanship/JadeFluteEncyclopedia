@@ -66,6 +66,15 @@ Reading this as: editorial long-form research report for analysts, with a quiet 
 - 焦点可见：`outline: 2px solid var(--jade)`
 - 对比度：正文与大标题达到 WCAG AA；按钮文字不得浅底浅字
 
+## 侧边目录锚点（硬规则）
+
+企业 IM 内置预览和部分浏览器不认中文 fragment。目录必须全部 ASCII：
+
+- 标题 `id`：`sec-1`、`sec-2`、`sec-3` …
+- TOC：`href="#sec-N"`，禁止 `href="#核心结论"`
+- 点击：`preventDefault` + `window.scrollTo`；章节保留 `scroll-margin-top`
+- 由 `scripts/md_to_html.py` 生成，不要手写中文 `id`
+
 ## 明确禁止
 
 - 紫雾、霓虹描边、玻璃拟态堆叠、三列等宽功能卡

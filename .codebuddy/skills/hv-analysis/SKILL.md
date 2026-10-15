@@ -1,6 +1,6 @@
 ---
 name: hv-analysis
-description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown、网页 HTML 与 PDF。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。"
+description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown 与网页 HTML（仓库可另存 PDF）。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。"
 ---
 
 # 横纵分析法深度研究
@@ -8,13 +8,45 @@ description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）
 > **方法论溯源**
 > 横纵分析法由数字生命卡兹克（Khazix）提出，融合了语言学中的历时-共时分析（Saussure）、社会科学中的纵向-横截面研究设计、商学院案例研究法、以及竞争战略分析的核心思想，形成了一套适用于产品/公司/概念/人物的通用研究框架。核心原则不变：纵向追时间深度，横向追同期广度，最终交汇出判断。
 
-你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。最终产出三件套：Markdown 定稿、网页阅读版 HTML、排版可用的 PDF。
+你是玉笛百科的横纵研究分析师。正在执行一次横纵分析法深度研究。交付件是 Markdown 定稿 + 网页阅读版 HTML。仓库里可以再留一份 PDF 归档；**群聊 / htalk 只发 HTML，不要发 PDF**。
+
+---
+
+## 交付事故（必读，禁止再犯）
+
+2026-10-15 深度研究群连续两次翻车：网页目录点了不跳、群里 PDF 中文乱码。**生成任何 HTML / PDF 之前先读完这一节。** 不要靠「脚本大概对了」蒙混过关。下面两条是硬规则，质检清单必须逐条勾。
+
+### 事故 1：HTML 侧边目录无法跳转
+
+- **现象**：阅读版左侧目录点了，IM 内置预览 / 部分浏览器不跳到对应章节。
+- **根因**：用中文标题当 fragment（`id="核心结论速览"`、`href="#核心结论"`）。非 ASCII hash 在企业 IM webview 里经常是死链。
+- **必须**：
+  1. 只用本 Skill 的 `scripts/md_to_html.py` + `references/web-report.html`，不要手写 HTML、不要 `slugify(中文标题)`。
+  2. 标题 `id` 只能是 ASCII：`sec-1`、`sec-2`、`sec-3` …
+  3. TOC 只能 `href="#sec-N"`。**禁止** `href="#核心结论"`、`href="#纵向分析"` 或任何中文锚点。
+  4. 模板点击必须先 `preventDefault`，再 `window.scrollTo`（可加 `history.replaceState`）；章节保留 `scroll-margin-top`。
+- **质检**：用编辑器或浏览器打开 HTML，点侧边目录前 3 条，必须跳到对应 `h2/h3`。再搜一遍：不应出现 `href="#[^"]*[\u4e00-\u9fff]`；应出现 `id="sec-1"` 和 `href="#sec-1"`。转换脚本写出后会自检，失败即停。
+
+### 事故 2：PDF 中文乱码
+
+- **现象**：群里发的 PDF（如《桌面破坏神》）在企业 IM / 微信预览里中文花屏、方块。
+- **根因（两层，缺一都会炸）**：
+  1. WeasyPrint 把 **CFF/OTF（文件头 `OTTO`）** 嵌进 PDF 后，IM 阅读器不会渲 CFF CID，中文变乱码。
+  2. 对静态 Regular 写 `font-weight: 100 900`。标题实际是 700，匹配失败会掉进没有汉字的西文字体。
+- **必须**：
+  1. 只用 `scripts/md_to_pdf.py`，只嵌入 **TrueType glyf**（文件头 `00 01 00 00`，表里有 `glyf`）的 `scripts/fonts/NotoSansSC-Regular.ttf` + `NotoSansSC-Bold.ttf`。
+  2. `@font-face` 分别注册 Regular **400** 与 Bold **700**。禁止 CFF/OTF/TTC，找不到 TTF 就停，**禁止静默回退**系统宋体 / PingFang / Noto OTF。脚本会隔离 fontconfig，不让系统 `.otf` 混进 PDF。
+  3. 禁止 `font-weight: 100 900` 套在单档 Regular 上，禁止 `Droid Sans Fallback`。
+  4. **htalk / 深度研究群只发 HTML，不要发 PDF。** 仓库可以留 PDF 归档。
+- **质检**：转换脚本写出后会自检：必须有 `/FontFile2` + `/Subtype /CIDFontType2` + `JadeCJK`，且不得出现 `OTTO` / `CIDFontType0` / `FontFile3`。失败即停。不要自己拿 CFF 去「试一试」。
+
+---
 
 ## 前置准备
 
 ### 环境准备
 
-1. **确认转换脚本可用**：本 Skill 自带 `scripts/md_to_html.py`（网页阅读版）和 `scripts/md_to_pdf.py`（PDF）。依赖：`pip install weasyprint markdown`。PDF 脚本会自动发现本机中文字体（Noto Sans SC / 微软雅黑 / PingFang / 文泉驿）；找不到时会尝试下载 Noto Sans SC。不要改用已废弃的 `Droid Sans Fallback` 字体栈，那是乱码的根因。
+1. **确认转换脚本可用**：本 Skill 自带 `scripts/md_to_html.py`（网页阅读版，**群聊交付必须用这个**）和 `scripts/md_to_pdf.py`（仓库归档用 PDF）。依赖：`pip install weasyprint markdown`。PDF 必须嵌入 **TrueType（glyf）** 的 Noto Sans SC Regular + Bold（脚本自带 `scripts/fonts/*.ttf`）。**禁止用 CFF/OTF（OTTO）**：WeasyPrint 把 CFF 嵌进 PDF 后，企业 IM / 微信预览会把中文渲成乱码。也不要对静态 Regular 写 `font-weight: 100 900`，标题全是 700，匹配失败会掉进没有汉字的西文字体。更不要用已废弃的 `Droid Sans Fallback`。
 2. **报告模板**：写作时严格遵循 [references/report-template.md](references/report-template.md)。网页视觉规范见 [references/html-design.md](references/html-design.md)，模板是 [references/web-report.html](references/web-report.html)。
 3. **写作风格**：本Skill已内置完整的写作风格指南（见下文"写作风格"部分），无需额外加载其他skill。网页 HTML 不要为单篇报告手写 CSS，一律走转换脚本。
 
@@ -195,7 +227,7 @@ prompt要描述目标（"获取""调研""了解"），不要用暗示具体手�
 
 ### 中英文标点（硬规则）
 
-中文报告用中文标点。半角标点只留给英文单词、数字、代码和 URL。完美世界那一版把「已经成功过两次,第一次是…」写成了英文逗号，属于撰写事故，定稿前必须拦住。
+中文报告用中文标点。半角标点只留给英文单词、数字、代码和 URL。完美世界那一版把 `已经成功过两次,第一次是…` 写成了英文逗号，属于撰写事故，定稿前必须拦住。
 
 | 语境 | 用 | 不用 |
 |------|----|------|
@@ -232,13 +264,15 @@ Markdown 定稿后，**必须**再用本 Skill 的网页模板生成独立 HTML�
 python [skill目录]/scripts/md_to_html.py input.md output.html --title "研究对象名称" --author "玉笛百科"
 ```
 
-脚本会抽出封面标题/副标题、元信息、目录、结论带和「剧本」卡片，正文保持原 Markdown 结构。产出必须可单文件打开（CSS/JS 内联），含：粘滞目录、阅读进度、深浅色、字号、移动端目录抽屉、`prefers-reduced-motion`。网页模板已于 2026-10-13 在深度研究审定，后续报告按此生成，不要另起视觉方案。
+脚本会抽出封面标题/副标题、元信息、目录、结论带和「剧本」卡片，正文保持原 Markdown 结构。产出必须可单文件打开（CSS/JS 内联），含：粘滞目录、阅读进度、深浅色、字号、移动端目录抽屉、`prefers-reduced-motion`。**侧边目录规则见上文「交付事故」：ASCII `sec-N` + `preventDefault`/`scrollTo`，禁止中文 href。** 网页模板已于 2026-10-13 在深度研究审定，后续报告按此生成，不要另起视觉方案。
 
 不要做：紫雾落地页、三列功能卡、每个小节加英文眉题、为装饰生成假截图。
 
-## 第六步：生成PDF报告
+## 第六步：生成 PDF（仅仓库归档，不要发群）
 
-报告写完后，使用本Skill自带的 `scripts/md_to_pdf.py` 将 Markdown 转为 PDF。完整章节骨架见 [references/report-template.md](references/report-template.md)。网页阅读版已经由上一步单独生成；PDF 脚本默认不再覆盖 `.html`。
+报告写完后，可用本 Skill 自带的 `scripts/md_to_pdf.py` 把 Markdown 转成 PDF，放进研究对象目录归档。网页阅读版已经由上一步单独生成；PDF 脚本默认不再覆盖 `.html`。
+
+**htalk / 深度研究群只发 HTML。** 不要 `htalk send --file *.pdf`。IM 内置阅读器对 CFF 字体不友好，用户要的交付物是网页 HTML。
 
 ### 转换流程
 
@@ -255,7 +289,7 @@ python [skill目录]/scripts/md_to_html.py input.md output.html --title "研究�
 - **页面**：A4；封面满版墨蓝/玉色，正文页边距约 22mm
 - **封面**：自动抽取首个 H1 与元信息（研究时间、领域、类型、研究员）
 - **目录**：根据 H1/H2/H3 自动生成，带页码引导线
-- **字体**：运行时解析本机 CJK 字体，用 `@font-face` 嵌入；禁止依赖 Droid Sans Fallback
+- **字体**：优先嵌入 `scripts/fonts/NotoSansSC-Regular.ttf` 与 `NotoSansSC-Bold.ttf`（TrueType glyf）。禁止嵌入 CFF/OTF，禁止 `font-weight: 100 900` 套在单档 Regular 上，禁止 Droid Sans Fallback
 - **正文**：JadeCJK，10.5pt，行距 1.78，左对齐（避免 WeasyPrint 对中文两端对齐造成重叠/乱码）
 - **「核心结论速览」**：自动套成封面后的结论卡片
 - **页眉页脚**：玉笛百科 / 标题 / 第 X 页（封面不显示）
@@ -323,6 +357,13 @@ feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
 用 HEREDOC 传 message。不要 `--no-verify`，不要 `--force`。
 
 4. `git push` 到当前跟踪的 remote 分支。失败则报告错误并停下。
+5. **任务来自 htalk 时，立刻把网页 HTML 发到来源群**，不要只 git push、不要发 PDF、不要在群里贴长文摘要：
+
+```bash
+htalk send --group <groupID> --file <研究对象目录>/<研究对象>_横纵分析报告.html
+```
+
+群里的交付物就是这个 HTML 文件。**不要附带 PDF。** Agent 自动回群的 result 只留一两句（已发送 / 路径），禁止再贴一遍报告正文。
 
 ---
 
@@ -368,9 +409,12 @@ feat(游戏/金铲铲之战): add 金铲铲之战横纵分析报告
 - [ ] 中文正文没有半角逗号 / 半角括号 / 半角冒号？`lint_cjk_punct.py` 已通过？
 - [ ] 所有关键事实标注了信息来源？
 - [ ] 搜不到的信息诚实标注了「暂缺」，没有编造？
-- [ ] PDF 中文正常、无方框/乱码，封面、目录、结论卡片完整？
-- [ ] 网页 HTML 由 `md_to_html.py` 生成，可单文件打开，目录/进度/深浅色可用，移动端不破版？
+- [ ] **HTML 目录事故复查**：由 `md_to_html.py` 生成；标题 `id` 是 `sec-1` 起的 ASCII；TOC 是 `href="#sec-N"`；源码里没有中文 `href="#…"`；打开后点目录能跳（脚本已 `preventDefault` + `scrollTo`）？
+- [ ] **PDF 乱码事故复查**（若生成了仓库 PDF）：`md_to_pdf.py` 自检通过；只嵌入 TrueType glyf 的 NotoSansSC Regular/Bold；没有 CFF/OTF、没有 `font-weight: 100 900`；中文正常、无方框/乱码？
+- [ ] **群聊只发 HTML**：`htalk send --file` 没有附带 PDF？
+- [ ] 网页 HTML 可单文件打开，目录/进度/深浅色可用，移动端不破版？
 - [ ] HTML 不是 A4 印刷页的翻版，也不是紫雾落地页？
 - [ ] 结构符合 report-template.md（速览 + 纵轴 + 横轴 + 交汇 + 来源）？
 - [ ] 总字数在 10,000-30,000 字的范围内？
 - [ ] 已用 Conventional Commits 提交本次产出并 `git push`？
+- [ ] 若任务来自 htalk：已把 **HTML** 用 `htalk send --file` 发到来源群，**没有发 PDF**，且没有在群里贴长文？

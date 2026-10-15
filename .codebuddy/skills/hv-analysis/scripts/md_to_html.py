@@ -31,6 +31,8 @@ from md_to_pdf import (  # noqa: E402
 )
 
 TITLE_SPLIT = re.compile(r"\s*[：:]\s*", re.U)
+SEC_ID_RE = re.compile(r"^sec-\d+$")
+CJK_HREF_RE = re.compile(r'href="#([^"]*[^\x00-\x7f][^"]*)"')
 
 
 def split_title(full: str) -> tuple[str, str]:
@@ -101,6 +103,33 @@ def collect_toc(body: str) -> tuple[str, str]:
     return "\n".join(lines), body
 
 
+def assert_ascii_toc(toc_html: str, body: str, full_html: str | None = None) -> None:
+    """IM webview 不认中文 fragment。目录和标题必须是 ASCII sec-N。"""
+    blob = full_html if full_html else (toc_html or "") + "\n" + (body or "")
+    chinese = CJK_HREF_RE.findall(blob)
+    if chinese:
+        raise SystemExit(
+            "HTML 目录禁止中文锚点（IM / 部分浏览器点了不跳）: "
+            + ", ".join(f"#{item}" for item in chinese[:5])
+        )
+    hrefs = re.findall(r'<ol class="toc">[\s\S]*?</ol>', blob)
+    href_ids = re.findall(r'<a href="#([^"]+)"', hrefs[0] if hrefs else (toc_html or ""))
+    if toc_html or href_ids:
+        if not href_ids:
+            raise SystemExit("TOC 没有 href")
+        for hid in href_ids:
+            if not SEC_ID_RE.match(hid):
+                raise SystemExit(f'TOC href 必须是 #sec-N，发现 #{hid}')
+        if "sec-1" not in href_ids:
+            raise SystemExit('TOC 缺少 href="#sec-1"')
+    for hid in re.findall(r"<h[1-3][^>]*\sid=\"([^\"]+)\"", body):
+        if not SEC_ID_RE.match(hid):
+            raise SystemExit(f"标题 id 必须是 ASCII sec-N，发现: {hid}")
+    if full_html:
+        if "preventDefault" not in full_html or "scrollTo" not in full_html:
+            raise SystemExit("网页模板 TOC 点击必须 preventDefault + scrollTo")
+
+
 def autolink(body: str) -> str:
     parts = re.split(r"(<a\b[^>]*>.*?</a>)", body, flags=re.S)
 
@@ -123,13 +152,14 @@ def wrap_tables(body: str) -> str:
 
 def wrap_lead(body: str) -> str:
     def replacer(match: re.Match) -> str:
-        heading = match.group(1)
-        rest = match.group(2)
+        attrs = match.group(1) or ""
+        heading = match.group(2)
+        rest = match.group(3)
         cls = "summary" if re.search(r"核心结论|速览", heading) else "lead-band"
-        return f'<section class="{cls}"><h2>{heading}</h2>{rest}</section>'
+        return f'<section class="{cls}"><h2{attrs}>{heading}</h2>{rest}</section>'
 
     return re.sub(
-        r"<h2>([^<]*(?:核心结论|速览|一句话定义)[^<]*)</h2>(.*?)(?=<h[1-2]\b|$)",
+        r"<h2([^>]*)>([^<]*(?:核心结论|速览|一句话定义)[^<]*)</h2>(.*?)(?=<h[1-2]\b|$)",
         replacer,
         body,
         count=1,
@@ -138,9 +168,18 @@ def wrap_lead(body: str) -> str:
 
 
 def wrap_sources(body: str) -> str:
+    def replacer(match: re.Match) -> str:
+        attrs = match.group(1) or ""
+        inner = match.group(2)
+        if re.search(r"\bclass=", attrs):
+            attrs = re.sub(r'class="([^"]*)"', r'class="\1 sources-h"', attrs, count=1)
+        else:
+            attrs = f' class="sources-h"{attrs}'
+        return f"<h2{attrs}>{inner}</h2>"
+
     return re.sub(
-        r"<h2>([^<]*(?:信息来源|参考资料)[^<]*)</h2>",
-        r'<h2 class="sources-h">\1</h2>',
+        r"<h2([^>]*)>([^<]*(?:信息来源|参考资料)[^<]*)</h2>",
+        replacer,
         body,
         count=1,
     )
@@ -253,12 +292,13 @@ def md_to_reading_html(
         extensions=["tables", "fenced_code", "sane_lists", "nl2br"],
         output_format="html5",
     )
+    toc_html, html_body = collect_toc(html_body)
     html_body = wrap_lead(html_body)
     html_body = wrap_sources(html_body)
-    toc_html, html_body = collect_toc(html_body)
     html_body = wrap_scenarios(html_body)
     html_body = wrap_tables(html_body)
     html_body = autolink(html_body)
+    assert_ascii_toc(toc_html, html_body)
 
     template = TEMPLATE_PATH.read_text(encoding="utf-8")
     replacements = {
@@ -279,6 +319,7 @@ def md_to_reading_html(
     leftover = re.findall(r"\{\{[A-Z0-9_]+\}\}", out)
     if leftover:
         raise SystemExit(f"模板占位符未替换: {leftover}")
+    assert_ascii_toc(toc_html, html_body, full_html=out)
     return out
 
 
