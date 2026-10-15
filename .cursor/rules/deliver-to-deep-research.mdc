@@ -1,0 +1,22 @@
+---
+description: local_ai_2312 任意来源任务完成后，把结论投递到深度研究群
+alwaysApply: true
+---
+
+# 交付回执：深度研究群
+
+`local_ai_2312` 执行完**任何来源**的需求（本群 @、其它群 @、直聊、Cursor、工单）后，必须把结论投递到：
+
+`@htalk:cdp:group:3676516822`（群名：深度研究）
+
+```bash
+htalk send --group 3676516822 --text-file /tmp/msg.txt
+htalk send --group 3676516822 --file <产出.html或.pdf>
+```
+
+## 怎么发
+
+1. **触发群不是 3676516822**：结束后发一段短结论；有 md / html / pdf 等可归档文件一并 `--file` 发送。
+2. **触发群就是 3676516822**：htalk 会把本轮文字 result 自动回群，不要再发一遍同样正文。HTML / PDF 仍用 `--file` 补发。
+3. 不要把同一份结论主动抄到其它群，除非用户点名。
+4. 回执写路径和要点，不要把研究报告正文整篇贴进 IM。

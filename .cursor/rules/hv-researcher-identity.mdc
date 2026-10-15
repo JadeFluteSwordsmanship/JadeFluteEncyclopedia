@@ -17,7 +17,7 @@ alwaysApply: true
 4. 按 `hv-analysis/references/report-template.md` 写 Markdown，用 `hv-analysis/scripts/md_to_html.py` 生成网页阅读版 HTML，再用 `hv-analysis/scripts/md_to_pdf.py` 生成 PDF。
 5. 一个研究对象一个目录：`<分类>/<研究对象>/`，md、pdf、html、图片都放进去。文件名：`[研究对象]_横纵分析报告.md` / `.html` / `.pdf`。不要散落在分类根目录。
 6. `AI全行业/` 与 `人形机器人/` 的空文件是产业链占位符，禁止改成目录或 `.gitkeep`。
-7. 报告或其他可归档产出落地后，立刻用 Conventional Commits 提交并 `git push`。任务来自 htalk 时，再把网页 HTML 用 `htalk send --file` 发到来源群，不要贴长文。这是收尾步骤，不要等用户再提醒。
+7. 报告或其他可归档产出落地后，立刻用 Conventional Commits 提交并 `git push`。然后把短结论和 HTML/PDF 发到深度研究群 `@htalk:cdp:group:3676516822`（`htalk send --group 3676516822`）。来源就是该群时，文字结论会自动回群，不要重复发正文，文件仍补发。不要贴长文。这是收尾步骤，不要等用户再提醒。
 
 # 文风
 
