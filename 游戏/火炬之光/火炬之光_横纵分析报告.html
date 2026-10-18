@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-size="md">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>火炬之光横纵分析报告</title>
+<style>
+:root {
+  --ink: #15232c;
+  --ink-soft: #2a3d46;
+  --paper: #f2f5f3;
+  --paper-2: #e7eeea;
+  --jade: #2f7a64;
+  --jade-deep: #1f5648;
+  --jade-soft: rgba(47, 122, 100, 0.12);
+  --muted: #4a5c61;
+  --hair: #cdd8d3;
+  --card: #ffffff;
+  --shadow: 0 18px 40px rgba(21, 35, 44, 0.08);
+  --cover: #15232c;
+  --cover-ink: #eaf3ef;
+  --cover-muted: rgba(234, 243, 239, 0.68);
+  --warn: #8b4a3a;
+  --warn-soft: rgba(139, 74, 58, 0.1);
+  --ok-soft: rgba(47, 122, 100, 0.1);
+  --base-soft: rgba(74, 92, 97, 0.08);
+  --radius: 8px;
+  --sidebar: 17.25rem;
+  --measure: 42rem;
+  --topbar: 3.5rem;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SFMono-Regular", "Cascadia Mono", "Consolas", "Liberation Mono", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --ink: #e4ece8;
+  --ink-soft: #c5d2cc;
+  --paper: #12181a;
+  --paper-2: #1a2225;
+  --jade: #6eb89f;
+  --jade-deep: #8fd0ba;
+  --jade-soft: rgba(110, 184, 159, 0.14);
+  --muted: #9aada8;
+  --hair: #2c3a3d;
+  --card: #1a2225;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --cover: #101618;
+  --cover-ink: #e4ece8;
+  --cover-muted: rgba(228, 236, 232, 0.64);
+  --warn: #d08978;
+  --warn-soft: rgba(208, 137, 120, 0.14);
+  --ok-soft: rgba(110, 184, 159, 0.14);
+  --base-soft: rgba(154, 173, 168, 0.1);
+}
+
+[data-size="sm"] { --body-size: 15.5px; }
+[data-size="md"] { --body-size: 17px; }
+[data-size="lg"] { --body-size: 19px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  scroll-padding-top: calc(var(--topbar) + 0.8rem);
+}
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-size: var(--body-size);
+  line-height: 1.85;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .topbar, .progress span, .toc a, .theme-btn, .toc-drawer {
+    transition: background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.skip {
+  position: absolute;
+  left: 0.8rem;
+  top: -3rem;
+  background: var(--jade);
+  color: #f4faf7;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius);
+  z-index: 80;
+}
+.skip:focus { top: 0.6rem; }
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--jade);
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.1rem;
+  color: var(--cover-ink);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+.topbar.is-scrolled {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border-bottom-color: var(--hair);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .topbar.is-scrolled { background: var(--paper); backdrop-filter: none; }
+}
+
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  font-weight: 650;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.brand small {
+  display: block;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 0.68rem;
+}
+
+.top-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar.is-scrolled .top-title { opacity: 0.86; }
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.icon-btn:focus-visible,
+.toc a:focus-visible,
+.article a:focus-visible {
+  outline: 2px solid var(--jade);
+  outline-offset: 2px;
+}
+.icon-btn[aria-pressed="true"] { border-color: color-mix(in srgb, currentColor 28%, transparent); }
+.toc-toggle { display: none; }
+
+.cover {
+  min-height: 100dvh;
+  background: var(--cover);
+  color: var(--cover-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5.5rem 8vw 4.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -18% auto;
+  width: min(52vw, 34rem);
+  height: min(52vw, 34rem);
+  background: radial-gradient(circle, rgba(47, 122, 100, 0.22), transparent 68%);
+  pointer-events: none;
+}
+.cover-inner {
+  position: relative;
+  max-width: 48rem;
+}
+.cover-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--jade);
+  font-weight: 650;
+  margin: 0 0 1.1rem;
+}
+.cover h1 {
+  font-size: clamp(2.35rem, 6vw, 4.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 670;
+  margin: 0;
+  max-width: 14ch;
+  padding-bottom: 0.15em;
+}
+.cover-sub {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.45;
+  color: var(--cover-muted);
+  max-width: 28ch;
+  font-weight: 400;
+}
+.cover-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--jade);
+  border: 0;
+  margin: 1.7rem 0 1.4rem;
+}
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  color: var(--cover-muted);
+  font-size: 0.92rem;
+}
+.cover-meta span { white-space: nowrap; }
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  gap: 0 2.5rem;
+}
+
+.toc-wrap {
+  position: sticky;
+  top: var(--topbar);
+  align-self: start;
+  height: calc(100dvh - var(--topbar));
+  padding: 2rem 0 2.5rem;
+  overflow: auto;
+  border-right: 1px solid var(--hair);
+  padding-right: 1.2rem;
+  z-index: 2;
+}
+.toc-close { display: none; }
+.toc-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin: 0 0 0.9rem;
+  font-weight: 650;
+}
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc li { margin: 0; }
+.toc .depth-2 { margin-top: 0.55rem; }
+.toc .depth-2:first-child { margin-top: 0; }
+.article h1, .article h2, .article h3 {
+  scroll-margin-top: calc(var(--topbar) + 0.8rem);
+}
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  padding: 0.38rem 0.6rem 0.38rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+.toc a:hover { color: var(--ink); }
+.toc a.is-active {
+  color: var(--jade-deep);
+  border-left-color: var(--jade);
+  background: var(--jade-soft);
+  font-weight: 600;
+}
+.toc .depth-3 a {
+  font-size: 0.8rem;
+  padding-left: 1.35rem;
+}
+.toc-kind {
+  display: inline-block;
+  width: 0.9rem;
+  font-size: 0.68rem;
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.article {
+  max-width: var(--measure);
+  padding: 2.4rem 0 5rem;
+  min-width: 0;
+}
+
+.article > .summary,
+.article > .lead-band {
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--jade);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.4rem 1.2rem;
+  margin: 0 0 2.4rem;
+  box-shadow: none;
+}
+.article > .summary > h2:first-child,
+.article > .lead-band > h2:first-child {
+  margin-top: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--jade-deep);
+}
+.article > .summary > h2:first-child::after,
+.article > .lead-band > h2:first-child::after {
+  display: none;
+}
+.article > .summary > p:first-of-type,
+.article > .lead-band > p:first-of-type {
+  font-size: 1.12em;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.article h2 {
+  font-size: 1.58rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 2.8rem 0 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.article h2::after {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 2px;
+  background: var(--jade);
+  margin-top: 0.7rem;
+}
+.article h3 {
+  font-size: 1.18rem;
+  line-height: 1.4;
+  margin: 2rem 0 0.7rem;
+  font-weight: 680;
+  color: var(--ink);
+}
+.article h4 {
+  font-size: 1.02rem;
+  margin: 1.5rem 0 0.45rem;
+  color: var(--ink-soft);
+  font-weight: 650;
+}
+
+.article p { margin: 0.85rem 0; }
+.article p:first-child { margin-top: 0; }
+
+.article a {
+  color: var(--jade-deep);
+  text-underline-offset: 0.18em;
+}
+.article a:hover { color: var(--jade); }
+
+.article strong { font-weight: 670; color: var(--ink); }
+
+.article ul, .article ol {
+  margin: 0.7rem 0 1rem;
+  padding-left: 1.35rem;
+}
+.article li { margin: 0.28rem 0; }
+.article li::marker { color: var(--jade); }
+
+.article blockquote {
+  margin: 1.3rem 0;
+  padding: 0.2rem 0 0.2rem 1.05rem;
+  border-left: 3px solid var(--jade);
+  color: var(--ink-soft);
+  background: transparent;
+  font-style: normal;
+}
+.article blockquote p { margin: 0.35rem 0; }
+
+.article hr {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 2rem 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.3rem 0 1.6rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+}
+.article thead th {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: left;
+  font-weight: 650;
+  padding: 0.7rem 0.85rem;
+  white-space: nowrap;
+}
+[data-theme="dark"] .article thead th {
+  background: #0c1214;
+  color: var(--ink);
+}
+.article td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: top;
+}
+.article tbody tr:last-child td { border-bottom: 0; }
+.article tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+
+.article pre, .article code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+.article code {
+  background: var(--paper-2);
+  padding: 0.08em 0.35em;
+  border-radius: 4px;
+}
+.article pre {
+  background: var(--cover);
+  color: var(--cover-ink);
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.article pre code { background: none; padding: 0; color: inherit; }
+.article img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.scenario {
+  margin: 1.2rem 0 1.6rem;
+  padding: 1.15rem 1.2rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--hair);
+  background: var(--card);
+}
+.scenario > h3:first-child,
+.scenario > h4:first-child {
+  margin-top: 0;
+}
+.scenario-up { background: var(--ok-soft); border-color: color-mix(in srgb, var(--jade) 35%, var(--hair)); }
+.scenario-base { background: var(--base-soft); }
+.scenario-down { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, var(--hair)); }
+
+.article .sources-h + *,
+.sources {
+  font-size: 0.92em;
+  color: var(--ink-soft);
+}
+
+.site-foot {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.site-foot p { margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--hair); }
+
+.toc-backdrop {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  html.toc-open { overflow: hidden; }
+  .toc-toggle { display: inline-flex; }
+  .toc-close { display: inline-flex; position: absolute; top: 0.85rem; right: 0.7rem; }
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 0 1.1rem 3rem;
+  }
+  .toc-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: min(20rem, 86vw);
+    background: var(--paper);
+    z-index: 70;
+    padding: 4.4rem 1rem 1.5rem;
+    transform: translateX(-105%);
+    border-right: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+  }
+  html.toc-open .toc-wrap { transform: translateX(0); }
+  .toc-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 24, 26, 0.42);
+    z-index: 65;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.toc-open .toc-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .cover { padding: 5rem 1.25rem 3rem; }
+  .cover h1 { max-width: none; }
+  .article { padding-top: 1.6rem; }
+}
+
+@media print {
+  .progress, .topbar, .toc-wrap, .toc-backdrop, .site-foot { display: none !important; }
+  .layout { display: block; max-width: none; padding: 0; }
+  .cover { min-height: auto; padding: 1.5cm 0; break-after: page; }
+  .article { max-width: none; padding: 0; }
+  a { text-decoration: none; color: inherit; }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#article">跳到正文</a>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#cover">玉笛百科<small>JADE FLUTE</small></a>
+  <div class="top-title" id="top-title">火炬之光</div>
+  <div class="top-actions">
+    <button class="icon-btn toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-wrap">目录</button>
+    <button class="icon-btn" id="size-down" type="button" title="减小字号" aria-label="减小字号">A-</button>
+    <button class="icon-btn" id="size-up" type="button" title="增大字号" aria-label="增大字号">A+</button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false">深色</button>
+  </div>
+</header>
+
+<section class="cover" id="cover">
+  <div class="cover-inner">
+    <p class="cover-kicker">横纵分析</p>
+    <h1>火炬之光</h1>
+    <p class="cover-sub">暴雪北老人用十一个月做成的暖色刷宝，和一次被「游戏即服务」改写的遗产</p>
+    <hr class="cover-rule">
+    <div class="cover-meta"><span>游戏 / 动作角色扮演 / 刷宝 ARPG · 产品</span><span>2026年10月18日</span><span>约 11382 字</span><span>阅读 25 分钟</span><span>玉笛百科</span></div>
+  </div>
+</section>
+
+<div class="toc-backdrop" id="toc-backdrop"></div>
+
+<div class="layout">
+  <aside class="toc-wrap" id="toc-wrap">
+    <button class="icon-btn toc-close" id="toc-close" type="button">关闭</button>
+    <p class="toc-label">目录</p>
+    <nav aria-label="章节">
+      <ol class="toc"><li class="depth-2"><a href="#sec-1">核心结论速览</a></li>
+<li class="depth-2"><a href="#sec-2"><span class="toc-kind" aria-hidden="true">纵</span>一、纵向分析：从诞生到当下</a></li>
+<li class="depth-3"><a href="#sec-3">1.1 起源：地狱之门旁边的网络测试（至 2008）</a></li>
+<li class="depth-3"><a href="#sec-4">1.2 十一个月和二十美元（2008—2011）</a></li>
+<li class="depth-3"><a href="#sec-5">1.3 高峰：《火炬之光 2》，以及同一天取消的 MMO（2012—2013）</a></li>
+<li class="depth-3"><a href="#sec-6">1.4 人散了，灯还亮着（2014—2017）</a></li>
+<li class="depth-3"><a href="#sec-7">1.5 前线改名第三作：一次没改完的身份（2018—2021）</a></li>
+<li class="depth-3"><a href="#sec-8">1.6 无限，以及 3718 万美元的商标（2022—2026）</a></li>
+<li class="depth-2"><a href="#sec-9"><span class="toc-kind" aria-hidden="true">横</span>二、横向分析：竞争图谱</a></li>
+<li class="depth-3"><a href="#sec-10">2.1 竞品地图</a></li>
+<li class="depth-3"><a href="#sec-11">2.2 《火炬之光》当前画像</a></li>
+<li class="depth-3"><a href="#sec-12">2.3 vs 《暗黑破坏神》：父亲、对手、以及被借走的位置</a></li>
+<li class="depth-3"><a href="#sec-13">2.4 vs 《流放之路》：深度把浅尝变成了另一种品类</a></li>
+<li class="depth-3"><a href="#sec-14">2.5 vs 《恐怖黎明》与《最后纪元》：同代神作，和后来居中的那款</a></li>
+<li class="depth-3"><a href="#sec-15">2.6 vs 手机刷宝：《不朽》和无限抢的是同一块屏幕</a></li>
+<li class="depth-3"><a href="#sec-16">2.7 维度对照</a></li>
+<li class="depth-3"><a href="#sec-17">2.8 生态位与格局</a></li>
+<li class="depth-2"><a href="#sec-18"><span class="toc-kind" aria-hidden="true">汇</span>三、横纵交汇洞察</a></li>
+<li class="depth-3"><a href="#sec-19">3.1 历史如何塑造了当下位置</a></li>
+<li class="depth-3"><a href="#sec-20">3.2 优势与劣势的历史根源</a></li>
+<li class="depth-3"><a href="#sec-21">3.3 未来三个剧本</a></li>
+<li class="depth-2"><a href="#sec-22">四、信息来源</a></li>
+<li class="depth-2"><a href="#sec-23">五、方法论说明</a></li></ol>
+    </nav>
+  </aside>
+  <article class="article" id="article">
+<section class="summary"><h2 id="sec-1">核心结论速览</h2>
+<p><strong>一句话定义</strong>：《火炬之光》（Torchlight）是 2008 年从 Flagship 西雅图残骸里拼起来的刷宝 ARPG 系列：特拉维斯·鲍德里（Travis Baldree）的宠物与轻松节奏，加上席弗兄弟（Max / Erich Schaefer）和马特·乌尔门（Matt Uelmen）的暗黑血统，用十一个月、二十美元定价做成了西方玩家心里「彩色的暗黑 2」；系列高峰停在 2012 年的《火炬之光 2》，之后在完美世界的网游战略里被拧成共享世界和赛季制，2025 年底由心动以 3718 万美元买下全部 IP。</p>
+<p><strong>关键判断</strong>：</p>
+<ol>
+<li>这个系列真正被记住的产品契约，是「短、亮、能摸宠物、能离线、二十美元买断」。2009 年第一作十一个月做完，2012 年第二作在《暗黑破坏神 3》拍卖行风波里吃到「我们才是暗黑 2 精神续作」的舆论红利，Steam 英文好评至今约 93%。后来每一次想把它做成永远在线的服务，都会先丢掉这张契约。</li>
+<li>《火炬之光 3》的失败，写在身份被改过两次：先是《火炬之光：前线》（Torchlight Frontiers）免费共享世界，2020 年初改回付费单机续作，同年 6 月突然进抢先体验，服务器宕机，Steam 一度只有约 36% 好评。玩家看到的是一个还带着免费网游骨架的 30 美元成品。Echtra 2021 年被 Zynga 买走后停更，2025 年工作室被关。原班人马的火炬之光，到此结束。</li>
+<li>2026 年还能被持续运营的，是心动的《火炬之光：无限》：Unreal Engine 4、端手同步、免费赛季制，海外 2022 年 10 月开测，全球 2023 年 5 月 9 日转正。Steam 英文好评约 61%，口碑是「能玩的赛季刷宝」，不是「火炬之光」。2025 年 12 月 29 日心动用债权抵销拿下系列 IP，公告写明目的是停掉版税、自己做续作。IP 的控制权第一次回到正在做产品的人手上，但产品形态已经离开西雅图那间小工作室很远。</li>
+</ol>
+<p><strong>机会与风险</strong>：</p>
+<ul>
+<li>机会：买断向的暖色刷宝在 2026 年仍是空位。PoE2、暗黑 4、Last Epoch 把深度和赛季卷满了，《火炬之光 2》仍有人在 Switch 和主机倒读。Steam 上一代二代的发行商栏已经换成 XD，渠道统一。心动拿到源码、文档和商标之后，如果肯做一款「现代引擎上的火炬 2」而不是再做一季皮肤，品牌还能被唤回。源码写进了转让清单，技术上不用从零猜。</li>
+<li>风险：系列在大众记忆里已经和「三代表」绑在一起。无限继续用契约精灵和交易行走免费赛季，会强化「火炬之光 = 手游」的印象。Runic 已关、Echtra 已关、鲍德里改写小说、席弗离开行业前线，能续上 2012 年手感的人几乎不在编制里。源码可以买，手感买不回编制。</li>
+</ul>
+<hr>
+</section><h2 id="sec-2">一、纵向分析：从诞生到当下</h2>
+<blockquote>
+<p><strong>叙事主线</strong>：一群把《暗黑破坏神》和《命运》（Fate）做成肌肉记忆的人，在公司倒闭后用十一个月证明「小团队也能做出暗黑」。他们被中国发行商买走，是因为一张从来没做出来的 MMO 支票。支票到期之后，系列被改写成服务；服务失败之后，IP 被卖给正在交版税的那家中国公司。整条弧线是：手艺活下来了，工作室没有，产品契约被改写了两次。</p>
+</blockquote>
+<h3 id="sec-3">1.1 起源：地狱之门旁边的网络测试（至 2008）</h3>
+<p>要讲火炬之光，得先讲一场失败。</p>
+<p>2000 年代中期，暴雪北（Blizzard North）散掉之后，马克斯·席弗、埃里克·席弗和比尔·罗珀等人在旧金山办了 Flagship Studios，做《地狱之门：伦敦》（Hellgate: London）。2007 年这款游戏口碑和商业都不成。工作室为了测网络游戏，让特拉维斯·鲍德里在西雅图拉了一个很小的组，做一个暗黑式砍杀原型，内部叫 Project Tugboat，后来变成《神话》（Mythos）。</p>
+<p>鲍德里不是暴雪北的人。他更早的作品是 2005 年的《命运》：俯视角刷宝、永久宠物、钓鱼把宠物变成别的生物、轻松到几乎像休闲。Fate 证明一件当时被 3A 看不上的事：暗黑语汇可以不做史诗，也可以不做网游，只要点击反馈和掉落声音对，一个人加小团队也能让玩家通宵。火炬之光把这套验证搬进有暴雪北老人坐镇的工作室，宠物不再是彩蛋，是减摩擦的基础设施。Mythos 从网络测试长成十四人小队的免费 ARPG MMO，2007 到 2008 年封测。Gamasutra 后来那篇《From the Ashes of Mythos》写得很清楚：它不炫技，不新，但好玩；论坛气氛和南边 Hellgate 组完全两样，测试者像正常人。公开测试只差几周。</p>
+<p>2008 年 7 月 Flagship 倒闭。IP 落到韩国韩比特（HanbitSoft）手里。西雅图十四个人在一个月里决定：接着做，但是从零开始，因为代码和美术都带不走。2008 年 8 月 11 日，鲍德里、席弗兄弟、彼得·胡（Peter Hu）成立新公司。占位名是 Surprise Truck，马克斯随口起的，结果真有人打电话来问能不能运货。后来改名 Runic Games。Gamasutra 把他们 2009 年列为年度五佳开发商之一，理由就是：十一个月，把一款打磨过的游戏做完了。</p>
+<p>暗黑的作曲马特·乌尔门也加入。火炬之光从第一天起就带着两套基因：暴雪北的随机地下城和掉落节奏，鲍德里在 Fate 里验证过的宠物与轻松语气。乌尔门给暗黑 1、暗黑 2 写过那种地底里的钢弦和打击乐，火炬里他把同样的紧张感调暖，吉他更亮，管弦更薄，让小镇和矿脉听起来像「还可以回去睡一觉的冒险」。美术走蒸汽朋克小镇加地底矿脉，主色是琥珀和暖灯，和暗黑的骨灰盒子刻意相反。矿石叫 Ember，商人拿它交易，炼金术士抽它的魔力，也有人把它当成腐蚀一切的诱惑。小镇就叫 Torchlight：因为发现矿脉而一夜暴富，也因为矿脉下面埋着更老的文明。听和看同时告诉玩家：这是暗黑的亲戚，亲戚性格好说话。</p>
+<p>这一层起源决定了后面十年的好处和坏处。好处是：他们知道暗黑 2 的手感，也知道自己做不起暗黑 3 那种体量，所以把范围锁死在单机、短流程、可模组。坏处是：中国发行商看中的不是这个范围，是他们嘴上说过的「做完单机就做 MMO」。</p>
+<h3 id="sec-4">1.2 十一个月和二十美元（2008—2011）</h3>
+<p>正式制作大约从 2008 年 11 月开始。2009 年 GDC 他们带着能玩的版本出现，名字公开为 Torchlight。2009 年 10 月 27 日 Windows 数字版上架，定价 20 美元。职业三个：近战的毁灭者（Destroyer）、远程的征服者（Vanquisher）、法术与装置并重的炼金术士（Alchemist）。引擎是 OGRE。工具链连编辑器 TorchED 一起给玩家。地下城按层往下挖，城镇只有一座，任务把你一次次送回矿脉。随机的是房间拼接、怪物组合和掉落，不是开放世界。对只做了十一个月的团队，这是能做完的范围；对玩过暗黑 2 的人，这是熟悉的「再下一层」。</p>
+<p>宠物是这款游戏被记住的第一触点。它会打怪、背包、回城替你卖垃圾。钓鱼得来的鱼能把宠物变成别的生物。暗黑 2 里你得自己跑回城里清包，或者开传送门；火炬之光把这个摩擦卸掉了。对一款强调「再下一层」的游戏，少一次回城，就多一次点击快感。</p>
+<p>评价对得上制作周期。PC 版 Metacritic 约 83 分；2010 年游戏开发者选择奖最佳处女作。Runic 自己报的销量：2010 年 7 月超过 50 万；2011 年 7 月跨 PC、Mac、Xbox 360 超过 100 万。XBLA 版 2011 年 3 月 9 日上线，公司说那天是「所有版本里单日销量最高」。2010 年 5 月 12 日有 Mac 版。Linux 后来跟着 Humble Bundle 走。</p>
+<p>2010 年 5 月，完美世界以 840 万美元拿下 Runic 控股权。公开叙事仍是：单机打样，MMO 才是正餐，完美世界负责全球发行。对西雅图十几个人，这是活下去的钱；对北京，这是一张暗黑血统的网游期权。两边从第一天起就没买同一件商品。</p>
+<p>Steam 上第一作至今仍是特别好评区间：第三方统计约 7300 到 7400 条评论、约 91% 好评，2026 年 8 月同时在线还能看到三十多人。一款十七年前的短流程刷宝，还在被人打开，说明手感契约没有过期。过期的是工作室。</p>
+<h3 id="sec-5">1.3 高峰：《火炬之光 2》，以及同一天取消的 MMO（2012—2013）</h3>
+<p>第一作做完，Runic 没有立刻上 MMO。他们先做续作。官方原因是：团队需要把合作、大地图、新职业做进同一套手感里，也需要继续和社区说话。2010 年 8 月宣布《火炬之光 2》，原估 2011 年春，XBLA 移植把档期往后推。最终 2012 年 9 月 20 日发售，仍是 20 美元。工程师把炮台和宠物补给做成战场家具，狂战吃近战爆发，余烬法师把元素打满屏，异乡人用枪和陷阱走远程。大地图让你在野外、遗迹、海岸之间跑，不再只是一座镇加一口井。共享储物箱、难度阶梯、后期的 Mapworks 随机图，把「打完主线」接上一条还能刷的尾巴。尾巴不长，但 2012 年够用。创意工坊随后把人数上限、物品过滤、新区域补进来，社区把它当成活的游戏，而不是一次性光盘。</p>
+<p>这一年西方 ARPG 的气压不正常。《暗黑破坏神 3》5 月 15 日上市，强制联网、真钱拍卖行、画风偏亮、前期节奏被很多人骂成「不是暗黑」。火炬 2 晚四个月进场，职业改成工程师、狂战、余烬法师、异乡人，有大地图，有线上和局域网合作，有 Steam 创意工坊。宠物回城还在。乌尔门的吉他和管弦还在。Kotaku 那句被 Steam 页沿用至今的话是：它给你一个想逛的世界，里面全是你想拆掉的敌人。</p>
+<p>Metacritic 媒体分 88（67 家），用户分 8.4。Runic 推特在 2012 年 12 月 31 日说当年销量超过 100 万。GameSpot 2013 年 7 月 25 日报道累计 200 万。20 美元买到「能和朋友一起刷、能模组、能离线」的暗黑 2 气味，在拍卖行争议正热的窗口里，是精确的产品位置。</p>
+<p>同一天，2012 年 9 月 20 日，开发组宣布不再做火炬之光宇宙的 MMO。完美世界 840 万美元买的那张期权，被发行日新闻一并作废。公开说法是战略调整。从产品逻辑看，火炬 2 已经把「和朋友一起刷」做进合作，再做一个永远在线的同世界观 MMO，会和自己的买断用户打架，也会和暗黑 3 已经证明过的「强制联网伤感情」撞车。Runic 选了把第二作做完。完美世界账上少了一款网游。</p>
+<p>Steam 英文评论 17553 条、93% 好评，是系列里最硬的口碑资产。中文玩家后来把火炬 2 叫成「暗黑 2 精神续作」之一，和《恐怖黎明》并列。系统没有更深，2012 年它站在暴雪对面，把轻松、彩色、便宜三件事做满了。</p>
+<h3 id="sec-6">1.4 人散了，灯还亮着（2014—2017）</h3>
+<p>高峰过后是人事。2014 年 3 月埃里克·席弗和鲍德里离开，办 Double Damage Games，后来做出《叛舰》系列：太空里的独立船，和地下城里的独立英雄是同一套「小团队把一种手感做完」的脾气。鲍德里再往后以《书与匕首》三部曲小说出名，那是另一条人生，不再管 Ember。2016 年初马克斯·席弗离开，办 Echtra Games，班子里仍有前暴雪和前 Runic 的人。创始人分两路走，等于把「轻松买断」和「再做一款在线火炬」拆开。后来的产品证明，拆开之后，两边都没再做出二代那种完成度。</p>
+<p>留在西雅图的 Runic 做了《霍布》（Hob，2017），解谜平台，和刷宝无关。它证明工作室还能做别的类型，也证明东家要的并不是「别的类型」。Hob 口碑不差，商业体量撑不起一家被要求贡献在线流水的子公司。2017 年 11 月 3 日，完美世界关掉西雅图办公室。官方口径：「持续聚焦在线游戏即服务」。工作室负责人 Marsh Lefler 在官网写：今天是 Runic 开着的最后一天；社区和多人服务会继续；喜欢火炬系列的人，后面会有消息。完美世界同时说，Runic 作为品牌还在作品库里，游戏继续卖。</p>
+<p>「在线游戏即服务」这七个字，是纵轴上的倒钩。2017 年的完美世界北美同时在养 Cryptic 的《无冬》《星际迷航》网游，以及英雄射击《Gigantic》。买断 ARPG 在这张表上是异常项。Runic 证明过自己会做买断、会做模组、会做 20 美元的完成品。东家要的是能按季度收钱的在线产品。Hob 不是。火炬 2 的长尾也不是。灯熄掉之前，系列最好的两款游戏已经做完，人已经走完。关停声明里那句「后面会有消息」，指向的是 Echtra 和前线，不是第二家西雅图工作室。</p>
+<h3 id="sec-7">1.5 前线改名第三作：一次没改完的身份（2018—2021）</h3>
+<p>2018 年中，完美世界宣布《火炬之光：前线》，开发商 Echtra，共享世界，免费。马克斯回来管火炬，听起来像圆梦：当年没做成的 MMO，由原班灵魂再做一次。测试几年，定位在 MMO 玩家和 ARPG 玩家之间来回滑。</p>
+<p>Frontiers 那几年的宣传面向 MMO 读者：共享世界、多人、长期运营。ARPG 读者在论坛里问的是：能不能单机、有没有宠物回城、会不会做成暗黑 3 那种强制联网。两套读者用同一款测试客户端，得出相反的期待。2020 年 1 月项目改名《火炬之光 3》，改成付费。等着免费网游的人，这是缩圈；等着火炬 2 续作的人，这是加料。两边的预期叠在同一个名字上。2020 年 6 月 13 日，PC Gaming Show 进行中，游戏突然进 Steam 抢先体验，定价约 30 美元。服务器当晚撑不住。Perfect World 公开说「海量玩家」，同时道歉。Steam 好评一度掉到约 36%。差评里反复出现的词是：必须联网、像手游、像被稀释的免费游戏、像 Anthem。很少有人把它当成「抢先体验所以可以烂」。</p>
+<p>2020 年 10 月 13 日 1.0。Steam 英文评论至今约 4920 条、51% 好评，混合。Metacritic 媒体约 65，用户 3.5，整体偏负面。3DJuegos 的句子很狠：粉丝躲开了 Frontiers 这颗子弹，但三代仍不是二代该有的续作；它是一款还行的 ARPG，宠物可爱，据点玩法薄，地下城和战斗都欠打磨，大地图还线性。Eurogamer 等媒体把它写成「Frontiers 仍是隐形副标题」。</p>
+<p>据点、契约、要塞装饰、必须在线，都是共享世界留下来的器官。付费之后这些器官没有被拿掉，只是被改名叫品质。2021 年 3 月 2 日 Zynga 收购 Echtra。5 月 26 日马克斯发社区信：诅咒船长更新会把三代表送到「一个还不错的位置」，然后 Echtra 不再做这款游戏，接力棒交回完美世界。2025 年 6 月 Zynga 关闭 Echtra，当时他们在做一款未公布的跨平台 ARPG。火炬 3 的开发主体，两头都不在了。</p>
+<h3 id="sec-8">1.6 无限，以及 3718 万美元的商标（2022—2026）</h3>
+<p>IP 没有进坟墓。心动从完美世界拿到授权，做《火炬之光：无限》。引擎 Unreal Engine 4。2022 年 1 月 18 日手机封闭测试；7 月宣布 Windows；10 月 12 日公开测试兼第一赛季「暗涌」，海外先走。中国大陆 2023 年 5 月上线。全球转正是 2023 年 5 月 9 日，端手进度互通，免费。</p>
+<p>产品语言换成赛季、天赋页、传奇装备、交易行、契约精灵。宠物还在，但已经是养成和抽卡结构里的「精灵」，不是火炬 1 里那只帮你回城卖垃圾的狼狗。战斗去体力条、去冷却，强调清屏。每个赛季重置进度，塞进一套当季机制：监狱、瘟疫、法外赏金，名字换、循环不换。交易行让构筑依赖经济，和二代「自己刷齐」的节奏相反。端手同步是真能力，上下班用手机清图、回家用电脑打首领，这是西雅图那两年里从未需要回答的问题。它回答得越成功，和 2012 年那款买断就越不像。Wiki 和评测反复出现同一句：这是能玩的刷宝，和火炬之光关系有限。Gamezebo 2/5；也有人打 7/10。Steam 英文 8393 条、61% 好评，混合。Google Play 约 4.3 分、5.5 万条评价，2026 年 10 月 9 日还在更新。赛季没有停：2025 年「法外」、2026 年 1 月「渴瘾症 / Vorax」、4 月「Lunaria」一类名字还在公告里转。</p>
+<p>心动 2025 年报把无限写成：海外 2022 年 10 月、国内 2023 年 5 月，靠赛季更新维持社区；年底买下系列 IP 和相关无形资产。现金表里有一笔约 3.119 亿元人民币用于购买火炬之光知识产权及其他无形资产。对公司来说，无限是已验证的赛季产品，IP 是把授权关系从「租」改成「买」。对玩家来说，公告里的「续作、衍生、跨平台」可以是火炬 4，也可以是更多皮肤和联动。两种读法在 2026 年都还没有被新项目打脸或证实。</p>
+<p>赛季名字在中文和英文之间对不上是常态：「渴瘾症」对应 Vorax 一类机制季。重要的不是译名，是循环：约一个季度一次的机制、英雄特质、通行证。循环能养活团队，也会把「火炬」训练成「这个月的活动页」。Runic 那代人训练玩家的是「我有一款可以随时打开的游戏」；无限训练玩家的是「我有一个必须赶上的赛季」。两种训练长出两种用户，很难再装回同一个期待里。</p>
+<p>2025 年 12 月 29 日港交所公告把交易结构写死。卖方是 Runic Games 和 Arc Games，Golden Arc 是它们的母公司。Arc Games 的前身是完美世界北美，后来并进 Embracer 旗下 Gearbox Publishing San Francisco，2024 年改名，2025 年 11 月管理层收购进 Project Golden Arc。心动全资子公司 XD Entertainment 收购游戏、源码、文档、IP、合同、社交账号和商誉，不含无限里心动自己已经拥有的那部分。总对价 3718 万美元，用 11 月 26 日借给 Golden Arc 的 4000 万美元定期贷款做抵销，不另付现金。估值师按免许可费法把 2025 年 11 月 30 日的知识产权评估在 3735.4 万美元。心动自己的理由三条：以后不用向外付版税，决策不再受授权限制，可以自己做续作和衍生。</p>
+<p>2026 年 10 月看这个系列，货架上同时摆着四样东西：还在卖的一代和二代买断；口碑破裂、停更的三代；仍在赛季里转的无限；以及一张刚刚过户的全球商标。玩家打开 Steam，发行商栏已经印着 XD。故事从西雅图的 Surprise Truck，写到了上海的上市公司公告。</p>
+<p>这一段纵轴要记住的数字其实很少：十一个月、20 美元、840 万美元、2012 年 9 月 20 日、2017 年 11 月关停、2020 年 6 月抢先体验、2023 年 5 月 9 日无限转正、3718 万美元。数字中间夹着三次所有权换手：完美世界买工作室、Zynga 买 Echtra、心动买商标。换手一次，产品契约就被改写一次。活到 2026 年的，是契约被改写之前的那两款游戏，和契约被改写之后唯一还能按季度出新内容的那款免费产品。</p>
+<hr>
+<h2 id="sec-9">二、横向分析：竞争图谱</h2>
+<blockquote>
+<p><strong>切面时间</strong>：2026 年 10 月。火炬之光不是一部正在排档期的新作，是一套还在货架上的老游戏加一款赛季制免费产品。横向对比要回答的是：2026 年想刷宝的人，会不会点进这个名字。</p>
+</blockquote>
+<h3 id="sec-10">2.1 竞品地图</h3>
+<p>场景 C，对手超过三个，而且分两层。</p>
+<p>买断 / 长青层：想在周末打通一趟、能离线、能模组。这里的对照是《火炬之光 2》《恐怖黎明》《泰坦之旅》传统，以及还在卖的《暗黑破坏神 2：狱火重生》。</p>
+<p>赛季 / 深度层：想每个季度重练、研究构筑、参与经济。这里的对照是《流放之路》和《流放之路 2》《暗黑破坏神 4》《最后纪元》，手机上还有《暗黑破坏神：不朽》。无限站在这一层，却借用第一层的商标。</p>
+<p>不拿一代去对 PoE2 的终极，那种对比没有信息。下面按「用户为什么选它」来写。选的是晚上怎么过，不是商标印在哪张海报上。</p>
+<h3 id="sec-11">2.2 《火炬之光》当前画像</h3>
+<p>定位：西方 ARPG 里「低压力、暖色、宠物、短流程」的经典买断，外加一款中国团队运营的免费赛季续命产品。品牌记忆停在 2012，运营能量在 2026 年只存在于无限。</p>
+<p>核心能力：</p>
+<ul>
+<li>上手快。技能栏浅，不需要读 Wiki 才能出图。</li>
+<li>宠物降低摩擦。回城、负重、陪伴，是系列辨识度，不是系统深度。</li>
+<li>模组。一代有官方工具，二代有创意工坊，社区把流程和人数上限自己拉长。</li>
+<li>美术和音乐一次性做对。蒸汽小镇、Ember 矿灯、乌尔门的吉他，十七年后仍能在截图里被认出来。</li>
+<li>价格。一代二代长年打折，心理账是「一顿饭钱买暗黑气味」。</li>
+</ul>
+<p>短板：</p>
+<ul>
+<li>后期薄。二代打完主线，Mapworks 一类循环撑不住 2026 年习惯了赛季的人。</li>
+<li>构筑自由度明显低于 PoE、Last Epoch、甚至 Grim Dawn 的双职业。</li>
+<li>三代把「必须联网的服务」写进续作，把老用户的信任用掉了。</li>
+<li>无限的战斗和变现是另一套语法，Steam 好评停在混合，无法给商标回血。</li>
+<li>原开发团队不在了。手感无法靠补丁「慢慢修回来」。</li>
+</ul>
+<p>目标用户：被暗黑 3 拍卖行伤过、又不想学 PoE 天赋树的人；想和朋友开黑但不想读攻略的人；2026 年在手机上找「能清屏的刷宝」、能接受交易行和赛季的人。</p>
+<p>口碑分层很清楚。二代在 ARPG 推荐文里仍是「想轻松就玩这个」。三代在 Steam 上 51%。无限在中文社区是「火炬皮的流放 / 不朽」，在英文社区是 mixed。Google Play 4.3 分说明手机用户比 Steam 核心宽。</p>
+<p>打开二代，一个晚上可以从出生打到中期地图，宠物来回跑城镇，掉落音效密，负担低。打开无限，一个晚上是在当季机制里叠词条、看交易行、决定这赛季的主天赋。两种「一晚上」消耗的注意力完全不同。把后者叫做前者的续作，会让前者的用户觉得被骗，也会让后者的用户觉得前者过时。2026 年这个商标最麻烦的地方，就是它同时要服务这两种晚上。</p>
+<h3 id="sec-12">2.3 vs 《暗黑破坏神》：父亲、对手、以及被借走的位置</h3>
+<p>火炬之光的人是从暴雪北走出来的。对比暗黑，从来不是「两个同类游戏」，是一门手艺离开原厂之后还能不能成立。</p>
+<p>《暗黑 2》是模板：随机图、词缀、暗金、共享储物箱的祖先、折磨。火炬 1 把折磨感卸掉，换成宠物和暖色。有人因此说它浅，有人因此通关。两种评价说的是同一件事：它降低了进入暗黑语汇的门槛。</p>
+<p>2012 年《暗黑 3》把这个对照推到最大。暴雪做大制作、强制联网、真钱拍卖行；Runic 做 20 美元、可离线、可合作。拍卖行把「掉落」变成「开盘」，论坛上的怒气足够让一份 20 美元的彩色砍杀显得像道德正确。媒体把火炬 2 写成「今年最值的 RPG 之一」，核心在于它没有背叛 2000 年那套「点地下城、听掉落」的身体记忆，而不在于系统赢了暗黑 3。暗黑 3 后来用《夺魂之镰》和取消拍卖行把自己救回来，用十几年赛季把制作规格拉到品类顶格。火炬系列没有对等的资料片经济和服务器预算，二代吃到的是窗口，不是十年运营。窗口关掉之后，商标还在，窗口里的那家工作室不在了。</p>
+<p>2026 年的《暗黑 4》是最光滑的赛季刷宝：重量感打击、梦魇地城、天梯式成长、战斗通行证。新人从这里进门。火炬 2 打不过它的制作规格，也不该打。火炬还能站住的，是「我今天不想上战网」的那几个晚上。无限对标的其实是《不朽》和手机 PoE，不是暗黑 4。把无限宣传成暗黑 4 的替代，会再次透支商标。</p>
+<h3 id="sec-13">2.4 vs 《流放之路》：深度把浅尝变成了另一种品类</h3>
+<p>GGG 的《流放之路》把刷宝做成免费、赛季、经济、天赋总表。学习曲线陡，一旦过了，清屏和解构构筑的快感是品类天花板。2026 年《流放之路 2》还在把「谁是深度之王」往前推。</p>
+<p>火炬 2 完全不参加这场比赛。MarshyMedia 2025 年的选型文把话说死：火炬适合少花时间理论、多花时间丢火球；后期内容少，角色自定义浅，2012 年的骨架能感觉到。这是诚实的生态位。无限试图用 24 页天赋、200 多件传奇、交易行去蹭 PoE 的深度，同时又要保留火炬的「轻松」。两边讨好的结果是 Steam 61%：深度玩家嫌浅和氪，怀旧玩家嫌不像。</p>
+<p>用户选 PoE 的理由是：我愿意读 Wiki，我要这个赛季的构筑和经济。用户选火炬 2 的理由是：我今晚想打完，不想研究。无限站在中间，需要自己的理由。现在的理由是「端手同步、赛季不停、免费进」，这是运营理由，还不是审美理由。</p>
+<h3 id="sec-14">2.5 vs 《恐怖黎明》与《最后纪元》：同代神作，和后来居中的那款</h3>
+<p>《恐怖黎明》和火炬 2 几乎是同一代西方独立 ARPG 的两种答案。Crate 走泰坦之旅的黑暗、双职业、手绘稠密地图、离线友好。它的后期比火炬 2 厚，更新年限也长。2026 年的推荐清单里，Grim Dawn 仍是「值」的代名词；火炬 2 是「轻松」。两人曾经共享「暗黑 3 让位出来的买断市场」。Crate 把市场守住了，Runic 被东家改成服务。</p>
+<p>《最后纪元》是 2020 年代的居中解：技能专精深，制作接近可瞄准，Monolith 后期有目标，又不要求 PoE 级的入学考试。PC Gamer 写过，它是多年来把人从 PoE 拉开的第一款。2026 年想「有深度但不想读四年」的人，会先点 Last Epoch，不会先点火炬 2。火炬要在这个位置复活，必须提供 Last Epoch 没有的东西：宠物、暖色、更短的单局、更便宜的买断。无限走赛季，等于主动离开这个位置。</p>
+<p>Grim Dawn 还在靠资料片和打折活成「买一次、玩很久」。Last Epoch 还在靠制作系统和后续赛季把人留在当前版本。火炬 2 的资料片从来没有真正做成，Runic 把时间花在 Hob 和东家战略上。缺资料片这件事，在 2013 年看不出来，在 2026 年的货架上看得很清楚：同代竞品用十年把世界做厚，火炬把世界停在第二作发售日。</p>
+<h3 id="sec-15">2.6 vs 手机刷宝：《不朽》和无限抢的是同一块屏幕</h3>
+<p>《暗黑破坏神：不朽》把暴雪商标铺进手机。无限用火炬商标做同一件事：短局、清屏、赛季、交易。Google Play 4.3 分说明这块市场吃得下「够爽就行」。Steam 混合分说明 PC 核心吃不下「火炬皮」。横向竞争在手机上，无限的对手是不朽、一众国产刷宝和 PoE 手机化；在 PC 上，无限的对手是 PoE 赛季和暗黑 4 赛季。商标在两边都帮忙拉新，也在两边都制造「名不副实」的差评。</p>
+<h3 id="sec-16">2.7 维度对照</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>火炬之光 2</th>
+<th>暗黑 4</th>
+<th>流放之路 / PoE2</th>
+<th>恐怖黎明</th>
+<th>火炬之光：无限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>首次亮相</td>
+<td>2012 买断</td>
+<td>2023 买断 + 赛季</td>
+<td>2013 免费赛季；PoE2 进行中</td>
+<td>2016（EA 更早）</td>
+<td>2022 测试，2023 转正</td>
+</tr>
+<tr>
+<td>2026 年状态</td>
+<td>长尾好评，低活跃</td>
+<td>赛季主力</td>
+<td>深度之王</td>
+<td>长青买断</td>
+<td>赛季仍在更</td>
+</tr>
+<tr>
+<td>口碑锚点</td>
+<td>Steam 英文约 93%</td>
+<td>制作规格最高</td>
+<td>构筑天花板</td>
+<td>双职业、值</td>
+<td>Steam 英文约 61%，手机约 4.3</td>
+</tr>
+<tr>
+<td>学习成本</td>
+<td>低</td>
+<td>中低</td>
+<td>高</td>
+<td>中</td>
+<td>中，且叠付费</td>
+</tr>
+<tr>
+<td>离线</td>
+<td>可以</td>
+<td>核心在线</td>
+<td>必须在线</td>
+<td>可以</td>
+<td>必须在线</td>
+</tr>
+<tr>
+<td>宠物 / 陪伴</td>
+<td>系列签名</td>
+<td>无此核心</td>
+<td>无此核心</td>
+<td>无此核心</td>
+<td>契约精灵，偏养成</td>
+</tr>
+<tr>
+<td>模组</td>
+<td>创意工坊</td>
+<td>无</td>
+<td>无官方模组生态</td>
+<td>有限</td>
+<td>无</td>
+</tr>
+<tr>
+<td>用户为什么选</td>
+<td>轻松、彩色、便宜、能和朋友刷</td>
+<td>手感与世界最「像 3A」</td>
+<td>每个赛季重做角色</td>
+<td>黑暗、双职业、离线</td>
+<td>端手同步、免费、赛季</td>
+</tr>
+<tr>
+<td>2026 年最大风险</td>
+<td>被当成博物馆</td>
+<td>赛季疲劳</td>
+<td>入学劝退</td>
+<td>画面老</td>
+<td>名不副实 + 版号方策略变化（IP 已自有，产品形态未改）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-17">2.8 生态位与格局</h3>
+<p>2026 年 ARPG 是两极：一端是 PoE2 / 暗黑 4 / Last Epoch 的赛季战争，一端是 Grim Dawn / 火炬 2 / 暗黑 2 重制版的长青货架。中间曾经有过「彩色、低压力、还在更新的买断续作」，现在空着。火炬 3 没填上。无限填的是免费赛季，不是这个空位。</p>
+<p>中文市场把这个系列认得很早。完美世界既是股东也是发行通道，一代二代在国内论坛和玩家社区留下过「彩色暗黑」的口耳相传。三代在 Steam 全球翻车时，中文区同步在骂「换皮手游」。无限上线后，国内用户比海外更熟悉心动的赛季运营，骂得具体：掉率、通行证、契约精灵池。骂完仍有人每个赛季回来，因为清屏手感在手机上成立。商标在中文互联网里因此裂成两套指代：老玩家说火炬之光，指 2012；渠道和投放说火炬之光，指无限。研究这个对象，必须把两套指代摊开，否则会把二代的 93% 好评误记成无限的成绩。</p>
+<p>格局对火炬商标最狠的一句：它在 2012 年证明过小团队能打暴雪的窗口，却在 2017 年被「游戏即服务」关掉工作室。2026 年还活着的，是那两款已经做完的游戏，和一款必须靠赛季证明自己不是皮。心动买 IP，承认的是无限已经把商标用热了、版税该停。西雅图那张产品契约要不要回来，公告里没有承诺。谁在 2026 年点开这个名字，先要问自己要的是哪一晚：二代那种一晚上打完一段，还是无限那种一晚上赶赛季。名字相同，晚上完全不同。</p>
+<hr>
+<h2 id="sec-18">三、横纵交汇洞察</h2>
+<h3 id="sec-19">3.1 历史如何塑造了当下位置</h3>
+<p>十一个月和 20 美元，把「完成」写成了品牌性格。玩家爱上的是做完的东西。完美世界 840 万美元买的是「做完之后的 MMO」。2012 年 9 月 20 日，完成品上市，MMO 取消，两种预期第一次撕开。</p>
+<p>2017 年关停，是东家把「完成」判定为不够。Echtra 的前线和三代表，是把未完成的服务硬安进完成品的名字。抢先体验宕机只是导火索，炸药是 2018 到 2020 年那次改名：免费共享世界改付费续作，却留下联网和据点。纵轴上每一次「向服务靠拢」，横轴上就丢掉一批只要火炬 2 的人。</p>
+<p>无限能活，是因为它从一开始就没假装自己是十一个月的单机。它是赛季制免费游戏，用火炬的矿灯和宠物当皮肤。心动 2025 年买 IP，是把已经在付的版税资本化。3718 万美元大约等于当年完美世界买工作室的四倍多，买到的却不再包括那支十一个月的团队。历史把商标和手艺拆开了。2026 年货架上能卖的是商标。</p>
+<p>把这条弧线收成一句决策逻辑：Runic 选「先做完」，所以有了 93% 的二代；完美世界选「做成服务」，所以关了工作室、催出了三代；心动选「停版税、自己运营已经在转的无限」，所以买下商标。三代决策都自洽，用户却只给第一种决策打过高分。横轴上 2026 年的空位，恰好还是第一种决策空出来的那个：短、亮、能离线、买断。谁再选一次「先做完」，谁才有资格把火炬两个字从赛季页上捡回去。</p>
+<h3 id="sec-20">3.2 优势与劣势的历史根源</h3>
+<p>今天二代仍 93% 好评，根子在 2008 年那次「从零重做，但范围锁死」。宠物回城来自 Fate，不来自暗黑。暖色来自对 Hellgate 和暗黑 3 路线的反向选择。乌尔门来自暴雪北的听觉记忆。这些优势都是一次性浇铸，补丁加不上去。</p>
+<p>今天三代 51%、无限 61%，根子在 2010 年那张 MMO 支票和 2017 年「游戏即服务」的关停令。支票让东家有理由一直把系列往在线拽；关停令让真正会做买断的人离开编制。马克斯 2018 年带着 Echtra 回来，是个人圆梦，圆的是 2008 年没做成的那款网游，不是 2012 年已经做成的那款买断。梦和商标重名，用户不买账。</p>
+<p>今天「彩色暗黑」这个空位还在，根子也在 2012：当时只有火炬 2 把它做满。Last Epoch 走的是清晰制作和中等深度，画面偏冷。暗黑 4 走的是重量和世界剧情，画面偏灰。PoE 走的是黑暗 Reckless。没有人把「琥珀灯、宠物、一晚上打一段」当成主菜。空位还在，原厨房没了。这是机会，也是错觉：空位不等于还轮得到旧商标。新团队用新名字把这个空位填上，玩家会认游戏，不一定认火炬。</p>
+<p>包袱同样清楚。把宠物做成抽卡，是把签名器官移植进另一套经济。移植能活，但老用户会说：那只狼狗不是这么用的。无限每多一个赛季，这层皮就更像皮。商标越热，二代那种「打开就能打」的记忆越容易被赛季页盖住。这是免费产品活着的代价，也是买断遗产被稀释的方式。</p>
+<h3 id="sec-21">3.3 未来三个剧本</h3>
+<ul>
+<li>
+<p><strong>最可能</strong>：无限按季度更新，口碑维持混合，手机盘比 PC 盘稳。IP 归心动之后，版税省下，利润表更好看，但短期仍不会做「火炬 4 买断」。一代二代继续在 Steam 打折，发行商显示 XD，有人买，没人当主游戏。主机上的二代靠 backward compatibility 偶尔被重新发现。商标作为赛季制 ARPG 的引流名活着，作为 2012 年那种产品契约，进入冷冻。观察点有两处：无限下一个赛季的 Steam 近期好评会不会站上 70%；心动年报会不会写出除无限以外的新火炬项目。两处都没有动静，就按冷冻处理。</p>
+</li>
+<li>
+<p><strong>最危险</strong>：无限在某次经济或数值事故里把 PC 好评打到差评，同时没有买断新作。中文社区完成「火炬之光 = 烂尾手游 IP」的定性。3718 万美元变成一笔需要摊销的品牌费。暗黑 4 和 PoE2 的赛季把轻度用户也吸走，二代的长尾不足以维持系列话题。Echtra 已关，Runic 已关，没有第二支队伍能救急。</p>
+</li>
+<li>
+<p><strong>最乐观</strong>：心动用源码和工具链，做一款现代引擎上的买断续作：离线、合作、宠物回城、模组，定价仍走亲民。无限继续作为免费线存在，两条产品分开发布，不再要求彼此互证。2026 年 ARPG 玩家对「再来一个赛季通行证」已经疲劳，暖色短流程有需求。这个剧本要求公司克制自己最熟悉的免费运营肌肉，去雇会做买断手感的人。纵轴上完美世界没做成这件事；心动有没有意愿，要看他们把 IP 当皮肤还是当厨房。厨房意味着范围锁死、做完再卖；皮肤意味着赛季页换一张矿灯。</p>
+</li>
+</ul>
+<p>我的判断靠在「最可能」上，略偏危险一侧。无限还能做下去，赛季还在更，Play 商店还在更。让我往危险一侧靠的，是 2025 年那笔收购的官方动机写得很直：停版税、自主决策、做衍生。停版税立刻兑现。做一款配得上 2012 年 93% 好评的买断，没有写进公告的时间表。用户若只问「现在该不该玩火炬之光」，答案仍然具体：想轻松刷，买二代；想赛季，进无限并接受它不是二代；不要为了怀旧去碰三代。</p>
+<p>把火炬之光当成 2026 年的研究对象，真正要盯的不是「IP 花了多少钱」，是东家会不会再选一次「先做完」。十一个月那代人把完成写进了品牌；完美世界把完成判定为不够用；心动把完成品的商标买下来去养一款永不完成的赛季。三条路都走得通，只有第一条留下了 93%。货架上还空着那一格。空着不等于会有人坐回去。</p>
+<hr>
+<h2 class="sources-h" id="sec-22">四、信息来源</h2>
+<ol>
+<li><a href="https://www.gamedeveloper.com/business/from-the-ashes-of-i-mythos-i-the-art-of-i-torchlight-i-">Gamasutra / Game Developer：From the Ashes of Mythos</a> — 访问日期 2026-10-18 — Flagship 西雅图、Mythos 封测、Runic 从零重做</li>
+<li><a href="https://www.gamedeveloper.com/business/working-by-torchlight">Gamasutra：Working by Torchlight</a> — 访问日期 2026-10-18 — 鲍德里与马克斯谈单机打样再做 MMO</li>
+<li><a href="https://www.runicgames.com/blog/2009/04/02/april-2009-news-updates/">Runic 2009 年 4 月新闻</a> — 访问日期 2026-10-18 — 完美世界发行、单机后做 MMO 的原话</li>
+<li><a href="https://en.wikipedia.org/wiki/Runic_Games">Wikipedia：Runic Games</a> — 访问日期 2026-10-18 — 成立日期、完美世界持股、人员离开、关停</li>
+<li><a href="https://en.wikipedia.org/wiki/Torchlight">Wikipedia：Torchlight</a> — 访问日期 2026-10-18 — 发售日、职业、宠物、MMO 取消、销量节点</li>
+<li><a href="https://www.gamedeveloper.com/business/-i-torchlight-i-sells-1m-copies-across-all-platforms">Game Developer：Torchlight 跨平台销量破百万</a> — 访问日期 2026-10-18 — 2011-07-06，50 万与 100 万</li>
+<li><a href="https://www.runicgames.com/blog/2010/07/27/update-from-the-runic-team/">Runic：2010 年团队更新</a> — 访问日期 2026-10-18 — 50 万份、GDCA 最佳处女作</li>
+<li><a href="https://www.metacritic.com/game/torchlight/">Metacritic：Torchlight</a> — 访问日期 2026-10-18 — 媒体分区间</li>
+<li><a href="https://www.metacritic.com/game/torchlight-ii/">Metacritic：Torchlight II</a> — 访问日期 2026-10-18 — 88 / 8.4</li>
+<li><a href="https://store.steampowered.com/app/200710/Torchlight_II/">Steam：Torchlight II</a> — 访问日期 2026-10-18 — 英文 17553 条、93% 好评，发行商显示 XD</li>
+<li><a href="https://gameinformer.com/b/news/archive/2012/12/31/torchlight-2-sells-over-2-million-copies-in-2012">Game Informer：Torchlight 2 2012 年销量破百万</a> — 访问日期 2026-10-18 — Runic 推特口径</li>
+<li><a href="https://www.gamespot.com/games/torchlight-ii/news/">GameSpot：Torchlight II 销量达 200 万</a> — 访问日期 2026-10-18 — 2013-07-25</li>
+<li><a href="https://www.runicgames.com/blog/2012/10/11/torchlight-ii-launched/">Runic：Torchlight II 发售博文</a> — 访问日期 2026-10-18 — 媒体评语汇编</li>
+<li><a href="https://www.pcgamer.com/torchlight-and-hob-developer-runic-games-has-shut-down/">PC Gamer：Runic 关停</a> — 访问日期 2026-10-18 — 完美世界「在线游戏即服务」</li>
+<li><a href="https://www.polygon.com/2017/11/3/16605008/runic-games-closes-motiga-layoffs/">Polygon：Runic 关停</a> — 访问日期 2026-10-18 — Lefler 公开信</li>
+<li><a href="https://www.runicgames.com/">Runic 关停声明原文</a> — 访问日期 2026-10-18 — 最后一天开业</li>
+<li><a href="https://massivelyop.com/2020/06/15/torchlight-iiis-surprise-early-access-launch-was-tormented-by-server-issues-and-poor-reviews/">Massively OP：TL3 抢先体验宕机</a> — 访问日期 2026-10-18 — 服务器与「像免费手游」差评</li>
+<li><a href="https://www.gamepressure.com/newsroom/torchlight-3-criticized-in-steam-reviews/z01e73">gamepressure：TL3 Steam 好评约 36%</a> — 访问日期 2026-10-18 — 抢先体验口碑</li>
+<li><a href="https://store.steampowered.com/app/1030210/Torchlight_III/">Steam：Torchlight III</a> — 访问日期 2026-10-18 — 英文 4920 条、51% 好评</li>
+<li><a href="https://www.metacritic.com/game/torchlight-iii/">Metacritic：Torchlight III</a> — 访问日期 2026-10-18 — 媒体约 65，用户 3.5</li>
+<li><a href="https://www.reddit.com/r/pcgaming/comments/nlat44/echtra_games_ceases_work_on_torchlight_3/">Reddit 转载：Echtra 停更 TL3</a> — 访问日期 2026-10-18 — 马克斯 2021-05-26 社区信</li>
+<li><a href="https://www.ign.com/articles/star-wars-hunters-publisher-shutters-studio-founded-by-torchlight-diablo-creator-before-it-could-announce-its-new-game">IGN：Zynga 关闭 Echtra</a> — 访问日期 2026-10-18 — 2025-06</li>
+<li><a href="https://store.steampowered.com/app/1974050/Torchlight_Infinite/">Steam：Torchlight: Infinite</a> — 访问日期 2026-10-18 — 2023-05-09 转正，英文 8393 条、61%</li>
+<li><a href="https://www.gamespress.com/TORCHLIGHT-INFINITE-REVEALS-GLOBAL-LAUNCH-PLAN-WITH-GAME-CHANGING-NEW-">Games Press：无限全球转正</a> — 访问日期 2026-10-18 — 端手同步、Cube of Rapacity</li>
+<li><a href="https://en.wikipedia.org/wiki/Torchlight:_Infinite">Wikipedia：Torchlight: Infinite</a> — 访问日期 2026-10-18 — 测试节点、评测摘要</li>
+<li><a href="https://play.google.com/store/apps/details?hl=en_US&amp;id=com.xd.TLglobal">Google Play：Torchlight: Infinite</a> — 访问日期 2026-10-18 — 4.3 分、5.5 万评价、2026-10-09 更新</li>
+<li><a href="https://www.hkexnews.hk/listedco/listconews/sehk/2025/1229/2025122901555.pdf">香港交易所：心动资产转让公告</a> — 访问日期 2026-10-18 — 3718 万美元、贷款抵销、免许可费估值</li>
+<li><a href="https://investgame.net/wp-content/uploads/2026/03/2026-03-31-xd_2025_earnings_wp.pdf">心动 2025 年报摘录</a> — 访问日期 2026-10-18 — 无限上线时间、购 IP 现金约 3.119 亿元</li>
+<li><a href="http://www.xd.com/games/single/16105?lang=en">心动官网：完成系列 IP 收购</a> — 访问日期 2026-10-18 — 2025-12-31 中文声明、SS11 档期</li>
+<li><a href="https://en.wikipedia.org/wiki/Arc_Games">Wikipedia：Arc Games</a> — 访问日期 2026-10-18 — 完美世界娱乐到 Golden Arc 的沿革</li>
+<li><a href="https://marshymedia.com/path-of-exile-to-torchlight-which-arpg-is-right-for-you-in-2025/">MarshyMedia：2025 年 ARPG 选型</a> — 访问日期 2026-10-18 — 火炬 2 低压力定位</li>
+<li><a href="https://timesaver.gg/blog/best-arpgs-to-play-2026">timesaver.gg：2026 年最佳 ARPG</a> — 访问日期 2026-10-18 — 暗黑 4 / PoE2 / Last Epoch / Grim Dawn 格局</li>
+<li><a href="https://steambase.io/games/torchlight/reviews">Steambase：Torchlight 评论</a> — 访问日期 2026-10-18 — 约 91% 好评、Metascore 83</li>
+<li><a href="https://store.steampowered.com/app/41500/Torchlight/">Steam：Torchlight</a> — 访问日期 2026-10-18 — 发售日与现发行商</li>
+</ol>
+<h2 id="sec-23">五、方法论说明</h2>
+<p>本文采用横纵分析法（Horizontal-Vertical Analysis）。纵轴沿时间还原对象的生命历程，横轴在当前截面与同类对比，两条轴交汇后给出判断。方法论由数字生命卡兹克提出；本报告由玉笛百科撰写。研究对象按中文玩家口语中的「火炬之光」处理为系列，覆盖一代、二代、三代与无限，避免把商标和单一产品混成一个年份。</p>
+  </article>
+</div>
+
+<footer class="site-foot">
+  <p>玉笛百科 · 横纵分析法深度研究报告 · 玉笛百科 · 2026年10月18日</p>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var topbar = document.getElementById("topbar");
+  var bar = document.getElementById("progress-bar");
+  var themeBtn = document.getElementById("theme-toggle");
+  var tocWrap = document.getElementById("toc-wrap");
+  var tocToggle = document.getElementById("toc-toggle");
+  var tocClose = document.getElementById("toc-close");
+  var tocBackdrop = document.getElementById("toc-backdrop");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function stored(key, fallback) {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  var theme = stored("hv-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  var size = stored("hv-size", "md");
+  root.setAttribute("data-theme", theme);
+  root.setAttribute("data-size", size);
+
+  function syncThemeLabel() {
+    var dark = root.getAttribute("data-theme") === "dark";
+    themeBtn.textContent = dark ? "浅色" : "深色";
+    themeBtn.setAttribute("aria-pressed", dark ? "true" : "false");
+  }
+  syncThemeLabel();
+
+  themeBtn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    save("hv-theme", next);
+    syncThemeLabel();
+  });
+
+  var sizes = ["sm", "md", "lg"];
+  document.getElementById("size-down").addEventListener("click", function () {
+    var i = Math.max(0, sizes.indexOf(root.getAttribute("data-size")) - 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+  document.getElementById("size-up").addEventListener("click", function () {
+    var i = Math.min(sizes.length - 1, sizes.indexOf(root.getAttribute("data-size")) + 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+
+  var links = [].slice.call(document.querySelectorAll(".toc a[href^='#']"));
+  var headings = [].slice.call(document.querySelectorAll(".article h1[id], .article h2[id], .article h3[id]"));
+
+  function syncToc() {
+    var probe = topbar.offsetHeight + 48;
+    var activeId = null;
+    headings.forEach(function (h) {
+      if (h.id && h.getBoundingClientRect().top <= probe) activeId = h.id;
+    });
+    if (!activeId && headings[0]) activeId = headings[0].id;
+    links.forEach(function (a) {
+      var id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+      a.classList.toggle("is-active", id === activeId);
+    });
+  }
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = p + "%";
+    topbar.classList.toggle("is-scrolled", window.scrollY > 16);
+    syncToc();
+  }
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  function setToc(open) {
+    root.classList.toggle("toc-open", open);
+    tocToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  tocToggle.addEventListener("click", function () {
+    setToc(!root.classList.contains("toc-open"));
+  });
+  tocClose.addEventListener("click", function () { setToc(false); });
+  tocBackdrop.addEventListener("click", function () { setToc(false); });
+  links.forEach(function (a, i) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
+      try { raw = decodeURIComponent(raw); } catch (err) {}
+      if (!/^sec-\d+$/.test(raw)) {
+        raw = (headings[i] && headings[i].id) || "";
+      }
+      var target = (raw && document.getElementById(raw)) || headings[i];
+      if (!target) return;
+      var y = target.getBoundingClientRect().top + window.pageYOffset - (topbar.offsetHeight + 12);
+      if (window.scrollTo) {
+        window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
+      } else {
+        target.scrollIntoView(true);
+      }
+      try {
+        if (raw && /^sec-\d+$/.test(raw) && history.replaceState) {
+          history.replaceState(null, "", "#" + raw);
+        }
+      } catch (err) {}
+      setToc(false);
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setToc(false);
+  });
+})();
+</script>
+</body>
+</html>
