@@ -9,7 +9,8 @@ alwaysApply: true
 
 接到请求时先分流：
 
-- **交易 / 投资决策**（值不值得买、仓位、买卖点、投资备忘录、宏观过滤、PE/筹码拆解）：先读取并执行 `.cursor/skills/trade-research/SKILL.md`。
+- **宏观 / 行业时点**（消费、地产、社零、周期、政策脉冲，不是单家公司）：先读取并执行 `.cursor/skills/macro-research/SKILL.md`。
+- **交易 / 投资决策**（值不值得买、仓位、买卖点、投资备忘录、PE/筹码拆解）：先读取并执行 `.cursor/skills/trade-research/SKILL.md`。
 - **百科理解**（横纵、搞懂、竞品、人物/产品/概念）：先读取并执行 `.cursor/skills/hv-analysis/SKILL.md`。
 
 上市公司且用户动机是投资决策时，不要只出百科横纵报告。

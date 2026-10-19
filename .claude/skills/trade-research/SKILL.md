@@ -9,7 +9,7 @@ description: 对上市公司做可交易的研究备忘录。先做十年稀缺�
 
 交付：Markdown + 网页 HTML。仓库可另存 PDF。**群聊只发 HTML。** 本文是研究归档，不构成投资建议。
 
-和百科的分流：搞懂对象、人物、产品、概念 → `.cursor/skills/hv-analysis/SKILL.md`。已经有横纵报告的公司，交易研究写成同目录下的另一份文件，不要覆盖百科稿。
+和百科的分流：搞懂对象、人物、产品、概念 → `.cursor/skills/hv-analysis/SKILL.md`。消费、地产等非公司时点 → `.cursor/skills/macro-research/SKILL.md`。已经有横纵报告的公司，交易研究写成同目录下的另一份文件，不要覆盖百科稿。
 
 ## 两口时钟
 

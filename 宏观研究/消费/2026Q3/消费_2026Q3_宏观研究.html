@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-size="md">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>消费宏观研究</title>
+<style>
+:root {
+  --ink: #15232c;
+  --ink-soft: #2a3d46;
+  --paper: #f2f5f3;
+  --paper-2: #e7eeea;
+  --jade: #2f7a64;
+  --jade-deep: #1f5648;
+  --jade-soft: rgba(47, 122, 100, 0.12);
+  --muted: #4a5c61;
+  --hair: #cdd8d3;
+  --card: #ffffff;
+  --shadow: 0 18px 40px rgba(21, 35, 44, 0.08);
+  --cover: #15232c;
+  --cover-ink: #eaf3ef;
+  --cover-muted: rgba(234, 243, 239, 0.68);
+  --warn: #8b4a3a;
+  --warn-soft: rgba(139, 74, 58, 0.1);
+  --ok-soft: rgba(47, 122, 100, 0.1);
+  --base-soft: rgba(74, 92, 97, 0.08);
+  --radius: 8px;
+  --sidebar: 17.25rem;
+  --measure: 42rem;
+  --topbar: 3.5rem;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SFMono-Regular", "Cascadia Mono", "Consolas", "Liberation Mono", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --ink: #e4ece8;
+  --ink-soft: #c5d2cc;
+  --paper: #12181a;
+  --paper-2: #1a2225;
+  --jade: #6eb89f;
+  --jade-deep: #8fd0ba;
+  --jade-soft: rgba(110, 184, 159, 0.14);
+  --muted: #9aada8;
+  --hair: #2c3a3d;
+  --card: #1a2225;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --cover: #101618;
+  --cover-ink: #e4ece8;
+  --cover-muted: rgba(228, 236, 232, 0.64);
+  --warn: #d08978;
+  --warn-soft: rgba(208, 137, 120, 0.14);
+  --ok-soft: rgba(110, 184, 159, 0.14);
+  --base-soft: rgba(154, 173, 168, 0.1);
+}
+
+[data-size="sm"] { --body-size: 15.5px; }
+[data-size="md"] { --body-size: 17px; }
+[data-size="lg"] { --body-size: 19px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  scroll-padding-top: calc(var(--topbar) + 0.8rem);
+}
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-size: var(--body-size);
+  line-height: 1.85;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .topbar, .progress span, .toc a, .theme-btn, .toc-drawer {
+    transition: background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+.skip {
+  position: absolute;
+  left: 0.8rem;
+  top: -3rem;
+  background: var(--jade);
+  color: #f4faf7;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius);
+  z-index: 80;
+}
+.skip:focus { top: 0.6rem; }
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--jade);
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.1rem;
+  color: var(--cover-ink);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+.topbar.is-scrolled {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border-bottom-color: var(--hair);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .topbar.is-scrolled { background: var(--paper); backdrop-filter: none; }
+}
+
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  font-weight: 650;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.brand small {
+  display: block;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  opacity: 0.7;
+  font-size: 0.68rem;
+}
+
+.top-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.92rem;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar.is-scrolled .top-title { opacity: 0.86; }
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.icon-btn:focus-visible,
+.toc a:focus-visible,
+.article a:focus-visible {
+  outline: 2px solid var(--jade);
+  outline-offset: 2px;
+}
+.icon-btn[aria-pressed="true"] { border-color: color-mix(in srgb, currentColor 28%, transparent); }
+.toc-toggle { display: none; }
+
+.cover {
+  min-height: 100dvh;
+  background: var(--cover);
+  color: var(--cover-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5.5rem 8vw 4.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -18% auto;
+  width: min(52vw, 34rem);
+  height: min(52vw, 34rem);
+  background: radial-gradient(circle, rgba(47, 122, 100, 0.22), transparent 68%);
+  pointer-events: none;
+}
+.cover-inner {
+  position: relative;
+  max-width: 48rem;
+}
+.cover-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  color: var(--jade);
+  font-weight: 650;
+  margin: 0 0 1.1rem;
+}
+.cover h1 {
+  font-size: clamp(2.35rem, 6vw, 4.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 670;
+  margin: 0;
+  max-width: 14ch;
+  padding-bottom: 0.15em;
+}
+.cover-sub {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.45;
+  color: var(--cover-muted);
+  max-width: 28ch;
+  font-weight: 400;
+}
+.cover-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--jade);
+  border: 0;
+  margin: 1.7rem 0 1.4rem;
+}
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  color: var(--cover-muted);
+  font-size: 0.92rem;
+}
+.cover-meta span { white-space: nowrap; }
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  gap: 0 2.5rem;
+}
+
+.toc-wrap {
+  position: sticky;
+  top: var(--topbar);
+  align-self: start;
+  height: calc(100dvh - var(--topbar));
+  padding: 2rem 0 2.5rem;
+  overflow: auto;
+  border-right: 1px solid var(--hair);
+  padding-right: 1.2rem;
+  z-index: 2;
+}
+.toc-close { display: none; }
+.toc-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin: 0 0 0.9rem;
+  font-weight: 650;
+}
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc li { margin: 0; }
+.toc .depth-2 { margin-top: 0.55rem; }
+.toc .depth-2:first-child { margin-top: 0; }
+.article h1, .article h2, .article h3 {
+  scroll-margin-top: calc(var(--topbar) + 0.8rem);
+}
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  padding: 0.38rem 0.6rem 0.38rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+}
+.toc a:hover { color: var(--ink); }
+.toc a.is-active {
+  color: var(--jade-deep);
+  border-left-color: var(--jade);
+  background: var(--jade-soft);
+  font-weight: 600;
+}
+.toc .depth-3 a {
+  font-size: 0.8rem;
+  padding-left: 1.35rem;
+}
+.toc-kind {
+  display: inline-block;
+  width: 0.9rem;
+  font-size: 0.68rem;
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.article {
+  max-width: var(--measure);
+  padding: 2.4rem 0 5rem;
+  min-width: 0;
+}
+
+.article > .summary,
+.article > .lead-band {
+  background: var(--paper-2);
+  border: 1px solid var(--hair);
+  border-left: 3px solid var(--jade);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.4rem 1.2rem;
+  margin: 0 0 2.4rem;
+  box-shadow: none;
+}
+.article > .summary > h2:first-child,
+.article > .lead-band > h2:first-child {
+  margin-top: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--jade-deep);
+}
+.article > .summary > h2:first-child::after,
+.article > .lead-band > h2:first-child::after {
+  display: none;
+}
+.article > .summary > p:first-of-type,
+.article > .lead-band > p:first-of-type {
+  font-size: 1.12em;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.article h2 {
+  font-size: 1.58rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 2.8rem 0 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.article h2::after {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 2px;
+  background: var(--jade);
+  margin-top: 0.7rem;
+}
+.article h3 {
+  font-size: 1.18rem;
+  line-height: 1.4;
+  margin: 2rem 0 0.7rem;
+  font-weight: 680;
+  color: var(--ink);
+}
+.article h4 {
+  font-size: 1.02rem;
+  margin: 1.5rem 0 0.45rem;
+  color: var(--ink-soft);
+  font-weight: 650;
+}
+
+.article p { margin: 0.85rem 0; }
+.article p:first-child { margin-top: 0; }
+
+.article a {
+  color: var(--jade-deep);
+  text-underline-offset: 0.18em;
+}
+.article a:hover { color: var(--jade); }
+
+.article strong { font-weight: 670; color: var(--ink); }
+
+.article ul, .article ol {
+  margin: 0.7rem 0 1rem;
+  padding-left: 1.35rem;
+}
+.article li { margin: 0.28rem 0; }
+.article li::marker { color: var(--jade); }
+
+.article blockquote {
+  margin: 1.3rem 0;
+  padding: 0.2rem 0 0.2rem 1.05rem;
+  border-left: 3px solid var(--jade);
+  color: var(--ink-soft);
+  background: transparent;
+  font-style: normal;
+}
+.article blockquote p { margin: 0.35rem 0; }
+
+.article hr {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 2rem 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.3rem 0 1.6rem;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 0;
+}
+.article thead th {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: left;
+  font-weight: 650;
+  padding: 0.7rem 0.85rem;
+  white-space: nowrap;
+}
+[data-theme="dark"] .article thead th {
+  background: #0c1214;
+  color: var(--ink);
+}
+.article td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: top;
+}
+.article tbody tr:last-child td { border-bottom: 0; }
+.article tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, transparent); }
+
+.article pre, .article code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+.article code {
+  background: var(--paper-2);
+  padding: 0.08em 0.35em;
+  border-radius: 4px;
+}
+.article pre {
+  background: var(--cover);
+  color: var(--cover-ink);
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.article pre code { background: none; padding: 0; color: inherit; }
+.article img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.scenario {
+  margin: 1.2rem 0 1.6rem;
+  padding: 1.15rem 1.2rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--hair);
+  background: var(--card);
+}
+.scenario > h3:first-child,
+.scenario > h4:first-child {
+  margin-top: 0;
+}
+.scenario-up { background: var(--ok-soft); border-color: color-mix(in srgb, var(--jade) 35%, var(--hair)); }
+.scenario-base { background: var(--base-soft); }
+.scenario-down { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, var(--hair)); }
+
+.article .sources-h + *,
+.sources {
+  font-size: 0.92em;
+  color: var(--ink-soft);
+}
+
+.site-foot {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.site-foot p { margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--hair); }
+
+.toc-backdrop {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  html.toc-open { overflow: hidden; }
+  .toc-toggle { display: inline-flex; }
+  .toc-close { display: inline-flex; position: absolute; top: 0.85rem; right: 0.7rem; }
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 0 1.1rem 3rem;
+  }
+  .toc-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: min(20rem, 86vw);
+    background: var(--paper);
+    z-index: 70;
+    padding: 4.4rem 1rem 1.5rem;
+    transform: translateX(-105%);
+    border-right: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+  }
+  html.toc-open .toc-wrap { transform: translateX(0); }
+  .toc-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 24, 26, 0.42);
+    z-index: 65;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.toc-open .toc-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .cover { padding: 5rem 1.25rem 3rem; }
+  .cover h1 { max-width: none; }
+  .article { padding-top: 1.6rem; }
+}
+
+@media print {
+  .progress, .topbar, .toc-wrap, .toc-backdrop, .site-foot { display: none !important; }
+  .layout { display: block; max-width: none; padding: 0; }
+  .cover { min-height: auto; padding: 1.5cm 0; break-after: page; }
+  .article { max-width: none; padding: 0; }
+  a { text-decoration: none; color: inherit; }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#article">跳到正文</a>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#cover">玉笛百科<small>JADE FLUTE</small></a>
+  <div class="top-title" id="top-title">消费</div>
+  <div class="top-actions">
+    <button class="icon-btn toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-wrap">目录</button>
+    <button class="icon-btn" id="size-down" type="button" title="减小字号" aria-label="减小字号">A-</button>
+    <button class="icon-btn" id="size-up" type="button" title="增大字号" aria-label="增大字号">A+</button>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false">深色</button>
+  </div>
+</header>
+
+<section class="cover" id="cover">
+  <div class="cover-inner">
+    <p class="cover-kicker">宏观研究</p>
+    <h1>消费</h1>
+    <p class="cover-sub">9月社零是边际改善，还不是可以配上去的拐点</p>
+    <hr class="cover-rule">
+    <div class="cover-meta"><span>宏观 / 消费 · 宏观时点（非公司）</span><span>2026年10月19日</span><span>约 4863 字</span><span>阅读 11 分钟</span><span>玉笛百科</span></div>
+  </div>
+</section>
+
+<div class="toc-backdrop" id="toc-backdrop"></div>
+
+<div class="layout">
+  <aside class="toc-wrap" id="toc-wrap">
+    <button class="icon-btn toc-close" id="toc-close" type="button">关闭</button>
+    <p class="toc-label">目录</p>
+    <nav aria-label="章节">
+      <ol class="toc"><li class="depth-2"><a href="#sec-1">核心结论速览</a></li>
+<li class="depth-2"><a href="#sec-2">一、时间节点与触发</a></li>
+<li class="depth-2"><a href="#sec-3">二、把数字拆开</a></li>
+<li class="depth-3"><a href="#sec-4">2.1 总量：一个月改善，累计没动</a></li>
+<li class="depth-3"><a href="#sec-5">2.2 结构：汽车挖坑，手机填坑</a></li>
+<li class="depth-3"><a href="#sec-6">2.3 居民账本：有收入，少花钱，财产性收入几乎不动</a></li>
+<li class="depth-2"><a href="#sec-7">三、宏观过滤器</a></li>
+<li class="depth-2"><a href="#sec-8">四、账期叙事站得住的部分，和接太长的部分</a></li>
+<li class="depth-2"><a href="#sec-9">五、板块含义</a></li>
+<li class="depth-2"><a href="#sec-10">六、情景</a></li>
+<li class="depth-2"><a href="#sec-11">七、信息来源</a></li>
+<li class="depth-2"><a href="#sec-12">八、方法论说明</a></li></ol>
+    </nav>
+  </aside>
+  <article class="article" id="article">
+<section class="summary"><h2 id="sec-1">核心结论速览</h2>
+<p><strong>一句话定义</strong>：2026 年 9 月社零同比 1.1%、除汽车 3.9%，确认的是「往下掉的速度在减」，不是「消费周期已经转过弯」；沧海把问题收成现金流量表，方向有用，因果链接得过长。</p>
+<p><strong>关键判断</strong>：</p>
+<ol>
+<li>统计局原值成立：9 月社零 42433 亿元、同比 1.1%，比 8 月加快 0.7 个百分点；除汽车 3.9%；餐饮 2.1%。前三季度累计仍是 1.1%，和 1–8 月持平，拐点还没有进入累计数。</li>
+<li>结构比总量更重要。汽车类 9 月同比 -21.2%、限额以上单位社零 -2.1%，通讯器材 +31.1%。拉总量的是汽车以外的中小经营单位和一部手机，不是可选消费的全面回暖。</li>
+<li>「账期」是真问题：8 月末规上应收账款 29.48 万亿元、平均回收期 72.2 天。它解释企业部门循环，解释不了居民为什么实际收入增 4.4%、消费支出只增 2.7%。出口前三季度 +16.4%、9 月 +29.6%，外循环在量上没有失速；两年美债从 2 月低点 3.38% 升到 9 月 28 日 4.92%，约 154 个基点，数字对，但它不是 9 月社零的主因。</li>
+</ol>
+<p><strong>机会与风险</strong>：</p>
+<ul>
+<li>机会：季调环比从 8 月 -0.16% 回到 +0.35%；服务零售前三季度 +5.0%；二手房网签面积 +10.7%，地产政策 8–9 月已经铺到需求侧。</li>
+<li>风险：新房销售面积 -13.2%、开发投资 -20.6%；大消费板块年内仍跌约 13.5%，服务消费跌约 47%。市场没有按「拐点已出」定价。</li>
+<li>证伪：10–11 月除汽车社零掉回 2% 以下，或限额以上继续更深的负增长；两年美债重新站上 5.2% 并停留。</li>
+</ul>
+<hr>
+</section><h2 id="sec-2">一、时间节点与触发</h2>
+<p>2026 年 10 月 19 日上午，国家统计局同时发布了 9 月社零和前三季度国民经济数据。沧海一土狗当天写《消费的拐点基本上出来了》，把 1.1% 的超预期读成拐点，并把内需不振的根因写成现金流量表：包工头干了活，账上有 GDP，口袋里没有现金。</p>
+<p>这篇时点报告钉在 <strong>2026 年三季度、以 9 月社零为截面</strong>。对象是消费板块，地产和汽车只作为拖累项和渠道。对话那篇文章，不扩写它。数字对的地方承认，因果接太长的地方拆开。</p>
+<hr>
+<h2 id="sec-3">二、把数字拆开</h2>
+<h3 id="sec-4">2.1 总量：一个月改善，累计没动</h3>
+<p>国家统计局 10 月 19 日稿：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>口径</th>
+<th>9 月</th>
+<th>1–9 月</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>社零总额</td>
+<td>42433 亿元，同比 1.1%</td>
+<td>370001 亿元，同比 1.1%</td>
+</tr>
+<tr>
+<td>除汽车</td>
+<td>38792 亿元，同比 3.9%</td>
+<td>340574 亿元，同比 2.8%</td>
+</tr>
+<tr>
+<td>餐饮收入</td>
+<td>4603 亿元，同比 2.1%</td>
+<td>41969 亿元，同比 2.4%</td>
+</tr>
+<tr>
+<td>商品零售</td>
+<td>37830 亿元，同比 1.0%</td>
+<td>328032 亿元，同比 1.0%</td>
+</tr>
+<tr>
+<td>限额以上单位社零</td>
+<td>16873 亿元，同比 -2.1%</td>
+<td>140387 亿元，同比 -1.5%</td>
+</tr>
+</tbody>
+</table></div>
+<p>8 月社零同比 0.4%，9 月加快 0.7 个百分点到 1.1%，和沧海引用的「预期约 0.6%–0.7%」比，确实超预期。财新也写了季调环比：8 月 -0.16%，9 月 +0.35%。环比转正，比同比 1.1% 更像「动能止跌」。</p>
+<p>累计 1.1% 与 1–8 月持平。拐点如果成立，应先出现在环比，再渗进累计。现在只走完第一小步。前三季度 GDP 同比 4.6%（一季度 5.0%、二季度 4.3%、三季度 4.5%），社零累计 1.1%，生产和居民花钱之间的缝还在。</p>
+<h3 id="sec-5">2.2 结构：汽车挖坑，手机填坑</h3>
+<p>限额以上分类（9 月同比）：</p>
+<ul>
+<li>汽车类 3641 亿元，<strong>-21.2%</strong>；1–9 月 <strong>-14.9%</strong></li>
+<li>通讯器材类 1062 亿元，<strong>+31.1%</strong>；1–9 月 +18.1%</li>
+<li>烟酒类 +13.8%（中秋错位）</li>
+<li>粮油食品 +6.7%，化妆品 +5.4%，服装 +1.2%</li>
+<li>金银珠宝 -9.6%，家具 -3.0%，建筑装潢 -9.2%，家电仅 +1.9%（1–9 月家电仍 -4.9%）</li>
+</ul>
+<p>汽车占 9 月社零约 8.6%，跌 21.2% 会把总量往下拽大约两个百分点。官方「除汽车 3.9%」把这个坑挖掉之后，消费看起来正常得多。通讯器材单月 31.1%，是年内高点，更像换机和消费电子脉冲，不像居民资产负债表修复。</p>
+<p>限额以上整体 -2.1%，限额以下在把总量拉回正值。大店、连锁、可统计的可选消费仍在收缩；街头和小店的基数效应、下沉和乡村（9 月乡村 +2.7%、城镇 +0.8%）在撑数字。读总量 1.1% 而不看限额以上，会把质量读高一档。</p>
+<p>服务侧更强：前三季度服务零售额 +5.0%，社会消费商品和服务零售总额 +2.6%。住宿餐饮增加值前三季度 +5.5%，9 月服务业生产指数 +4.8%。商品弱、服务相对不弱，已经持续几个季度。</p>
+<h3 id="sec-6">2.3 居民账本：有收入，少花钱，财产性收入几乎不动</h3>
+<p>前三季度全国居民人均可支配收入 34230 元，名义 +5.3%，实际 +4.4%；人均消费支出实际 +2.7%。工资性收入名义 +5.3%，经营净收入 +6.6%，<strong>财产净收入只 +1.6%</strong>。城镇调查失业率 9 月 5.2%。人还在上班，房子和金融资产不怎么给人钱，支出增速明显慢于收入。这是预防性储蓄和财富效应，不是包工头账期能单独解释的。</p>
+<p>地产实物仍冷：开发投资 -20.6%，新房销售面积 -13.2%、销售额 -13.9%，房企到位资金 -21.6%。唯一的亮点是二手房网签面积 +10.7%。存量房在动、新房和投资没有跟上，家具、装潢、金银珠宝继续负增长，逻辑自洽。</p>
+<hr>
+<h2 id="sec-7">三、宏观过滤器</h2>
+<blockquote>
+<p><strong>体制一句话</strong>：美国在重新加息、两年美债靠近 5%，中国出口和工业利润并不差，差的是地产和汽车拖着的内需；政策从 8 月起转向缩短账期和补贴刚需购房。<br>
+<strong>闸门</strong>：黄，打在内需和地产链。外需是绿的，不能把消费写成系统性红灯，也不能写成绿灯配置。</p>
+</blockquote>
+<p>全球流动性与利率。两年美债 2026 年 2 月 27 日低点 3.38%，9 月 28 日高点 4.92%，高低点约 154 个基点，和「升了 150bp、相当于加息六次」同方向。10 月中旬回落到 4.77% 附近，高位震荡，不是确认见顶。联邦基金目标区间 9 月已提到 3.75%–4.00%，市场仍在给年内可能再加一次定价。<code>usTLT.OQ</code> 年内约 -5%，长久期资产继续被贴现率压着。<code>usUUP.AM</code> 年内约 +7%，美元不弱。</p>
+<p>总需求与总供给。中国前三季度 GDP 4.6%，规上工业利润 1–8 月 +15.7%，出口 +16.4%、9 月 +29.6%，进口 +22.3%。供给端和外循环在量上是热的。CPI 前三季度 +0.9%，核心 CPI +1.1%，没有需求过热。社融存量同比 9 月末 7.1%、新增人民币贷款累计仍弱（westock：贷款增量同比约 -21%），信用扩张靠政府债在撑。内需的约束是地产投资和居民愿不愿意把收入变成支出，不是工厂开不了工。</p>
+<p>国内政策。沧海列的时间表，一手来源对得上，落点要分开看：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>文件</th>
+<th>真正打在哪</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8 月 7 日</td>
+<td>北京优化限购和公积金（京建发〔2026〕400 号）</td>
+<td>五环内非京籍社保降至连续 1 年，公积金额度上浮</td>
+</tr>
+<tr>
+<td>8 月 20 日</td>
+<td>上海「沪八条」</td>
+<td>公积金扩围、单套最高 8 万元购房补贴</td>
+</tr>
+<tr>
+<td>8 月 28 日</td>
+<td>住建部等《关于完善商品住房销售制度的通知》</td>
+<td>新出让土地优先现房；预售须主体封顶。这是防交付风险，短期会收紧期房供给，不是刺激 9 月社零的工具</td>
+</tr>
+<tr>
+<td>9 月 10 日</td>
+<td>国办发〔2026〕24 号，治理中小企业回款难</td>
+<td>引导 60 日现金账期，电子凭证最长 6 个月。这才是「缩短内循环账期」的正文</td>
+</tr>
+<tr>
+<td>9 月 20 日</td>
+<td>新修订《住房公积金管理条例》施行</td>
+<td>缴存互认、灵活就业可缴、装修和物业可提取</td>
+</tr>
+<tr>
+<td>9 月 29 日</td>
+<td>购房贷款贴息（财金〔2026〕95 号）+ 央行 PSL</td>
+<td>贴息从 <strong>10 月 1 日</strong> 起：首套、120 平方米及 150 万元以下，年化 1 个百分点、最长 5 年、单户贷款上限 100 万元。PSL 利率 1.75%→1.5%，并把水网、新型电网、算力网、通信网、地下管网、物流网纳入支持</td>
+</tr>
+</tbody>
+</table></div>
+<p>贴息和 PSL 都在 9 月 29 日出台。它们解释不了已经过完的 9 月社零。PSL「六张网」是投资端，不是居民现金流量表。把这两项写进「9 月消费拐点的原因」，时序反了。</p>
+<p>人民币。9 月末在岸约 6.7053、离岸约 6.7089，即期确实升值；1 年期在岸掉期点 9 月末约 -2112（约 3.1% 年化贴水），和「从约 1.6% 升到约 3.2%」同方向。即期升值加远期贴水，是中美利差和出口结汇同时存在的结果。出口企业锁汇成本上升，沧海说的「外循环变贵」在掉期上成立；出口量却在加速，量价不是同一回事。</p>
+<hr>
+<h2 id="sec-8">四、账期叙事站得住的部分，和接太长的部分</h2>
+<p>规上应收账款 8 月末 29.48 万亿元，同比 +9.0%；平均回收期 72.2 天，同比多 0.9 天。国办 9 月 10 日文专门打这件事，工信部也公开说大型企业对中小企业「卷账期」。账期是政策承认的病灶，不是自媒体发明。</p>
+<p>还要看位置。CEIC 序列里，2026 年 2 月回收期到过 76.4 天，8 月 72.2 天已经从年内高点回落。利润 1–8 月 +15.7%，利润表偏强。说「现金流量表很差、利润表很好」时，账期只多了 0.9 天，达不到三角债危机的量级。</p>
+<p>居民消费还要过另外三道门：</p>
+<ol>
+<li><strong>房价和财产性收入</strong>。财产净收入 +1.6%，新房和开发投资仍是两位数下跌。房子不给人财富效应，可选消费很难有斜率。</li>
+<li><strong>汽车</strong>。-21.2% 是 9 月社零的主拖累。它更像补贴退坡、价格战和换购周期，不是美债账期。</li>
+<li><strong>出口其实在加速</strong>。前三季度出口 +16.4%、9 月 +29.6%、机电 +23.7%。把「外循环周期拉长」写成内需的最大阻力，必须解释为什么货出去得更快了。更干净的说法是：货出去了，人民币售价和锁汇成本变差，企业利润表仍能做出来（工业利润 +15.7%），但回款慢、工资和分红更谨慎，居民侧继续存钱。这是传导的中间段，不是「美债一升、社零就死」。</li>
+</ol>
+<p>国办 60 日付现如果执行，最先改善的是中小制造业和建筑分包的现金流，然后才是农民工工资和街头消费。时滞按季度计。用 9 月 10 日的文件解释 9 月当月社零，同样时序不对。文件的意义是：四季度到 2027 年上半年，账期有了一条可证伪的政策路径。</p>
+<p>把地产财富、汽车和限额以上持续负增长写成「疥癣之疾」，写轻了。三角债清掉，内需也不会自动回到过去 8% 的社零世界。更准确的话是：生产能力和外需不是现在的瓶颈；瓶颈在居民愿不愿意把已经挣到的钱花出去，以及汽车和住房两条耐用品腿何时不再打骨折。</p>
+<hr>
+<h2 id="sec-9">五、板块含义</h2>
+<p>10 月 19 日收盘（westock）：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>板块</th>
+<th>代码</th>
+<th>当日</th>
+<th>年内</th>
+<th>PE（TTM）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大消费</td>
+<td>pt02GN2103</td>
+<td>+0.53%</td>
+<td><strong>-13.53%</strong></td>
+<td>22.1</td>
+</tr>
+<tr>
+<td>服务消费</td>
+<td>pt02GN2395</td>
+<td>-0.61%</td>
+<td><strong>-47.27%</strong></td>
+<td>56.3</td>
+</tr>
+<tr>
+<td>白酒Ⅱ</td>
+<td>pt01801125</td>
+<td>+0.16%</td>
+<td>-15.57%</td>
+<td>20.5</td>
+</tr>
+<tr>
+<td>汽车</td>
+<td>pt01801880</td>
+<td>+1.14%</td>
+<td>-25.62%</td>
+<td>23.8</td>
+</tr>
+<tr>
+<td>消费电子</td>
+<td>pt01801085</td>
+<td>+1.46%</td>
+<td>-17.56%</td>
+<td>28.8</td>
+</tr>
+<tr>
+<td>房地产</td>
+<td>pt01801180</td>
+<td>-1.57%</td>
+<td>-16.68%</td>
+<td>13.3</td>
+</tr>
+<tr>
+<td>上证</td>
+<td>sh000001</td>
+<td>+0.39%</td>
+<td>-5.99%</td>
+<td>16.2</td>
+</tr>
+</tbody>
+</table></div>
+<p>社零稿当天，消费板块没有缺口式上涨。服务消费年内腰斩式回撤、估值仍 56 倍，说明 2025–2026 的主题拥挤已经出清，<strong>价格先于基本面做了悲观</strong>；大消费 22 倍不算贵，但对应的是 1.1% 的名义社零，也谈不上便宜到可以无视结构。汽车零售崩、股价年内 -26%，两者同向。地产政策密度很高，板块照样 -17%，新房和投资数据还没给政策投票。</p>
+<p>交易上更干净的表达：</p>
+<ul>
+<li><strong>必需消费 / 食品烟酒</strong>：数字已经在正增长，中秋脉冲会消退，适合标配，不适合当拐点弹性。</li>
+<li><strong>服务零售</strong>：宏观数字不弱，股价杀得很深，弹性大于商品，但要能忍受 50 倍以上的 PE，仓位不能按「拐点已确认」来加。</li>
+<li><strong>消费电子</strong>：9 月通讯器材 +31.1% 对得上，这是脉冲，不是居民部门转好。</li>
+<li><strong>汽车</strong>：基本面仍是坑。股价若因「除汽车社零很好」而反弹，是在交易一个它自己不在的分子。</li>
+<li><strong>地产链（开发、家具、装潢）</strong>：政策方向对，实物仍负。贴息从 10 月才开始，现房改革还可能压期房供给。这是 2026Q4–2027Q1 的观察仓，不是 9 月社零的兑现仓。</li>
+</ul>
+<p>领先指标里，9 月制造业 PMI 回到 50.1，新订单 50.5，非制造业商务活动 50.2。同步指标是社零环比和餐饮。滞后指标是累计社零和限额以上——这两项还没拐。跨市场：美元偏强、美债实际利率高，压制的是长久期成长，不是中国食品零售；对中国消费更紧的约束是房价和汽车，不是 TLT。</p>
+<hr>
+<h2 id="sec-10">六、情景</h2>
+<ul>
+<li>
+<p><strong>最可能</strong>：10–11 月社零同比仍在 1%–2%，除汽车维持 3% 左右，限额以上由 -2% 慢慢靠近零轴。汽车跌幅收窄，但转正要等 2027 年基数。账期政策开始在中小企业报表上出现，居民支出增速仍低于收入。消费板块跟业绩小修，不跟「拐点」叙事重估。概率大约一半。对应仓位：必需标配，可选和小盘服务低配到标配之间，地产链小仓跟踪二手房和 10 月贴息落地。</p>
+</li>
+<li>
+<p><strong>最危险</strong>：两年美债再次冲过 5.2%，美元继续涨，出口脉冲从 9 月 29.6% 快速回落；国内限额以上加深负增长，汽车跌幅不收。1.1% 变成假期错位。政策被读成「只有文件」。消费板块再杀估值，服务消费 56 倍尤其脆弱。对应动作：去掉可选，地产链只留政策博弈的极小仓。</p>
+</li>
+<li>
+<p><strong>最乐观</strong>：除汽车连续三个月高于 4%，限额以上转正，贴息把 120 平方米以下的刚需拉起来，二手房带动家电家具，汽车跌幅收到个位数。账期从 72 天回到 70 天以下。那时才能把「基本上」三个字拿掉。市场会补 2026 年已经跌掉的 10%–15%。这要求地产实物和汽车同时不再打骨折，纵轴上还没有一次两腿同时站稳的记录。</p>
+</li>
+</ul>
+<p>倾向维持 <strong>黄灯、标配必需、低配地产可选链</strong>。同意沧海的半句：看消费要看收入质量，不能只看 GDP。不同意的半句：9 月 1.1% 加上美债「可能见顶」，还不够写成拐点已经出来。下一步只看三样东西：10 月除汽车社零、限额以上、汽车类跌幅。</p>
+<hr>
+<h2 class="sources-h" id="sec-11">七、信息来源</h2>
+<ol>
+<li><a href="https://www.stats.gov.cn/sj/zxfb/202610/t20261019_1965614.html">国家统计局：2026年1—9月份社会消费品零售总额增长1.1%</a> — 2026-10-19 — 社零、除汽车、餐饮、限额以上及分类</li>
+<li><a href="https://www.stats.gov.cn/sj/zxfb/202610/t20261019_1965618.html">国家统计局：前三季度经济运行总体平稳</a> — 2026-10-19 — GDP、收入、投资、进出口、失业率、服务零售</li>
+<li><a href="https://mp.weixin.qq.com/s/VQZQHs_vwLoknkx6C2nEpw?scene=1">沧海一土狗：消费的拐点基本上出来了</a> — 2026-10-19 — 触发文本</li>
+<li><a href="https://economy.caixin.com/2026-10-19/102494742.html">财新：9月社零同比增速超预期加快至1.1%</a> — 2026-10-19 — 环比 0.35%、机构预期</li>
+<li><a href="https://www.stats.gov.cn/sj/zxfb/202609/t20260928_1965425.html">国家统计局：1—8月规上工业利润增长15.7%</a> — 2026-09-28 — 应收账款 29.48 万亿元、回收期 72.2 天</li>
+<li><a href="https://www.gov.cn/zhengce/zhengceku/202609/content_7080628.htm">国办发〔2026〕24号：中小企业回款难</a> — 2026-09-10 — 60 日付现、电子凭证 6 个月</li>
+<li><a href="https://www.beijing.gov.cn/zhengce/zhengcefagui/202608/t20260807_4814015.html">京建发〔2026〕400号</a> — 2026-08-07 — 北京楼市</li>
+<li><a href="https://www.chinanews.com.cn/kong/2026/08-20/10680924.shtml">新华社：上海出台楼市「沪八条」</a> — 2026-08-20</li>
+<li><a href="https://www.gov.cn/gongbao/2026/issue_13026/202610/content_7082773.html">建房规〔2026〕3号：完善商品住房销售制度</a> — 2026-08-28 — 现房 / 预售封顶</li>
+<li><a href="https://www.gov.cn/zhengce/content/202608/content_7078477.htm">国务院令第844号：修改住房公积金管理条例</a> — 2026-09-20 施行</li>
+<li><a href="https://jrs.mof.gov.cn/zhengcefabu/phjr/202609/t20260929_3998312.htm">财金〔2026〕95号：居民购房贷款贴息</a> — 2026-09-29，10 月 1 日起实施</li>
+<li><a href="https://www.gov.cn/lianbo/202609/content_7082400.htm">央行调整完善若干货币政策工具</a> — 2026-09-29 — PSL 利率与「六张网」</li>
+<li><a href="https://convextrade.com/metrics/dgs2/history/2026">FRED DGS2 / 2026 两年美债路径</a> — 2026-10-19 — 低点 3.38%、高点 4.92%</li>
+<li><a href="https://finance.sina.com.cn/money/forex/forexinfo/2026-10-12/doc-iniuxrzi5362446.shtml">中国货币市场：2026年9月境外人民币市场综述</a> — 2026-10-12 — CNY 6.7053、1 年掉期 -2112</li>
+<li>westock-data 板块行情 2026-10-19 — 大消费、服务消费、白酒、汽车、地产、消费电子</li>
+</ol>
+<h2 id="sec-12">八、方法论说明</h2>
+<p>本文是玉笛百科宏观时点研究，对象是消费板块，时间节点是 2026 年三季度（以 10 月 19 日发布的 9 月社零为截面）。先核一手，再决定是否接受触发文章的拐点定义。不构成投资建议。</p>
+  </article>
+</div>
+
+<footer class="site-foot">
+  <p>玉笛百科 · 横纵分析法深度研究报告 · 玉笛百科 · 2026年10月19日</p>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var topbar = document.getElementById("topbar");
+  var bar = document.getElementById("progress-bar");
+  var themeBtn = document.getElementById("theme-toggle");
+  var tocWrap = document.getElementById("toc-wrap");
+  var tocToggle = document.getElementById("toc-toggle");
+  var tocClose = document.getElementById("toc-close");
+  var tocBackdrop = document.getElementById("toc-backdrop");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function stored(key, fallback) {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  var theme = stored("hv-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  var size = stored("hv-size", "md");
+  root.setAttribute("data-theme", theme);
+  root.setAttribute("data-size", size);
+
+  function syncThemeLabel() {
+    var dark = root.getAttribute("data-theme") === "dark";
+    themeBtn.textContent = dark ? "浅色" : "深色";
+    themeBtn.setAttribute("aria-pressed", dark ? "true" : "false");
+  }
+  syncThemeLabel();
+
+  themeBtn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    save("hv-theme", next);
+    syncThemeLabel();
+  });
+
+  var sizes = ["sm", "md", "lg"];
+  document.getElementById("size-down").addEventListener("click", function () {
+    var i = Math.max(0, sizes.indexOf(root.getAttribute("data-size")) - 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+  document.getElementById("size-up").addEventListener("click", function () {
+    var i = Math.min(sizes.length - 1, sizes.indexOf(root.getAttribute("data-size")) + 1);
+    root.setAttribute("data-size", sizes[i]);
+    save("hv-size", sizes[i]);
+  });
+
+  var links = [].slice.call(document.querySelectorAll(".toc a[href^='#']"));
+  var headings = [].slice.call(document.querySelectorAll(".article h1[id], .article h2[id], .article h3[id]"));
+
+  function syncToc() {
+    var probe = topbar.offsetHeight + 48;
+    var activeId = null;
+    headings.forEach(function (h) {
+      if (h.id && h.getBoundingClientRect().top <= probe) activeId = h.id;
+    });
+    if (!activeId && headings[0]) activeId = headings[0].id;
+    links.forEach(function (a) {
+      var id = decodeURIComponent((a.getAttribute("href") || "").slice(1));
+      a.classList.toggle("is-active", id === activeId);
+    });
+  }
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = p + "%";
+    topbar.classList.toggle("is-scrolled", window.scrollY > 16);
+    syncToc();
+  }
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  function setToc(open) {
+    root.classList.toggle("toc-open", open);
+    tocToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  tocToggle.addEventListener("click", function () {
+    setToc(!root.classList.contains("toc-open"));
+  });
+  tocClose.addEventListener("click", function () { setToc(false); });
+  tocBackdrop.addEventListener("click", function () { setToc(false); });
+  links.forEach(function (a, i) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      var raw = (a.getAttribute("href") || "").replace(/^#/, "");
+      try { raw = decodeURIComponent(raw); } catch (err) {}
+      if (!/^sec-\d+$/.test(raw)) {
+        raw = (headings[i] && headings[i].id) || "";
+      }
+      var target = (raw && document.getElementById(raw)) || headings[i];
+      if (!target) return;
+      var y = target.getBoundingClientRect().top + window.pageYOffset - (topbar.offsetHeight + 12);
+      if (window.scrollTo) {
+        window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
+      } else {
+        target.scrollIntoView(true);
+      }
+      try {
+        if (raw && /^sec-\d+$/.test(raw) && history.replaceState) {
+          history.replaceState(null, "", "#" + raw);
+        }
+      } catch (err) {}
+      setToc(false);
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setToc(false);
+  });
+})();
+</script>
+</body>
+</html>

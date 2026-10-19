@@ -1,0 +1,6 @@
+{
+  "slug": "macro-research",
+  "name": "宏观研究",
+  "description": "消费、地产等非公司对象的时点宏观报告。路径：宏观研究/<板块>/<YYYYQn或YYYYMM>/。触发：宏观研究、社零、地产周期、消费拐点、行业时点。",
+  "version": "1.0.0"
+}

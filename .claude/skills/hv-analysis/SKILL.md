@@ -5,7 +5,7 @@ description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）
 
 # 横纵分析法深度研究
 
-> **分流**：用户要的是值不值得买、仓位、买卖点、宏观过滤或投资备忘录时，改走 `.cursor/skills/trade-research/SKILL.md`。本 skill 只回答「这是谁、怎么长成这样」。
+> **分流**：上市公司买卖/仓位走 `.cursor/skills/trade-research/SKILL.md`。消费、地产等非公司时点走 `.cursor/skills/macro-research/SKILL.md`。本 skill 只回答「这是谁、怎么长成这样」。
 
 > **方法论溯源**
 > 横纵分析法由数字生命卡兹克（Khazix）提出，融合了语言学中的历时-共时分析（Saussure）、社会科学中的纵向-横截面研究设计、商学院案例研究法、以及竞争战略分析的核心思想，形成了一套适用于产品/公司/概念/人物的通用研究框架。核心原则不变：纵向追时间深度，横向追同期广度，最终交汇出判断。
