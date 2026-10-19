@@ -270,6 +270,9 @@ def md_to_reading_html(
     title: str = "横纵分析报告",
     author: str = "玉笛百科",
     subtitle: str = "",
+    kicker: str = "横纵分析",
+    page_suffix: str = "横纵分析报告",
+    subtitle_fallback: str = "横纵分析法深度研究报告",
 ) -> str:
     md_text = EMOJI_RE.sub("", md_text)
     extracted_title, body_md = strip_first_h1(md_text)
@@ -282,7 +285,7 @@ def md_to_reading_html(
     if subtitle:
         cover_sub = subtitle
     elif not cover_sub:
-        cover_sub = "横纵分析法深度研究报告"
+        cover_sub = subtitle_fallback
 
     count = word_count(md_text)
     minutes = reading_minutes(count)
@@ -302,11 +305,11 @@ def md_to_reading_html(
 
     template = TEMPLATE_PATH.read_text(encoding="utf-8")
     replacements = {
-        "PAGE_TITLE": html_lib.escape(f"{cover_title}横纵分析报告"),
+        "PAGE_TITLE": html_lib.escape(f"{cover_title}{page_suffix}"),
         "TITLE": html_lib.escape(cover_title),
         "COVER_TITLE": html_lib.escape(cover_title),
         "SUBTITLE": html_lib.escape(cover_sub),
-        "COVER_KICKER": "横纵分析",
+        "COVER_KICKER": html_lib.escape(kicker),
         "META_HTML": build_meta_html(meta, author, count, minutes),
         "TOC_HTML": toc_html,
         "BODY": html_body,
@@ -330,6 +333,13 @@ def main() -> None:
     parser.add_argument("--title", default=None, help="封面主标题；默认取文首 H1")
     parser.add_argument("--subtitle", default="", help="封面副标题；默认从 H1 冒号后拆")
     parser.add_argument("--author", default="玉笛百科", help="作者 / 研究员")
+    parser.add_argument("--kicker", default="横纵分析", help="封面左上角小标")
+    parser.add_argument("--page-suffix", default="横纵分析报告", help="浏览器标题后缀")
+    parser.add_argument(
+        "--subtitle-fallback",
+        default="横纵分析法深度研究报告",
+        help="H1 拆不出副标题时的兜底",
+    )
     args = parser.parse_args()
 
     src = Path(args.input)
@@ -355,6 +365,9 @@ def main() -> None:
         title=args.title or "横纵分析报告",
         author=args.author,
         subtitle=args.subtitle,
+        kicker=args.kicker,
+        page_suffix=args.page_suffix,
+        subtitle_fallback=args.subtitle_fallback,
     )
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(html, encoding="utf-8")

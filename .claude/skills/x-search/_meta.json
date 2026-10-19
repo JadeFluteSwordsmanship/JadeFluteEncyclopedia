@@ -1,0 +1,6 @@
+{
+  "slug": "x-search",
+  "name": "X/Twitter 读取",
+  "description": "按 URL 或 status ID 读取 X 帖子。直连 x.com 常 403，走 fxtwitter。无关键词火hose。",
+  "version": "1.0.0"
+}
