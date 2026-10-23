@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1225218169",
+      "time": "2026-04-27 22:12:39",
+      "detail": "http://file.finance.qq.com/finance/hs/pdf/2026/04/28/1225218169.PDF",
+      "type": 0,
+      "title": "中国稀土：2026年一季度报告",
+      "url": "http://stockhtm.finance.qq.com/sstock/quotpage/q/000831.htm#notice-detail?id=1225218169&d=20260428",
+      "pdf": "http://file.finance.qq.com/finance/hs/pdf/2026/04/28/1225218169.PDF",
+      "content": "",
+      "detail_oem": "",
+      "stockcode": [
+        {
+          "symbol": "sz000831",
+          "name": "中国稀土"
+        }
+      ]
+    }
+  ]
+}

@@ -15,10 +15,16 @@
 | summary | 非空字符串数组；观点依据在六章给出 |
 | verdicts | 四对象依次label为盈利兑现、逆境反转、估值压缩、预期提高；各含status、detail、tone |
 | kpis | 零至六对象；各含label、value、note、sources、period |
-| sections | 恰好六对象，id依次q1至q6，title非空、blocks非空数组 |
+| sections | 六或七对象，id严格依次q1至qN（N为6或7）；q7仅可最后追加，拒绝少于六、多于七、缺id、重复或错位；title非空、blocks非空数组 |
 | sources | 来源对象数组，ID唯一；research／demo非空，draft允许为空 |
 
 `value`可为非空文字或有限数字；文字数字须带单位。缺项卡用“暂缺”并解释，不省略source和period字段，可引用证实未披露的原始材料。tone为neutral、primary、risk、positive：primary强调主观点，risk提示风险，positive用中国市场红色；不表示概率。
+
+## 可选q7附录
+
+默认保留独立q1至q6。仅用户明确要求七问或追加第七问时，允许末尾追加q7；使用现有id、title、blocks结构，不增加顶层交易字段，也不依赖trade-research。HTML与Markdown目录和正文自动遍历六或七节；六问示例保持不变。
+
+人工按report-template.md与research-method.md复核q7：明确分析者假设的周期、无杠杆示例、非用户仓位与非个性化立场；给long／short／观望、核心证据出处与最强反证；分别列证伪、价格风险止损、时间止损及止盈，阈值需推导、不盲套固定5–8%。A股融券能否实际借到不能由融券余额推断，未核验券源时不称可执行做空。自动校验只验证通用结构和引用，不代替用户授权及上述内容的人工检查。
 
 ## 来源对象
 
@@ -64,7 +70,7 @@ chart.series每项仅name与values数组，长度与categories一致；值是有
 
 ## 资料不足的draft
 
-使用 `mode=draft` 交付缺口骨架，HTML与Markdown醒目显示“资料不足／研究骨架，尚未完成公司深度研究”。允许sources和kpis为空，仍保留六章、四状态卡，状态注明证据不足；仅有二手资料也可引用，但不伪造primary。draft无来源时只写定性缺口与研究问题，不生成无来源数字图。所有有数字的表格／chart／KPI仍受来源与period约束。不要把draft称为正式公司研究；合成演示只允许demo。
+使用 `mode=draft` 交付缺口骨架，HTML与Markdown醒目显示“资料不足／研究骨架，尚未完成公司深度研究”。允许sources和kpis为空，仍保留六章、四状态卡，状态注明证据不足；仅有二手资料也可引用，但不伪造primary。用户明确要求q7时，可追加仅列待核验事项的第七节，不做价格判断或交易结论。draft无来源时只写定性缺口与研究问题，不生成无来源数字图。所有有数字的表格／chart／KPI仍受来源与period约束。不要把draft称为正式公司研究；合成演示只允许demo。
 
 ## 校验边界
 

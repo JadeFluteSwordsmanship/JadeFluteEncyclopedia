@@ -200,12 +200,12 @@ def validate_report(report):
             text(item[key], path + "." + key)
         scalar(item["value"], path + ".value")
         references(item["sources"], path + ".sources", ids, True)
-    array(report["sections"], "sections", 6, 6)
+    array(report["sections"], "sections", 6, 7)
     for i, section in enumerate(report["sections"]):
         path = f"sections[{i}]"
         obj(section, path, "id title blocks".split())
         if section["id"] != f"q{i + 1}":
-            fail(path + ".id", "六章节须按 q1..q6 排列，ID 不重复")
+            fail(path + ".id", "章节须按 q1..qN 排列（N 为 6 或 7），ID 不重复；q7 仅可最后追加")
         text(section["title"], path + ".title")
         array(section["blocks"], path + ".blocks", 1)
         for j, block in enumerate(section["blocks"]):
@@ -462,7 +462,8 @@ def render_html(report):
         parts.append('</section>')
     if warnings:
         parts.append('<aside class="callout tone-risk" aria-label="证据边界与数据缺口"><h3>证据边界与数据缺口</h3><ul>' + "".join('<li>' + esc(w) + '</li>' for w in warnings) + '</ul></aside>')
-    parts.append('<nav class="toc card" aria-label="六问目录"><strong>六问目录</strong><ol>' + "".join(f'<li><a href="#{s["id"]}">{esc(s["title"])}</a></li>' for s in report["sections"]) + '</ol><a href="#sources">来源清单</a> · <a href="#disclaimer">免责声明</a></nav><noscript><p class="callout">JavaScript 未启用：静态 SVG 和精确数据表均已显示，无需联网或安装运行环境。</p></noscript>')
+    toc_title = "六问目录" if len(report["sections"]) == 6 else "七问目录"
+    parts.append(f'<nav class="toc card" aria-label="{toc_title}"><strong>{toc_title}</strong><ol>' + "".join(f'<li><a href="#{s["id"]}">{esc(s["title"])}</a></li>' for s in report["sections"]) + '</ol><a href="#sources">来源清单</a> · <a href="#disclaimer">免责声明</a></nav><noscript><p class="callout">JavaScript 未启用：静态 SVG 和精确数据表均已显示，无需联网或安装运行环境。</p></noscript>')
     for section in report["sections"]:
         parts.append(f'<section id="{section["id"]}" aria-labelledby="{section["id"]}-title"><h2 id="{section["id"]}-title">{esc(section["title"])}</h2>')
         for i, block in enumerate(section["blocks"]):
@@ -521,7 +522,8 @@ def render_markdown(report):
             lines += [f'### {md_text(kpi["label"])}：{md_text(kpi["value"])}', md_text(kpi["note"]), md_note(report, kpi["sources"], kpi["period"])]
     if warnings:
         lines += ["## 证据边界与数据缺口", "\n".join("- " + md_text(w) for w in warnings)]
-    lines.append("## 六问目录\n" + "\n".join(f'- [{md_text(s["title"])}](#{s["id"]})' for s in report["sections"]))
+    toc_title = "六问目录" if len(report["sections"]) == 6 else "七问目录"
+    lines.append("## " + toc_title + "\n" + "\n".join(f'- [{md_text(s["title"])}](#{s["id"]})' for s in report["sections"]))
     for section in report["sections"]:
         lines += [f'<a id="{section["id"]}"></a>', "## " + md_text(section["title"])]
         for block in section["blocks"]:

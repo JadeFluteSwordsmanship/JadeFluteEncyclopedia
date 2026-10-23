@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1225387687",
+      "time": "2026-06-25 17:30:15",
+      "detail": "http://file.finance.qq.com/finance/hs/pdf/2026/06/26/1225387687.PDF",
+      "type": 0,
+      "title": "中国稀土：关于调整2026年日常关联交易预计发生金额的公告",
+      "url": "http://stockhtm.finance.qq.com/sstock/quotpage/q/000831.htm#notice-detail?id=1225387687&d=20260626",
+      "pdf": "http://file.finance.qq.com/finance/hs/pdf/2026/06/26/1225387687.PDF",
+      "content": "",
+      "detail_oem": "",
+      "stockcode": [
+        {
+          "symbol": "sz000831",
+          "name": "中国稀土"
+        }
+      ]
+    }
+  ]
+}

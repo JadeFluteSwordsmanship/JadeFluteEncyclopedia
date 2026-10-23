@@ -105,6 +105,18 @@ def draft_fixture(with_secondary=False):
     return report
 
 
+def seven_question_fixture(report):
+    report = copy.deepcopy(report)
+    report["sections"].append({
+        "id": "q7", "title": "七、分析者假设下的立场与退出条件（测试夹具）",
+        "blocks": [
+            {"type": "callout", "tone": "risk", "text": "结构测试前提：一个季度、无杠杆示例、非用户仓位；所有材料仅为夹具，非个性化立场。"},
+            {"type": "paragraph", "text": "观望：证据不足。核心证据与最强反证均待核验；论点证伪、价格风险止损、时间止损及止盈条件不据夹具设价。", "sources": ["S1"]},
+        ],
+    })
+    return report
+
+
 class ReportTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -176,8 +188,8 @@ class ReportTests(unittest.TestCase):
         self.report["sections"][0]["blocks"][0] = {"type": "html", "text": "<b>禁止</b>"}
         self.rejected()
 
-    def test_six_sections_and_stable_order(self):
-        variants = [self.example["sections"][:5], self.example["sections"] + [self.example["sections"][0]], list(reversed(self.example["sections"]))]
+    def test_section_bounds_and_stable_order(self):
+        variants = [self.example["sections"][:5], self.example["sections"] + self.example["sections"][:2], list(reversed(self.example["sections"]))]
         for sections in variants:
             with self.subTest(count=len(sections)):
                 self.report["sections"] = copy.deepcopy(sections)
@@ -185,6 +197,120 @@ class ReportTests(unittest.TestCase):
         self.report = copy.deepcopy(self.example)
         self.report["sections"][1]["id"] = "q1"
         self.rejected()
+
+    def test_seven_sections_render_html_and_directory(self):
+        report = seven_question_fixture(self.report)
+        validate_report(report)
+        page = render_html(report)
+        parser = PageParser()
+        parser.feed(page)
+        self.assertIn('aria-label="七问目录"><strong>七问目录</strong>', page)
+        self.assertNotIn("六问目录", page)
+        self.assertEqual(parser.id_counts["q7"], 1)
+        self.assertEqual(parser.id_counts["q7-title"], 1)
+        self.assertIn('id="q7-b2"', page)
+        self.assertIn('href="#source-S1"', page[page.index('<section id="q7"'):])
+        directory = page[page.index('<nav class="toc'):page.index('</nav>')]
+        self.assertEqual(re.findall(r'href="#(q[1-7])"', directory), [f"q{i}" for i in range(1, 8)])
+        self.assertTrue(all(count == 1 for count in parser.id_counts.values()))
+        self.assertEqual(page.count(DISCLAIMER), 1)
+        validate_html(report, page)
+
+    def test_seven_sections_render_markdown_and_directory(self):
+        report = seven_question_fixture(self.report)
+        markdown = render_markdown(report)
+        self.assertIn("## 七问目录\n", markdown)
+        self.assertNotIn("## 六问目录", markdown)
+        directory = markdown.split("## 七问目录\n", 1)[1].split('<a id="q1">', 1)[0]
+        self.assertEqual(re.findall(r'\]\(#(q[1-7])\)', directory), [f"q{i}" for i in range(1, 8)])
+        self.assertIn('<a id="q7"></a>', markdown)
+        self.assertIn("## " + report["sections"][-1]["title"], markdown)
+        self.assertIn("观望：证据不足", markdown)
+        appendix = markdown.split('<a id="q7"></a>', 1)[1]
+        self.assertIn("来源／口径：[S1]", appendix)
+        self.assertTrue(markdown.endswith(DISCLAIMER + "\n"))
+
+    def test_seven_sections_cli_generation_and_validation(self):
+        report = seven_question_fixture(self.report)
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            source, output, markdown = work / "seven.json", work / "seven.html", work / "seven.md"
+            source.write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+            self.run_cli(ROOT, "render_report.py", source, output, "--markdown", markdown, cwd=work)
+            self.run_cli(ROOT, "validate_report.py", source, "--html", output, cwd=work)
+            self.assertEqual(output.read_text(encoding="utf-8"), render_html(report))
+            self.assertEqual(markdown.read_text(encoding="utf-8"), render_markdown(report))
+            self.assertIn('href="#q7"', output.read_text(encoding="utf-8"))
+            self.assertIn('](#q7)', markdown.read_text(encoding="utf-8"))
+
+    def test_six_sections_remain_valid_without_q7(self):
+        for report in [self.report, research_fixture(), draft_fixture()]:
+            with self.subTest(mode=report["mode"]):
+                self.assertEqual([s["id"] for s in report["sections"]], [f"q{i}" for i in range(1, 7)])
+                validate_report(report)
+                page, markdown = render_html(report), render_markdown(report)
+                self.assertIn('aria-label="六问目录"', page)
+                self.assertIn("## 六问目录\n", markdown)
+                self.assertNotIn('id="q7"', page)
+                self.assertNotIn('href="#q7"', page)
+                self.assertNotIn('<a id="q7">', markdown)
+                self.assertNotIn('](#q7)', markdown)
+                validate_html(report, page)
+        self.assertEqual(render_html(self.report), self.html)
+        self.assertEqual(render_markdown(self.report), self.markdown)
+
+    def test_q7_must_be_last(self):
+        for index in range(6):
+            with self.subTest(index=index):
+                report = seven_question_fixture(self.report)
+                report["sections"].insert(index, report["sections"].pop())
+                with self.assertRaisesRegex(ReportError, rf"sections\[{index}\]\.id"):
+                    validate_report(report)
+                for renderer in [render_html, render_markdown]:
+                    with self.assertRaises(ReportError):
+                        renderer(report)
+
+    def test_eight_sections_rejected(self):
+        report = seven_question_fixture(self.report)
+        report["sections"].append({"id": "q8", "title": "不允许的第八问", "blocks": [{"type": "paragraph", "text": "仅用于边界测试"}]})
+        self.assertEqual([s["id"] for s in report["sections"]], [f"q{i}" for i in range(1, 9)])
+        with self.assertRaisesRegex(ReportError, r"sections: 数组长度应为 6\.\.7"):
+            validate_report(report)
+        for renderer in [render_html, render_markdown]:
+            with self.assertRaises(ReportError):
+                renderer(report)
+
+    def test_malformed_q7_rejected(self):
+        valid = seven_question_fixture(self.report)["sections"][-1]
+        variants = [
+            None, [], "q7", {},
+            {k: v for k, v in valid.items() if k != "id"},
+            *[{**valid, "id": value} for value in ["q6", "q8", "q07", "", None, 7, []]],
+            {**valid, "title": ""},
+            {**valid, "blocks": []},
+            {**valid, "blocks": [{"type": "paragraph"}]},
+            {**valid, "blocks": [{"type": "paragraph", "text": "待核验", "sources": ["S99"]}]},
+            {**valid, "blocks": [{"type": "paragraph", "text": "待核验", "sources": ["S1", "S1"]}]},
+            {**valid, "blocks": [{"type": "html", "text": "不接受原始HTML"}]},
+        ]
+        for index, section in enumerate(variants):
+            with self.subTest(index=index):
+                report = seven_question_fixture(self.report)
+                report["sections"][-1] = copy.deepcopy(section)
+                with self.assertRaisesRegex(ReportError, r"sections\[6\]"):
+                    validate_report(report)
+                for renderer in [render_html, render_markdown]:
+                    with self.assertRaises(ReportError):
+                        renderer(report)
+
+    def test_missing_section_ids_rejected_for_six_and_seven(self):
+        for original in [self.report, seven_question_fixture(self.report)]:
+            for index in range(len(original["sections"])):
+                with self.subTest(count=len(original["sections"]), index=index):
+                    report = copy.deepcopy(original)
+                    del report["sections"][index]["id"]
+                    with self.assertRaisesRegex(ReportError, rf"sections\[{index}\]: 缺少字段 id"):
+                        validate_report(report)
 
     def test_four_verdicts_labels_and_tones(self):
         for length in [0, 3, 5]:
