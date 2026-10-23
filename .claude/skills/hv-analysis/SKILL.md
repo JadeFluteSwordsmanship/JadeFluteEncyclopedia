@@ -1,11 +1,11 @@
 ---
 name: hv-analysis
-description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown 与网页 HTML（仓库可另存 PDF）。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。上市公司买卖、仓位、值不值得买、投资备忘录走 trade-research。"
+description: "用横纵分析法（HV Analysis / Horizontal-Vertical Analysis）对产品、公司、概念、技术或人物做深度研究并生成 Markdown 与网页 HTML（仓库可另存 PDF）。纵轴还原从诞生到当下的生命历程，横轴对比同期竞品，交汇产出洞察。用户提到横纵分析、深度研究、调研、竞品分析、deep research，或说帮我研究/分析/搞懂某个对象时使用。不要用于简单名词解释。上市公司一般公司分析、六问深研、SDGR 风格研报走 company-deep-research；只有明确横纵历史研究才走本技能。买卖、仓位、值不值得买、投资备忘录走 trade-research。"
 ---
 
 # 横纵分析法深度研究
 
-> **分流**：上市公司买卖/仓位走 `.cursor/skills/trade-research/SKILL.md`。消费、地产等非公司时点走 `.cursor/skills/macro-research/SKILL.md`。本 skill 只回答「这是谁、怎么长成这样」。
+> **分流**：上市公司一般公司分析、六问深研与 SDGR 风格报告走 `../company-deep-research/SKILL.md`；本技能保留明确要求的横纵历史研究。上市公司买卖/仓位走 `.cursor/skills/trade-research/SKILL.md`。消费、地产等非公司时点走 `.cursor/skills/macro-research/SKILL.md`。本 skill 只回答「这是谁、怎么长成这样」。
 
 > **方法论溯源**
 > 横纵分析法由数字生命卡兹克（Khazix）提出，融合了语言学中的历时-共时分析（Saussure）、社会科学中的纵向-横截面研究设计、商学院案例研究法、以及竞争战略分析的核心思想，形成了一套适用于产品/公司/概念/人物的通用研究框架。核心原则不变：纵向追时间深度，横向追同期广度，最终交汇出判断。
