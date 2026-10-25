@@ -1,0 +1,115 @@
+德明利（001309）行业与利润持续性：来源摘录
+信息截止：2026-10-25（北京时间）。检索及原网页回取日：2026-10-25。
+用途：来源底稿、口径纠错与待验证指标，不是最终研究报告；不包含买卖、估值或仓位建议。
+操作范围：本次仅通过Read/Write清理这份已存在的底稿，不再联网；前次取证仅检索及回取公开HTML正文/摘要，未下载任何PDF。未运行git、修改技能/最终报告或创建任务；未访问或下载file.finance.qq.com，未换工具绕过既有拒绝。公司季报PDF由另一检索线核验。
+证据范围：仅收录前次实际工具回取的HTML原文、公开摘要及已核媒体网页，保留复核01—10与总缺口。不包含PDF原件或基于PDF的已核断言；媒体网页已核仅指报道内容可读，不代表其中财务、公司进度已获法定公告原件确认。
+
+2026-10-25本轮联网复核：10条关键证据与最强反例
+所有网页回取日为2026-10-25；网页无发布日期时明确记“未标日期”，回取日不是发布日期。A3正文=原研公开新闻；A3摘要=原研公开研究介绍/目录而非完整付费研究；A2=厂商官网技术/产品或经营自述；B=媒体原文/第三方转载，涉及财务及公司进度仍需核实公告原文；C=只有搜索索引，仅作未核线索，不列为已核证据。以下不使用截止日之后资料，不把预测改写成已实现。
+
+[复核01] Q4仍涨：找到2026原机构正文，不是仅凭媒体
+来源/日期：TrendForce，2026-09-30，公开presscenter正文（A3正文）。
+URL：https://www.trendforce.com/presscenter/news/20260930-13258.html
+同日中文原页：https://www.trendforce.com.tw/presscenter/news/20260930-13256.html
+原句：“Conventional DRAM contract prices are projected to grow 10–15% QoQ in 4Q26, while NAND Flash contract prices are expected to increase 15–20%”。
+可核结论：9月30日版本预测2026Q4普通DRAM合约价环比+10–15%、整体NAND Flash+15–20%；原文预期eSSD为唯一较上季涨幅扩大的存储产品类别。预测截至10月25日仍非季度实现值，合约价≠现货价≠德明利净售价。
+边界/缺口：普通DRAM不包含将HBM单独列入的整体口径；此正文没有确认“含HBM整体DRAM+15–20%”，更不能当HBM单品涨幅。未取得各品类实际成交序列及截止日最新数值预测表。
+
+[复核02] 涨价斜率：必须比较同产品、标日期的预测版本
+来源/日期：TrendForce，2026-03-31、2026-07-03、2026-09-30（均A3正文，本轮重新读取）。
+URL（Q2）：https://www.trendforce.com/presscenter/news/20260331-12995.html
+URL（Q3）：https://www.trendforce.com/presscenter/news/20260703-13134.html
+URL（Q4）：https://www.trendforce.com/presscenter/news/20260930-13258.html
+普通DRAM：Q2预测+58–63% → Q3预测+13–18% → Q4预测+10–15%；NAND整体：Q2预测+70–75% → Q3预测+10–15% → Q4九月底预测+15–20%。
+口径：这是不同发布日期的季度预测比较，不是季度结算价/实测涨幅。普通DRAM预测涨幅收敛；NAND九月底版本较Q3预测回升，不能机械说所有品类一路减速。10月21日更新提示另见[复核04]，不可把九月底预测视为截至10月25日毫无变化的最终结论。
+缺口：媒体“80%→40%→20%”没有找到同口径原研正文、统计篮子或实现/预测说明，不纳入已核斜率。没有价格绝对值序列，不计算虚构全年累计涨幅。
+
+[复核03] eSSD价格与需求分别核验，不能映射全部企业级收入
+来源/日期：TrendForce，2026-09-24《2026年第四季記憶體價格展望》（A3摘要）；2026-09-30新闻（A3正文）。
+URL（公开研究介绍）：https://www.trendforce.com.tw/research/download/RP260924CM
+URL（公开新闻）：https://www.trendforce.com/presscenter/news/20260930-13258.html
+9月24日公开目录原句：“4Q26 Enterprise SSD合約價季增23-28%逆勢擴大……整體NAND Flash季增15-20%”。本轮只读介绍与目录，没有下载或读完整9页研究。
+9月30日正文另预测2026年eSSD位元需求同比超过80%，指向CSP推理部署、实时检索/缓存、QLC及vector database需求；多数新增供给已预订。23–28%是季度价格预测，超过80%是全年位元需求预测，均不是德明利收入增速。
+缺口：德明利企业级口径包含PCIe/SATA SSD及DDR5 RDIMM；eSSD/RDIMM收入拆分、TLC/QLC比例、自研主控出货占比、客户合同调价与实际采购/销售价均未核，不能把eSSD预测用于所有产品毛利。
+
+[复核04] 最强反例：原机构10月21日直接预警消费模组收入和利润率可下降
+来源/日期：TrendForce，2026-10-21《NAND Flash Market Bulletin - Oct. 21, 2026》（A3摘要，仅公开介绍/目录，非完整2页研究）。
+URL：https://www.trendforce.com/research/download/RP261021WT
+公开原句：“Suppliers are split on fourth-quarter contract pricing, so the average price increase is likely to narrow. Revenue and margins at consumer-focused module makers may decline.”
+另一原句：“Module makers face weak demand and high inventory, so spot trading is thin and prices stay range-bound.”
+可核结论：比9月底更新的原研明确提示Q4平均涨幅可能收窄、消费端模组收入与利润率可能下降、现货横盘。它直接反驳“存储仍涨→所有模组利润继续加速”，但没有给新百分比，也没有断言德明利或全部企业级产品已经下滑。
+传导旁证：7月3日Q3新闻原句“high upstream costs cannot be fully passed through to end markets”；9月30日Q4新闻称PC SSD采购量与容量双降，wafer高价无法被零售通路吸收、模组采购保守（URL见[复核01/02]）。
+反例的适用边界：德明利有企业级收入，不能按“纯消费模组”全盘套用；需核消费/企业级结构、同料号售价和成本、订单验收与回款。缺口为新数值预测表及公司实际价差，不擅自认定15–20%已被正式下修到某数字。
+
+[复核05] “所有存储未来都涨”已有原研子品类反例，2027仍须逐类看
+来源/日期：TrendForce，2026-10-22《eMMC/UFS Contract Price 4Q26》（A3摘要，仅读公开介绍/目录，非完整4页研究）。
+URL：https://www.trendforce.com/research/download/RP261022CU
+原句：“MLC eMMC dips for the first time”；“UFS gains slow……with new capacity arriving in the 1Q27 off-season, prices should plateau at high levels.”
+目录明示UFS涨幅收敛至个位数；TLC eMMC涨幅收窄；MLC eMMC因替代效应首次小幅回落；2027Q1淡季新增产能与渠道高库存下，价格预期高位趋平，MLC面临更大降价压力。
+口径：此页是10月22日研究的判断/展望，不是本轮独立核验成交价；小跌仅指MLC eMMC，不能扩写为整体NAND或eSSD已经转跌。个位数是UFS，不得改记LPDDR5X。
+缺口：没有子品类完整价格表、成交样本及德明利对应产品权重。故截至10月25日只支持“九月底Q4主要合约价预测仍涨、企业级与消费端明显分化”，不支持无期限、全品类单边上涨。
+
+[复核06] 利润变动：同比扭亏≠单季加速，财务暂保持媒体级
+来源一/日期：21经济网载全球财说，2026-10-19 12:19，孙宁郁（B，基于10月16日业绩预告，需核公告原文）。
+URL：https://www.21jingji.com/article/20261019/herald/2dc7083e34ef22b66a33b69baf2e67b5.html
+来源二/日期：证券时报网，2026-10-25 18:40，阮润生（B，报道三季报，需核公告原文）。
+URL：https://stcn.com/article/detail/4244603.html
+来源三/日期：新浪财经-鹰眼工作室，2026-10-25 17:00（B，AI财报解读，需核公告原文）。
+URL：https://finance.sina.com.cn/stock/aiassist/yjbg/2026-10-25/doc-iniwmtkr9778205.shtml
+21经济网写Q2归母26.71亿元、Q3预告26.33–29.33亿元；证券时报写Q3单季营收116.45亿元、归母27.29亿元、前三季度累计归母87.46亿元。按两家媒体舍入值条件计算Q3/Q2归母环比=(27.29/26.71-1)≈+2.17%，只是一条待公告复核线索，不是公告直接披露数字。
+新浪正文写Q3单季毛利率32.89%、环比-5.95个百分点，前三季度累计41.32%；该毛利数字不在10月19日21经济网原文，也不在上述证券时报原文，不可错挂来源。21经济网报道的H1累计47.12%与Q3单季32.89%的差不等于环比跌幅，两项均保持媒体级、待公告核验。
+可核判断：价格预测仍涨与单季利润近乎平稳/毛利率收敛可以并存；行业预测不能直接解释公司已发生的利润变化。单位净售价减单位结转成本的价差、销量、产品结构、费用与资金占用需要分别桥接。不能断言因低价库存耗尽、FIFO或某供应商良率导致；存货计价政策尚未通过本底稿对应PDF原件核验，不作已核事实。
+缺口：公司Q2/Q3原始收入/成本与归母净利润、公告发布时间、量价结构及采购销售条款交另一检索线核验。本轮未读取公司季报PDF，不使用10月26日或之后材料。
+
+[复核07] HBM/DRAM/NAND/eSSD不是四个平级介质，主控也不是存储晶圆
+来源/日期：美光官网技术页均未标明确发布日期，2026-10-25回取（A2，基础定义）；极限智芯技术词汇页2026-07-17发布/更新（厂商技术解释）。
+URL（HBM）：https://www.micron.cn/products/memory/hbm
+URL（DDR5）：https://www.micron.com/content/micron/tw/zh-tw/products/memory/dram-components/ddr5-sdram.html
+URL（NAND/主控）：https://www.micron.com/products/nand-flash/choosing-the-right-nand
+URL（断电保持/分类）：https://www.limchip.com/blog/nor-nand-dram-ddr-hbm-sram-memory-glossary.html
+定义：DRAM是易失性的工作内存，DDR5 RDIMM是服务器DRAM模组；HBM是3D堆叠的高带宽DRAM架构，属于DRAM而非NAND，不等于DDR5 RDIMM。NAND Flash是非易失性的长期存储介质；TLC/QLC分别每单元3/4位。eSSD是企业级固态硬盘成品，以NAND、主控与固件实现存储，可另配DRAM缓存，并非第四种与NAND并列的基础介质。
+原厂技术原句：HBM为“采用3D堆叠技术的高性能DRAM”；“NAND requires a controller……and specific firmware for error code correction (ECC), bad block management, and wear leveling.” 主控负责介质管理/接口与数据处理，能自研主控≠自产NAND/DRAM/HBM。
+德明利映射：官网定位“专业存储控制芯片及解决方案提供商”，数据中心页明确3D NAND、PCIe Gen5与NVMe，未提供H3361/H8560量产收入证据。
+URL（主营/应用，均未标日期）：https://www.twsc.com.cn/ ；https://www.twsc.com.cn/dataCenter/index.html
+缺口：HBM不是其已核主营制造收入；未核自研主控覆盖全产品比例，不能把外采主控的标准化方案说成全部自研。
+
+[复核08] 企业级主控真实进度：H3361已推出；H8560回片验证≠量产收入
+来源/日期：证券时报网2026-10-25 18:40（B，公司介绍的媒体转述，需核公告原文）。
+URL：https://stcn.com/article/detail/4244603.html
+正文：H3361企业级eSSD SATA&PCIe双模主控已“推出”；H8560为围绕PCM介质自研的主控，已“完成回片验证”，适配KV缓存与热数据分层。报道另称企业级产品已向头部云服务商批量出货、越南基地已量产交付。
+互补证据/日期：新浪转载投资者关系记录，页面公告日2026-05-13，活动2026-05-11（B转载，文本中问答2后有缺段，非交易所原件）。
+URL：https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=82526147&id=12318482
+可读原句：“2026年推出企业级自研主控芯片H3361”；“并未在全品类标准化主控赛道进行全面扩张”，资源聚焦定制化主控，标准化产品依托外部成熟资源。不依据缺段猜测详细进度。
+分层结论：已推出H3361可支持存在具体企业级主控项目；H8560仅支持工程样片回片/验证阶段。整条企业级产品线批量出货不能证明每个新主控料号已量产销售，更不能证明PCM介质本身已规模制造并确认收入；PCIe6.0列入矩阵亦不证明全部平台批量交付。“行业首颗”仅为公司经媒体转述的说法，无独立验证，不作为竞争排名。
+缺口：H3361/H8560按型号的量产放行、客户认证、批量出货量、对应成品料号、收入/毛利与回款未核；本轮未找到其2026进度的可读公司官网专文，不能将2025官网产品稿替代。H9560只有搜索转引预期线索，本轮不纳入已核进度。
+
+[复核09] supplier与competitor必须按产品层划分：原厂可能兼有成品竞争
+来源/日期：上述2026-05-13新浪转载记录（B，公司自述，需核原文）；长江存储PE501、美光6600 ION官网产品页均未标明确发布日期，2026-10-25回取（A2产品自述）。
+URL（采购关系类型）：https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=82526147&id=12318482
+URL（长江存储成品）：https://www.ymtc.com/cn/products/76.html?cat=36
+URL（美光成品）：https://www.micron.com/products/storage/ssd/data-center-ssd/6600-ion
+记录原句：“与多家存储原厂或其主要经销商建立了长期战略合作关系”；“原厂专注晶圆制造，模组厂负责将晶圆颗粒进行产品化落地，包括控制器适配、固件开发、兼容性测试、产品调试”。这支持采购/合作关系类型，原文本段没有可核供应商名单、份额或固定价条款。
+产品原文：长江存储PE501采用自家三维NAND的PCIe5.0 QLC企业级SSD；美光6600 ION采用自家G9 QLC NAND，明确整合自研controller、DRAM和firmware。因此上游存储原厂在晶圆层可为供给方，在自品牌eSSD成品层也有竞争重叠；不能简单列“原厂永远不是竞争者”，也不能把原厂当纯模组可比。
+缺口：这些原厂产品页不证明其与德明利存在特定采购合同；兼容某家颗粒≠正在直接向该原厂采购≠独家保供。长江存储/美光/三星/SK海力士/长鑫逐家的德明利采购金额、直接或经代理、LTA期限/数量/价格均未取得原件；不采用社区“占70%晶圆”“三家独家保供”等传闻，不编客户关系。
+
+[复核10] 同业层级与最强正向反证：有产品和交付，不是只有涨价故事
+来源/日期：江波龙301308官网UNCIA3836页未标日期，2026-10-25回取；佰维688525官网2026-09-16（均A2产品/公司自述）。
+URL（江波龙）：https://cn.longsys.com/product/enterprise-ssd/UNCIA3836SATASSD.html
+URL（佰维）：https://www.biwin.com.cn/article/detail/507
+原文：江波龙有国产主控+国产TLC NAND、自主软硬件设计的企业级SATA SSD；佰维有PCIe5.0 TLC/QLC SSD、SATA SSD、DDR5 RDIMM和CXL，自有封测/固件算法，并自述PCIe/SATA产品批量供货。这是更直接的模组/方案同业，但具体接口、介质、客户与业务结构仍需对齐。“国产颗粒+主控”、LTA、认证不构成德明利独家壁垒；平台兼容认证≠某客户长期份额。
+来源/日期：香农芯创300475，中新经纬2026-06-15 09:31（B，公司回复转述）；深科技000021官网公司介绍未标日期，2026-10-25回取（A2）。
+URL（香农）：https://www.jwview.com/jingwei/kb/m/06-15/234099.shtml
+URL（深科技）：https://en.kaifa.cn/AboutUs/
+香农主营代理分销+自主品牌，明确“没有芯片封装业务”，不能当纯模组；深科技官网支持电子制造、半导体与数据存储制造服务定位，封测相关分部不同于产品主控/固件定价，不与德明利直接套同一晶圆价差毛利模型。本页未拆出2026封测业务比例，缺口留存，不读取历史封测PDF补成2026事实。
+最强正向反证：对“德明利只有囤货/涨价、企业级毫无产品兑现”的说法，21经济网2026-10-19报道前三季度企业级销售82.37亿元（B、需核公告原文），证券时报2026-10-25报道头部云服务商批量出货，另有德明利官网2025-09-21自述已进入头部云厂商并规模出货（A2、非客户独立确认）。
+URL（21经济网）：https://www.21jingji.com/article/20261019/herald/2dc7083e34ef22b66a33b69baf2e67b5.html
+URL（证券时报）：https://stcn.com/article/detail/4244603.html
+URL（公司历史原页）：https://www.twsc.com.cn/companyNews/20251017/1163797206445064192.html
+官网正文日期2025-09-21与URL路径20251017不同，按正文记录并保留差异，不伪称2026新闻。该页产品范围包括PCIe/SATA SSD和RDIMM，支持历史业务方向，不替代2026主控型号的量产证据。
+待补：同接口/容量/介质比较、主控自研实际占比、产品收入与客户复购、成本传导、库存周转及回款；没有可核长期份额，不作纯同业毛利或竞争力排名。
+
+本轮排除与总缺口
+中国商报网原页已读：2026-10-22 10:23:25，https://www.zgswcn.com/news.html?aid=378444 。该页不是德明利主控进度证据；“80%→40%→20%”“含HBM整体DRAM+15–20%”仅媒体转述，未找到同口径原机构表，不升级为已核数据；eSSD23–28%已另以9月24日原研公开目录核验。该页其他无原文数字与投资推介不采用。
+不采用长鑫“1310亿”等无原文财务/上市代码，不引用黄仁勋只有财富号的采访；不为前次被拒绝下载换域名、换工具或走下载链。研究未触碰账户、季报PDF、技能、最终报告及git。
+总缺口：Q4最新完整分品类预测/成交表；公司Q2/Q3法定财务；采购/销售价格联动与存货结转桥接；企业级eSSD/RDIMM拆分；H3361/H8560量产型号收入及客户独立认证；逐家供应合同与真实竞标重叠。
+当前最窄结论：原研支持九月底Q4主要合约价仍上涨的预测，并有eSSD需求与价格支撑；10月21–22日原研更新已提示消费端涨幅收窄、模组利润可能下降及MLC eMMC回落。德明利企业级业务存在产品与公司/媒体交付证据，但单季利润加速和新主控量产收入不能由行业涨价或回片验证推出。
