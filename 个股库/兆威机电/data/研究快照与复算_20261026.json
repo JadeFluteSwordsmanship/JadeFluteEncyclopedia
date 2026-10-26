@@ -1,0 +1,82 @@
+{
+  "research_date": "2026-10-26",
+  "identity": {"company": "深圳市兆威机电股份有限公司", "A_ticker": "003021", "H_ticker": "02692"},
+  "quote_boundary": "北京时间13:31任务开始后取得的10月26日盘中冻结快照，接口time仅标交易日期没有时分秒；不是当日收盘，不宣称精确13:31价。后续K线盘中变化不混入冻结估值。信息截至本次查询，尚未见2026Q3实报；公司拟10月29日披露。",
+  "snapshot": {
+    "A_price_cny": 95, "A_previous_close_cny": 91.73, "A_vendor_total_market_cap_yi_cny": 254.55,
+    "A_vendor_total_shares": 267942700, "A_vendor_float_shares": 208212213, "A_vendor_PE_TTM": 118.03,
+    "A_vendor_PE_fwd": 170.50, "A_vendor_PB": 5.02, "A_vendor_PS_TTM": 14.08,
+    "H_price_hkd": 38.48, "H_previous_close_hkd": 39.80, "H_vendor_total_market_cap_yi_hkd": 102.79,
+    "H_vendor_total_shares": 267120300, "H_vendor_float_shares": 25925900, "H_vendor_PE_TTM": 41.23,
+    "note": "A/H显示市值均是全体股本按当地股价估值的代理，不等于相应股份类别市值；两项不能相加。"
+  },
+  "completed_session_prices": {"2026-10-16_A_close": 61.11, "2026-10-19_A_close": 67.22, "2026-10-20_A_close": 72.57, "2026-10-21_A_close": 75.81, "2026-10-22_A_close": 83.39, "2026-10-23_A_close": 91.73, "2026-10-16_H_close": 26.30, "2026-10-20_H_close": 27.54, "2026-10-21_H_close": 28.18, "2026-10-22_H_close": 34.18, "2026-10-23_H_close": 39.80},
+  "source_boundaries": [
+    "公司中报摘要、异动公告、股本与项目公告通过ncontent原文转写核验；未下载file.finance.qq.com原始PDF，没有绕过前轮明确拒绝。",
+    "完整中报/年报以现有新浪HTML公告转写核相关原表，非直接PDF版式核验；财务证据文件区分合并与母公司。",
+    "9月股份月报取得HTML转写搜索片段，尚未全文读取；股数用于有明确限制的参考计算，不证明10月无其他股本变化。",
+    "原接口finance仅返回到2025，不能用于替代最新H1。",
+    "华泰8/17研报网页可读：1.64/2.58/2.54亿元利润及97元目标是单家分析师口径，不是多机构可靠一致预期；预测接口机构数为0和更新时间缺失。",
+    "微型传动2024中国3.9%全球1.4%等为Frost经招股资料的二手转述，非本次独立市占调查；机器人排行/80%份额与各种巨量出货无足够原文支持，剔除。"
+  ],
+  "financials_cny": {
+    "2024FY": {"revenue": 1524598553.40, "net_parent": 225094344.84, "net_ex_nonrecurring": 183641510.60, "cfo": 123682270.66},
+    "2025FY": {"revenue": 1715534329.63, "net_parent": 254292217.63, "net_ex_nonrecurring": 225146021.70, "cfo": 159412549.33, "capex_cash": 170524863.48},
+    "2025H1": {"revenue": 786568700.89, "net_parent": 113271162.92, "net_ex_nonrecurring": 96697477.17, "cfo": 46762981.56},
+    "2026Q1": {"revenue": 357477104.69, "net_parent": 40951727.67, "net_ex_nonrecurring": 32139133.45, "cfo": 38803303.35},
+    "2026H1": {
+      "unaudited": true, "revenue": 816448456.12, "cost": 565330781.50, "net_parent": 74645686.46, "net_ex_nonrecurring": 54183923.54,
+      "systems_revenue": 505945349.24, "systems_cost": 377410598.13, "systems_gross_margin_pct": 25.40,
+      "parts_revenue": 276406949.39, "parts_cost": 162034203.94, "parts_gross_margin_pct": 41.38,
+      "mold_other_revenue": 34096157.49, "gross_margin_pct": 30.75732126598,
+      "sales_expense": 32783113.60, "admin_expense": 54092135.59, "rnd_expense": 85645462.60,
+      "financial_expense": 12596865.97, "last_H1_financial_expense": -17482187.74,
+      "interest_cost": 1290438.11, "interest_income": 28282901.45, "fx_loss": 39245838.40,
+      "last_H1_fx_loss": -2349862.30, "pretax_profit": 81711586.95, "income_tax": 7065900.49,
+      "assets": 5908647135.22, "liabilities": 838677283.51, "equity_parent": 5069969851.71, "total_equity": 5069969851.71,
+      "cash_funds": 1662747190.33, "cash_equivalents": 1660162545.00, "restricted_cash_funds": 2584645.33,
+      "financial_assets": 1171543047.78, "short_term_borrowings": 130207311.25, "current_liabilities": 750990725.07,
+      "lease_liabilities": 4787117.80, "noncurrent_due_one_year": 5787582.10,
+      "cfo": 132586623.84, "capex_cash": 128396292.93, "cfi": -101644786.62, "cff": 1484937300.38,
+      "equity_cash_received": 1632033575.10, "fx_cash_effect": -37497355.76, "cash_increase": 1478381781.84,
+      "opening_cash_equivalents": 181780763.16, "cash_sale_received": 901233483.19, "cash_purchase_paid": 462495676.27
+    }
+  },
+  "share_bridge": {
+    "2025_end_A": 240734400, "IPO_H": 26748300, "2026_H1_A": 240815950, "2026_H1_H": 26748300, "2026_H1_total": 267564250,
+    "Sep_start_A": 240824350, "Sep_A_option_issue": 394850, "Sep_A_cancel": 24800,
+    "Sep_end_A": 241194400, "Sep_end_H_including_treasury": 26748300, "Sep_end_H_treasury": 822400,
+    "Sep_end_H_ex_treasury": 25925900, "Sep_end_total_including_treasury": 267942700,
+    "Sep_end_total_ex_treasury": 267120300,
+    "note": "9月月报搜索片段与已读9月注销公告数值一致；没有月报原件全文或供应商字段定义，不宣称float等同全H公众流通。持作库存不是注销。"
+  },
+  "FX": {"published": "2026-10-26T09:40:41+08:00", "hkd_to_cny": 0.85634, "original_quote": "100港元=85.634人民币", "nature": "当日中间价，不是盘中即期成交", "url": "https://www.news.cn/fortune/20261026/9675e30601c44f359c5065f0beb999a1/c.html"},
+  "robot_evidence": {
+    "abnormal_notice_id": "nos1225619876", "uploaded": "2026-10-23T17:44:29+08:00", "signed": "2026-10-24",
+    "human_robot_H1_revenue_share_upper_bound": 0.01, "upper_bound_cny": 8164484.5612,
+    "notice_claim": "相关人形机器人及AI硬件产品距离大规模量产还需较长时间，近期未新增大客户、未获取或预计获取新增大额订单；全年人形业务预计不构成重大影响。不是所有业务无订单，非业务收入为零。",
+    "2025_robot_revenue_yi_sellside_approx": 0.2387, "definition_warning": "全年宽机器人口径、研报二手；不能与H1人形窄口径直接算同比。",
+    "robot_revenue_2026_target_yi_sellside": [0.40, 0.50], "robot_revenue_2027_target_yi_sellside": 1.0,
+    "targets_warning": "华兴研报转述目标，不是已核订单或硬指引。",
+    "Q3_expected_disclosure": "2026-10-29", "Q3_not_yet_released": true,
+    "park_capex_plan_yi": 8.0, "land_contract_cny": 40910000, "capital_warning": "规划总投入不等于本期支付；土地合同额不等于已付现金。"
+  },
+  "calculations": {
+    "q2_revenue_yi": 4.5897135143, "q2_net_parent_yi": 0.3369395879, "q2_net_ex_nonrecurring_yi": 0.2204479009,
+    "ttm_profit_yi": 2.1566674117, "ttm_revenue_yi": 17.4541408486,
+    "A_price_times_all_registered_share_yi": 254.545565,
+    "A_price_times_ex_treasury_equity_proxy_yi": 253.764285,
+    "A_class_marketcap_yi": 229.13468, "H_class_marketcap_yi_hkd": 9.97628632,
+    "AplusH_actual_class_price_proxy_yi_cny": 237.6777730273,
+    "H_price_cny_using_middle_FX": 32.9519632, "A_H_price_ratio": 2.8829845258, "A_H_premium_pct": 188.2984525790,
+    "A_price_equity_proxy_PE": 117.6650064926,
+    "profit_required_PE40_60_100_yi": [6.344107125, 4.22940475, 2.53764285],
+    "profit_gap_vs2025_PE40_60_100_yi": [3.8011849487, 1.6864825737, -0.0052793263],
+    "H1_cfo_less_capex_yi": 0.0419033091,
+    "FY2025_cfo_less_capex_yi": -0.1111231415,
+    "humanrobotH1_revenue_upper_yi": 0.081644845612,
+    "Oct23_completed_week_return_pct": 50.1063655703,
+    "nonrecurring_share_of_H1_net_pct_approx": 27.4118
+  },
+  "valuation_assumption_warning": "A股每股定价模型用全体非库存股股数267120300为同价股权代理，而非实际两地合计市值；买全公司不能按A价买所有H股。主观估值PE、未来净利率、销量和ASP都不是公司承诺。IPO及金融资产不在PE股权结果上重复加现金。"
+}
