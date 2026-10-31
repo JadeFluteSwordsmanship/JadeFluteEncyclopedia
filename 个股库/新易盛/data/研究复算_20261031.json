@@ -1,0 +1,95 @@
+{
+  "research_date": "2026-10-31",
+  "decimal_precision": 28,
+  "rounding": "计算使用Decimal字符串；报告以亿元/元、两位小数显示，不以显示舍入数重算",
+  "source_registry_file": "财务业务证据_20261031.txt",
+  "sources": [
+    {"id":"S1","url":"https://gu.qq.com/sz300502","published_at":"2026-10-30","period":"收盘行情","accessed_at":"2026-10-31","read_boundary":"冻结JSON已读，未使用新价格"},
+    {"id":"S2","url":"https://www1.cfi.net.cn/p20261029004308.html","published_at":"2026-10-29","period":"2026-01-01至2026-09-30；余额09-30","accessed_at":"2026-10-31","read_boundary":"现成HTML主要数据与合并三表已读；未读PDF/末尾附件"},
+    {"id":"S3","url":"https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12528568","published_at":"2026-08-25","period":"2026-01-01至06-30","accessed_at":"2026-10-31","read_boundary":"HTML业务、产销、确认、资产负债和现金表相关部分已读；非完整PDF"},
+    {"id":"S4","url":"https://www.cnfin.com/announ/detail/index.html?dannoun=lcdetail&id=830311587696","published_at":"2026-04-24","period":"2026-01-01至03-31","accessed_at":"2026-10-31","read_boundary":"现成HTML合并三表已读；主要表归母权益比较列冲突未采"},
+    {"id":"S5","url":"https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12173345","published_at":"2026-04-24","period":"2025FY；比较2023FY/2024FY","accessed_at":"2026-10-31","read_boundary":"HTML主要财务、季度、产销研发已读；截断，capex/SBC未读到"},
+    {"id":"S6","url":"https://data.eastmoney.com/notices/detail/300502/AN202610291831188725.html","published_at":"2026-10-29","period":"10-29经营交流","accessed_at":"2026-10-31","read_boundary":"HTML原公告经营问答1-7及9-12已读，13-15截断"},
+    {"id":"S7","url":"https://stock.10jqka.com.cn/20261030/c681269291.shtml","published_at":"2026-10-30","period":"10-29经营交流转引","accessed_at":"2026-10-31","read_boundary":"HTML问答已读含13-15；未读所链接PDF"},
+    {"id":"S8","url":"https://www.eoptolink.com/news/18-events/368-ecoc-2026-eoptolink-s-xpo-and-npo-powering-next-gen-ai-infrastructure","published_at":"2026-09-24","period":"ECOC2026展示","accessed_at":"2026-10-31","read_boundary":"官网全文已读；不含销售订单"},
+    {"id":"S9","url":"https://www.lightwaveonline.com/home/news/55410716/ethernet-optical-transceiver-set-to-grow-120-in-2026","published_at":"2026-10-08","period":"2026/2027行业预测","accessed_at":"2026-10-31","read_boundary":"媒体正文已读，LightCounting报告本体未读"},
+    {"id":"S10","url":"https://finance.sina.com.cn/stock/estate/integration/2026-10-29/doc-iniwwyas2746108.shtml","published_at":"2026-10-29","period":"2026YTD/Q3","accessed_at":"2026-10-31","read_boundary":"媒体正文已读，仅财务数交叉检查"},
+    {"id":"S11","url":"https://finance.sina.cn/tech/2026-10-29/detail-iniwwyas2774333.d.html?vt=4","published_at":"2026-10-29","period":"2026YTD/Q3同业","accessed_at":"2026-10-31","read_boundary":"媒体正文已读，同行原公告未完整阅读"},
+    {"id":"S12","url":"https://www.cs.com.cn/ssgs/01/2026/08/25/detail_2026082510033765.html","published_at":"2026-08-25","period":"2026H1产销","accessed_at":"2026-10-31","read_boundary":"媒体正文已读，用作第二来源核验"},
+    {"id":"S13","url":"https://m.10jqka.com.cn/20261030/c681288246.shtml","published_at":"2026-10-30","period":"2026E至2028E国盛预测","accessed_at":"2026-10-31","read_boundary":"快讯转述已读；未读卖方研报原件，不称共识"},
+    {"id":"S14","url":"https://newzzbcx.cs.com.cn/cxnews.html?name=new20261025180722waqqbanc","published_at":"2026-10-25","period":"光迅2026YTD/Q3","accessed_at":"2026-10-31","read_boundary":"媒体正文已读，正文披露日10/26与更新时间10/25差异保留"},
+    {"id":"S15","url":"https://www.cnfin.com/announ/detail/index.html?id=840575432498&code=300502&dannoun=lcdetail&announ=lc","published_at":"2026-08-21","period":"2026-2029考核要求","accessed_at":"2026-10-31","read_boundary":"HTML考核条款已读；非兑现承诺"},
+    {"id":"S16","url":"https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12528568","published_at":"2026-10-31","period":"2027-2029研究假设","accessed_at":"2026-10-31","read_boundary":"链接仅为基础材料；情景和敏感性均研究者假设"}
+  ],
+  "financial_input_cny": {
+    "FY2025":{"revenue":"24841854840.22","parent_profit":"9531922730.17","core_profit":"9507308848.08","CFO":"7701234651.00","capex":null,"source":"S5"},
+    "YTD2025":{"revenue":"16504791211.36","parent_profit":"6327092507.84","core_profit":"6301361138.70","CFO":"4637420688.24","source":"S2"},
+    "Q12026":{"revenue":"8337902040.74","parent_profit":"2780222960.23","core_profit":"2767975248.13","cost":"4238909758.12","CFO":"684071355.88","capex":"630943247.73","source":"S4"},
+    "H12026":{"revenue":"20909746962.20","parent_profit":"7529168039.39","core_profit":"7510738801.54","cost":"10781121465.77","CFO":"1616408524.15","capex":"1263841519.77","source":"S3"},
+    "YTD2026":{"revenue":"31849895741.23","parent_profit":"11372330534.73","core_profit":"11140484930.66","cost":"16659220232.12","CFO":"1464429142.65","capex":"1806016532.89","source":"S2"}
+  },
+  "valuation": {
+    "price_cny":"196","shares":"1394737276","formula":"market_cap=Decimal(price)*Decimal(shares); TTM=FY2025+YTD2026-YTD2025; PE=market_cap/TTM_parent_profit",
+    "market_cap_cny":"273368506096","market_cap_yi":"2733.68506096","vendor_cap_cny":"273369000000","difference_cny":"-493904",
+    "TTM_parent_profit_cny":"14577160757.06","TTM_revenue_cny":"40186959370.09","TTM_core_profit_cny":"14346432640.04","TTM_CFO_cny":"4528243105.41",
+    "PE_TTM":"18.75320651613191286211951084","PE_FY2025_current_shares":"28.67926165942855115002565136","PE_TTM_core":"19.05480706981089674688686679","TTM_eps_current_shares":"10.45154597062622710027863341",
+    "cash_equivalents_cny":"6526683601.89","bank_borrowings":"合并报表行未列余额，不把全部负债视作有息债务",
+    "lease_plus_all_current_maturity_cny":"38822011.92","minority_equity_cny":"225554898.40",
+    "EV_formula":"market_cap+lease_and_maturity+minority_equity-cash_equivalents; 仅机械桥，现金非全可分配，股权PE不重复加现金",
+    "EV_cny":"267106199404.43","sources":["S1","S2","S5"]
+  },
+  "quarter_results": [
+    {"period":"2026Q1","revenue_cny":"8337902040.74","parent_profit_cny":"2780222960.23","gross_margin_pct":"49.16095514905100674338244624","parent_margin_pct":"33.34439462883461125128095025","CFO_cny":"684071355.88","capex_cny":"630943247.73","FCF_cny":"53128108.15"},
+    {"period":"2026Q2=H1-Q1","revenue_cny":"12571844921.46","parent_profit_cny":"4748945079.16","gross_margin_pct":"47.96140305165141597567439073","parent_margin_pct":"37.77444845070911877442763481","CFO_cny":"932337168.27","capex_cny":"632898272.04","FCF_cny":"299438896.23","revenue_qoq_pct":"50.77947498102570518015356510","profit_qoq_pct":"70.81166320441915833361206170"},
+    {"period":"2026Q3=YTD-H1","revenue_cny":"10940148779.03","parent_profit_cny":"3843162495.34","gross_margin_pct":"46.27039462555483480241922174","parent_margin_pct":"35.12897834357195176949547785","CFO_cny":"-151979381.50","capex_cny":"542175013.12","FCF_cny":"-694154394.62","revenue_qoq_pct":"-12.97897128562819576388656520","profit_qoq_pct":"-19.07334299979346320842828300"}
+  ],
+  "quality_calculations": {
+    "formula_FCF":"CFO-购建固定资产无形资产及其他长期资产支付现金；不含并购、租赁偿付",
+    "FCF_YTD_cny":"-341587390.24","CFO_to_parent_YTD_pct":"12.87712433417033314976770414",
+    "asset_identity_Q3":"44666839210.80-16483623893.22-28183215317.58=0.00",
+    "asset_identity_H1":"36646979659.62-12180639783.72-24466339875.90=0.00",
+    "asset_identity_Q1":"29736124932.02-9228600383.02-20507524549.00=0.00",
+    "Q1_rejected_equity_field":"主要会计指标表上年归母比较18064255651.50系合并权益；采用详细表17922921088.15，不采错位字段",
+    "NWC_formula":"应收账款+存货+预付款-应付账款-应付票据-合同负债；窄口径，不是完整CFO桥",
+    "NWC_FY2025_cny":"6322775995.65","NWC_Q3_cny":"12573395112.18","NWC_increase_cny":"6250619116.53",
+    "financial_expense_increase_cny":"1052484670.66","financial_expense_basis":"负基数不称正常同比增长率；含汇兑利息等，不全视作汇兑损失",
+    "gross_profit_YTD_cny":"15190675509.11","parent_margin_YTD_pct":"35.70602122884944784087745900",
+    "Q4_revenue_for_500yi_cny":"18150104258.77","Q4_required_qoq_pct":"65.90363280579869077627157550",
+    "H1_ASP_formula":"光互联收入/全系列销量；结构价格混合，不是800G或1.6T单价",
+    "H1_ASP_cny":"1866.187743420911528150134048","prior_H1_ASP_cny":"1497.749919627338129496402878","H1_volume_growth_pct":"61.00719424460431654676258990","H1_ASP_growth_pct":"24.59942203737497545326437630"
+  },
+  "assumption_scenarios": {
+    "all_assumption":true,"source":"S16","formula":"收入亿元=销量万只*混合单价元/10000+其他收入亿元；归母亿元=收入*归母净利率；股权亿元=归母*PE；每股=股权*100000000/1394737276；不再额外加现金",
+    "no_probability":true,"future_dilution":"基本表固定已核股数；另测1%稀释使每股除1.01",
+    "rows":[
+      {"case":"逆风","year":2027,"volume_wan":"2000","ASP_cny":"1800","other_revenue_yi":"2","parent_margin_pct":"28","PE":"12","revenue_yi":"362","profit_yi":"101.36","equity_yi":"1216.32","per_share_cny":"87.20782192674400135556425754"},
+      {"case":"逆风","year":2028,"volume_wan":"2000","ASP_cny":"1650","other_revenue_yi":"2","parent_margin_pct":"24","PE":"10","revenue_yi":"332","profit_yi":"79.68","equity_yi":"796.80","per_share_cny":"57.12903883125297642077216555"},
+      {"case":"逆风","year":2029,"volume_wan":"2100","ASP_cny":"1600","other_revenue_yi":"2","parent_margin_pct":"24","PE":"10","revenue_yi":"338","profit_yi":"81.12","equity_yi":"811.20","per_share_cny":"58.16149134025152418741262638"},
+      {"case":"基准","year":2027,"volume_wan":"3200","ASP_cny":"2400","other_revenue_yi":"2","parent_margin_pct":"34","PE":"20","revenue_yi":"770","profit_yi":"261.8","equity_yi":"5236.0","per_share_cny":"375.4112039664163962589897827"},
+      {"case":"基准","year":2028,"volume_wan":"3800","ASP_cny":"2500","other_revenue_yi":"3","parent_margin_pct":"33","PE":"18","revenue_yi":"953","profit_yi":"314.49","equity_yi":"5660.82","per_share_cny":"405.8699869436916089134481554"},
+      {"case":"基准","year":2029,"volume_wan":"4200","ASP_cny":"2350","other_revenue_yi":"3","parent_margin_pct":"31","PE":"16","revenue_yi":"990","profit_yi":"306.9","equity_yi":"4910.4","per_share_cny":"352.0663055685047884243971407"},
+      {"case":"顺风","year":2027,"volume_wan":"4000","ASP_cny":"2750","other_revenue_yi":"3","parent_margin_pct":"38","PE":"25","revenue_yi":"1103","profit_yi":"419.14","equity_yi":"10478.50","per_share_cny":"751.2884455237001925515325511"},
+      {"case":"顺风","year":2028,"volume_wan":"5000","ASP_cny":"2900","other_revenue_yi":"4","parent_margin_pct":"38","PE":"23","revenue_yi":"1454","profit_yi":"552.52","equity_yi":"12707.96","per_share_cny":"911.1364712675822969830771197"},
+      {"case":"顺风","year":2029,"volume_wan":"5800","ASP_cny":"2850","other_revenue_yi":"4","parent_margin_pct":"36","PE":"20","revenue_yi":"1657","profit_yi":"596.52","equity_yi":"11930.40","per_share_cny":"855.3869037052968246616217921"}
+    ]
+  },
+  "reverse_valuation": {
+    "formula":"隐含归母利润亿元=2733.68506096/假设PE；隐含收入=隐含归母/假设归母净利率",
+    "rows":[
+      {"PE":"12","profit_yi":"227.8070884133333333333333333","revenue_at_margin_28":"813.5967443333333333333333332","revenue_at_margin_34":"670.0208482745098039215686274","revenue_at_margin_38":"599.4923379298245614035087718"},
+      {"PE":"15","profit_yi":"182.2456707306666666666666667","revenue_at_margin_28":"650.8773954666666666666666668","revenue_at_margin_34":"536.0166786196078431372549021","revenue_at_margin_38":"479.5938703438596491228070176"},
+      {"PE":"20","profit_yi":"136.684253048","revenue_at_margin_28":"488.1580466","revenue_at_margin_34":"402.0125089647058823529411765","revenue_at_margin_38":"359.6954027578947368421052632"},
+      {"PE":"25","profit_yi":"109.3474024384","revenue_at_margin_28":"390.52643728","revenue_at_margin_34":"321.6100071717647058823529412","revenue_at_margin_38":"287.7563222063157894736842105"}
+    ]
+  },
+  "two_parameter_sensitivity": {
+    "formula":"固定假设2027收入770亿元；每股=770*净利率*PE*1e8/1394737276",
+    "rows":[
+      {"margin_pct":"28","PE12":"185.4973007834057487397361279","PE20":"309.1621679723429145662268799","PE25":"386.4527099654286432077835998"},
+      {"margin_pct":"34","PE12":"225.2467223798498377553938696","PE20":"375.4112039664163962589897827","PE25":"469.2640049580204953237372283"},
+      {"margin_pct":"38","PE12":"251.7463367774792304324990307","PE20":"419.5772279624653840541650512","PE25":"524.4715349530817300677063140"}
+    ]
+  },
+  "unresolved_gaps":["分速率收入和单价","具体客户和集中度","单速率有效产能及良率","洪灾跨期金额/对应回款","Q3受限现金","2025精确capex和SBC金额","长期同口径历史估值序列","同行同期已核TTM","NPO/CPO商业合同经济性"],
+  "verification_note":"精确Decimal复算已执行；没有把单季乘四作为预测；股权PE不加减净现金；货币资金/现金等价物/归母权益/合并权益分开；没有声称已读官方PDF。"
+}

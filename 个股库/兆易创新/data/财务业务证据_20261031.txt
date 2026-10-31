@@ -1,0 +1,129 @@
+兆易创新（A股603986／H股03986）独立六问研究证据
+报告日、资料访问日：2026-10-31，北京时间；披露截止同日。
+本次实际重新执行CLI、domain_search一次、定点WebSearch和公告HTML读取；不继承现存报告、底稿的事实或“已读”标签，不以之前agent失败任务作为来源。
+输出目录是实际已存在的 workspace/个股库/兆易创新（用户“已有个股库”理解为现有库，而不是创建名为已有个股库的新库）。
+
+一、执行与读取层级
+1. 已Read company-deep-research/SKILL.md、research-method.md、valuation-and-financials.md、report-schema.md、report-template.md、html-design.md、data-and-markets.md、render_report.py、validate_report.py；也已Read仓库westock-data/SKILL.md。未改技能、CSS或JS，HTML/MD只由原生成器产生。
+2. 已实际执行node仓库westock-data/scripts/index.js notice sh603986 --type 1。最新ID=nos1225641959，标题2026第三季度报告，时间2026-10-29 17:07:56；H1=nos1225480384；FY2025=nos1225061352；9M2025=nos1224754267。
+3. 四个实际ncontent响应success=true，但content与detail_oem均空。响应原样保存为公告正文_Q3_2026.txt、公告正文_H1_2026.txt、公告正文_FY2025.txt、公告正文_Q3_2025.txt。文件名不代表获得正文：里面只是元数据JSON。不是一手财务正文证据。
+4. finance sh603986 --num 8实际返回2024-03-31至2025-12-31八期，不能误称2026最新。人工读取CLI Markdown；没有编写Markdown财务解析程序。没有诺多大数直接入报告。
+5. domain_search只一次高层句：“研究截至2026年10月31日兆易创新A股603986存储与MCU供需及财务情况。”结果用于发现线索，不作原始数。它把771.17亿元权益误叫资产，且其合计资产/负债/归母权益不勾稽，已经剔除；未采用其合成目标价、技术面或无原文行业量级。
+6. 已连接列表无金融MCP；仓库金融CLI覆盖旧报/公告索引，故以domain_search发现后进一步公开HTML定点取正文。没有重复失败agent网关。
+7. 新浪年度和中期WebFetch前段有截断。因此保存其同一现成HTML网页，用HTMLParser转写正文再Read后段附注；并非换域名取PDF。保存来源_2026H1_新浪公告.html、来源_FY2025_新浪公告.html、来源_2026Q3_新浪公告.html及公告HTML转写_已读取正文.txt。转写为HTML正文解析，不是解析金融CLI Markdown。
+8. 未请求/下载file.finance.qq.com；未换工具、协议或域名绕取同份文件；所有PDF均未下载未读取。港交所PDF搜索摘要仅作发现，不登记为已读PDF。stockhtm公告索引WebFetch乱码无正文，不用作primary。中国货币网动态汇率WebFetch未返回数，仅搜索命中不可假称已读动态原表。
+9. 未使用Git、任务创建管理、present、publish、上传、群消息。新文件按授权保存在个股目录，冻结行情未修改。
+
+二、来源登记（全部访问2026-10-31；来源分类与读取级别）
+S1｜冻结快照｜secondary｜pub2026-10-30｜period10/30收盘
+URL=https://gu.qq.com/sh603986
+level=Read本地行情冻结_20261031.json。price257.80，total703971427；URL为用户快照来源，未冒称重新抓该网页。
+S2｜兆易2026Q3｜primary发行人正文的镜像载体｜pub2026-10-30｜period1-9月、9/30余额
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12677209&stockid=603986
+level=完整HTML正文WebFetch+保存；合并三表、主要数据、非经常项已读。A公告日期10/30，签章10/29晚，未审计。
+S3｜兆易2026H1｜primary发行人正文的镜像载体｜pub2026-08-19｜period1-6月
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12502918&stockid=603986
+level=WebFetch前段+保存HTML转写Read后段。转写行6506-6528五产品收入成本；6588-6607销售渠道与地区口径；2736现金购建；7193-7249间接现金桥；7272-7322现金分类均已读。
+S4｜兆易FY2025｜primary发行人正文的镜像载体｜pub2026-03-31｜periodFY2025及2023/24比较
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=603986&id=12044980
+level=WebFetch前段+HTML转写Read后段。2025季度原表、FY2024/25购建现金及合并CFO、主营产品表已读。转写13930-14014是合并现金流，不能用后面的母公司表替代。
+S5｜兆易9M2025｜primary发行人正文镜像｜pub2025-10-29｜period1-9月
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=11551919&stockid=603986
+level=完整公告HTML三表正文WebFetch，未审计。
+S6｜中财网Q3转写｜secondary｜pub2026-10-29｜period9M2026/9/30
+URL=https://www.cfi.net.cn/p20261029006013.html
+level=完整HTML公告转写WebFetch，与S2为同一财报，不是独立审计。元级资产、负债、总权益、现金、CFO及购建现金均同。
+S7｜上证报Q3报道｜secondary｜pub2026-10-29 20:04｜periodQ3/9M2026
+URL=https://www.cnstock.com/commonDetail/818624
+level=全文WebFetch，核收入/归母/扣非/CFO/库存；11/17说明会为媒体转述公司安排，未取预约原公告。
+S8｜财联社财报解读｜secondary｜pub2026-10-30 07:41｜periodQ3/9M2026
+URL=https://finance.sina.com.cn/roll/2026-10-30/doc-iniwxzqa5665965.shtml
+level=全文WebFetch，核主要数据及金融投资的P&L/FVOCI区别；文中31.13%不采，原数复算31.04%。
+S9｜每经Q3报道｜secondary｜pub2026-10-30 00:23｜periodQ3/9M2026
+URL=https://finance.sina.cn/2026-10-30/detail-iniwxksr5114396.d.html?vt=4&cid=76568&node_id=76568
+level=全文WebFetch，876.55亿元资产、768.29亿元归母权益、188.60亿元货币资金、517.65亿元权益工具投资及主要经营数互证。
+S10｜新浪利润数据库｜secondary｜页面无独立发布/更新日期；日期字段为访问10/31｜periodQ1/H1/Q3、FY2025/9M2025
+URL=https://vip.stock.finance.sina.com.cn/corp/go.php/vFD_ProfitStatement/stockid/603986/ctrl/part/displaytype/4.phtml
+level=HTML已读；单位万元，保留舍入而非伪元级精度；数据相关原公告发布均不晚于10/31。页面行情时间不是财报发布时间。
+S11｜行权股份上市公告｜primary镜像｜pub2026-08-27｜period9/1上市后的分类股
+URL=https://www.cnfin.com/announ/detail/index.html?dannoun=lcdetail&id=841089344780
+level=全文HTML；A670718327、H33253100、total703971427；期权新发行2226393股来源与登记已读。
+S12｜H股实际报价｜secondary｜pub2026-10-30｜period10/30收盘
+URL=https://gu.qq.com/hk03986/gp/notice/nokHKEX-EPS-20260818-12289053
+level=实际CLI quote hk03986，315.00HKD、total703971427、H float33253100；URL实际搜索取得作溯源，不当公告内容。
+S13｜汇率报道｜secondary｜pub2026-10-30 09:47:01｜period10/30中间价
+URL=https://www.zhonghongwang.com/show-257-476559-1.html
+level=全文WebFetch，1HKD=0.85594CNY；中国货币网搜索值相同，动态WebFetch没数，未声称已读该动态原表。折算非收盘可交易现汇。
+S14｜公司官网产品报道｜primary｜pub2026-07-01｜period截至展会产品与累计出货
+URL=https://www.gigadevice.com.cn/about/news-and-event/news/2026-electronica-china-shanghai
+level=完整官网正文WebFetch；Fabless、BIOS/BMC、GD25/55、AEC-Q100、功能安全体系、GD32A7应用与累计Flash出货已读。展示方案不等客户定点，全公司体系不等全产品最高安全认证。
+S15｜ST IR Q3｜primary｜pub2026-10-29｜period截至2026-09-26单季
+URL=https://investors.st.com/news-releases/news-release-details/stmicroelectronics-reports-q3-2026-financial-results
+level=IR全文/附表已读；revenue3757百万USD、GAAP营业367百万USD、归母291百万USD、合并292百万USD；37.3%毛利；EMP不是纯MCU。媒体Stifel转发同表3757/367/291互证，非独立审计。聚合查询408百万营业利润剔除。
+S16｜MoneyDJ旺宏｜secondary｜pub2026-10-27 18:12:36｜period2026Q3
+URL=https://wwwuat.moneydj.com/kmdj/news/newsviewer.aspx?a=b14f4509-7680-413f-a14f-ac6f90cc071e
+level=全文媒体；242.37亿元新台币、税后净利109.51亿元新台币、毛利70.5%；需发行人原表，非归母强改。
+S17｜中时旺宏｜secondary｜pub2026-10-27 19:31｜period2026Q3/未来策略
+URL=https://www.chinatimes.com/realtimenews/20261027004036-260410
+level=全文媒体；营收242.37、净利109.51、毛利70.5%同S16；不再新增NOR投资不等不存在旧线转用供给。
+S18｜钜亨华邦｜secondary｜pub2026-10-06 13:00｜period2026Q3月报累计及未来收购
+URL=https://m.cnyes.com/news/id/6622630
+level=全文媒体；营收823.31亿元新台币、含其他业务；未取得原已读Q3毛利，法人预测不当事实。未交割收购不加当前份额。
+S19｜环球网行业展望｜secondary｜pub2026-10-01 11:34｜period2026Q4预测
+URL=https://news.qq.com/rain/a/20261001A06EEZ00
+level=全文媒体转述TrendForce，DRAM10%-15%、NAND15%-20%是一般行业合约预测，不作公司利基ASP；原文有缩容量、补库存、长协价区间等反例。
+S20｜财通单家预测｜secondary｜pub2026-08-23｜period预测CY2026/27/28
+URL=https://vip.stock.finance.sina.com.cn/q/go.php/vReport_Show/kind/lastest/rptid/840833024749/index.phtml
+level=摘要全文；收入278.11/348.08/430.29亿元人民币、归母136.07/166.71/192.53亿元；非当前市场一致预期，不报共识revision。
+S21｜DRAM预计额度｜primary镜像｜pub2026-09-29｜period2026实际/预算及2027前四月预计
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=80390363&gather=1&id=12623788
+level=公告HTML全文。57.11+21.43=78.54亿元、1-8月实际35.96亿元、2027前四月44.11亿元，全部不含税。原因原文=代工价格随行情上涨及新品，不代表拥有fab或已锁定全年出货。
+S22｜额度审议结果｜primary镜像｜pub2026-10-21｜period截至股东会决议
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=80390363&gather=1&id=12650684
+level=全文确认额度议案通过，不用9/29“待审批”冒当前状态；批准仍不等实际采购。
+S23｜界面中报产品｜secondary｜pub2026-08-20 08:01:06｜period2026H1
+URL=https://www.163.com/dy/article/L4ORTNEK0534A4SC.html
+level=媒体全文；98.27亿元存储、14.30亿元MCU、存储67.57%毛利互证；扣非791.90%错误，采用公告796.90%；投资组合变动与P&L收益混合数不用。
+S24｜研究者模型｜assumption｜日期2026-10-31｜periodCY2027-2029/反推/压力
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12502918&stockid=603986
+level=链接只锚已读业务，不虚造公司预测。全输入、公式和Decimal输出见研究复算_20261031.json。
+S25｜中证Q1媒体｜secondary｜pub2026-05-02 13:10:22｜period2026Q1
+URL=https://newzzbcx.cs.com.cn/cxnews.html?name=new20260502131022hfosdxwu
+level=已完整WebFetch正文，收入41.88、归母14.61、扣非14.1、CFO17.83亿元、毛利57.08%与原数互证。
+S26｜Q1原公告｜primary镜像｜pub2026-04-30｜period2026Q1
+URL=https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12278530&stockid=603986
+level=完整HTML合并三表、非经常项WebFetch，收入4188075574.04、cost1797659470.90、归母1461248353.08、扣非1410064284.20、CFO1783057278.72、现金capex327042913.51元；原PDF未读。
+
+三、原数与勾稽（人民币元；Decimal结果另存）
+9M2026 revenue20297371376.50、cost6855493449.93、parent11065687391.96、core9433960921.89、CFO10124072228.88、现金购建1404275936.57。
+Q3 revenue8731610944.35、parent4208900978.28、core4550927442.96、CFO4075731171.82。Q3成本2591249730.66=9M成本-H1成本；Q2各数=H1-Q1。
+Q3收入环比18.3516389%、归母-21.9929332%、扣非31.0385203%、毛利70.3233487%。9M毛利66.2247228%。
+9M2025 revenue6831634443.78、parent1083227880.04、core1042132191.94、CFO1795645619.05、capex714995741.42。
+FY2025 revenue9203463124.58、parent1648022651.70、core1469196552.72、CFO2128504212.49、capex1048563639.29。
+TTM=FY2025+9M2026-9M2025。revenue22669200057.30、parent11630482163.62、core9861025282.67、CFO10456930822.32、capex1737843834.44、现金FCF8719086987.88。
+FY2025现金FCF=2128504212.49-1048563639.29=1079940573.20，拒绝接口FCFF约2.575亿替代。
+9M现金FCF=10124072228.88-1404275936.57=8719796292.31。不是CFO减全部投资活动净额-7327069556.36。
+9M归母-core=1631726470.07；Q3归母-core=-342026464.68。公允价值损益1877893903.42不是含处置非经常项1878832019.82；FVOCI其他权益工具投资税后变动43000905435.24不进净利。
+合并资产87654926728.13=负债10537547812.63+总权益77117378915.50，差0.00。
+总权益77117378915.50=归母76828535308.48+少数288843607.02，差0.00。没有用换字段名调平错误资产771.17亿元。
+货币资金18860394865.64与现金等价物14962439626.46差3897955239.18，Q3差额构成缺原附注，不全叫受限。H1原注三个月以上定存2936251000.00、冻结1293800.56、证券待划转41546490.00、计提利息56061293.42，合计3035152583.98；不得继承H1分类当Q3精确分类。
+期末存货6291974702.44，账款599663920.58，合同负债1236173215.75，其他权益工具51764683980.73。库存股948012371.70是金额，不是股数。
+股份670718327+33253100=703971427，A价格乘总股=181483833880.60，供应商181484000000差166119.40（16.61194万元）属于舍入。
+A价全股本代理并非真实两地市值；A类别172911184700.60；H类别315*33253100*0.85594=8965737400.41；分类合计181876922101.01元，汇率仅中间价且未核回购账户，明确参考代理。不把两地全股本proxy相加。
+H1五产品收入成本：存储9827480589.64/3186960655.16；MCU1429762296.93/879515137.48；传感100250611.33/80605934.03；模拟190640846.62/113432093.44；技术其他17626087.63/3729899.16。分别加总为11565760432.15/4264243719.27，差均0.00；分产品毛利67.570929、38.485220、19.595569、40.499586、78.838757%。不造NOR/NAND/DRAM各自收入分配。
+
+四、模型与缺口
+规模锚为H1各产品收入×2，明确不是TTM或2026全年预测。CY2027存储量/ASP/结构、MCU量/价格结构、其他增长分别设三情景，收入自下而上相加；CY2028/2029收入增长和净利率/PE逐年注明，全部研究者假设。净利润保留正常研发/SBC，不预测金融估值波动，不额外加现金或股权投资价值以免重复。冻结股数不变，潜在稀释未纳入。
+正常化归母利润CY2027危险40.1935亿元、基准114.7791亿元、乐观183.1018亿元；PE20/25/30给803.8700/2869.4783/5493.0526亿元权益，不是当前目标价。未来年度值未折现，不给仓位、买点或第七问。
+PE与净利率双参数网格，另有cap/PE反推收入要求及现金压力。20倍PE需90.7419亿元利润，35%净利率需259.2626亿元年收入，25%需362.9677亿元；假设PE不是客观合理值。
+缺口：长历史仅年度三年与季度七季；2023capex未核。未得公司分产品ASP、物量、渠道库存、NOR/NAND/DRAM收入拆分、客户集中度；模拟和传感精确成本仅原表未独立第二源精确互证；同业部分媒体需原表；10/30最终回购账户股数、Q3资金差额分类、投资限售和连续共识revision未完整核。
+一手=发行人原创正文（现成HTML镜像）及官网/IR；载体不是独立审计。核心最新实数同时经S2/S6元级和S7/S8/S9媒体舍入互证；单次结构验证不自动证明全部事实。主结论仅为已证盈利兑现、持续性条件化，不声称中周期确定低估。
+
+五、最终验证记录
+validate_report.py JSON：exit0，schema_version=1通过。
+render_report.py JSON HTML --markdown MD：exit0，使用原模板产生同源三件套。
+validate_report.py JSON --html HTML：exit0，离线资产、锚点及确定性内容一致通过。
+原assets/report.js与实际HTML提取内联JS分别经node --check通过；实际SVG数量8，表格块15，六章id依次q1-q6，首屏四状态顺序正确，免责声明完整，无q7。
+六章正文、表格及图注汉字7392（Unicode汉字计数，不含首屏、来源重复注释、生成器重复原数表及免责声明）。Markdown全部内容含重复来源标签与原数表约12885汉字，不能把模板重复内容当研究正文篇幅。
+Decimal资产负债权益、分类股与产品收入成本差额均0.00；TTM、归母扣非桥、三年情景与双参数敏感性核验通过。
+保留校验提示：2023现金capex缺数null；自动校验不证明事实；10个primary含镜像载体，不是10个独立审计。上述未核项仍需补证，不以脚本通过掩盖。

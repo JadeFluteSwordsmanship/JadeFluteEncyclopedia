@@ -1,0 +1,921 @@
+{
+  "research_date": "2026-10-31",
+  "accessed_at": "2026-10-31",
+  "financial_as_of": "2026-09-30",
+  "currency": "CNY",
+  "method": "本次独立取数，不继承现存报告或底稿；Python Decimal，输入为人民币元字符串，百分率按比值计算。",
+  "source_registry": [
+    {
+      "id": "S1",
+      "title": "用户提供的冻结行情；本地JSON已读，URL仅作快照来源溯源",
+      "url": "https://gu.qq.com/sh603986",
+      "publisher": "Westock冻结快照／用户",
+      "published_at": "2026-10-30",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026-10-30收盘",
+      "read_level": "本地冻结JSON已Read；URL仅冻结快照提供的来源，不声称重新读取行情页"
+    },
+    {
+      "id": "S2",
+      "title": "2026年第三季度报告：发行人正文的新浪现成HTML转写已读，非原PDF",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12677209&stockid=603986",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2026-10-30",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "2026年1-9月及2026-09-30",
+      "read_level": "发行人公告现成HTML正文完整读取并保存；未读取PDF"
+    },
+    {
+      "id": "S3",
+      "title": "2026年半年度报告：HTML正文及后段合同分类、现金附注已读，非PDF",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12502918&stockid=603986",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2026-08-19",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "2026年1-6月",
+      "read_level": "HTML前段WebFetch、后段本地HTML转写及Read，分产品附注行6506-6528已读；非PDF"
+    },
+    {
+      "id": "S4",
+      "title": "2025年年度报告：HTML及后段合并现金流原列已读，非PDF",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=603986&id=12044980",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2026-03-31",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "FY2025及FY2024、FY2023可比数",
+      "read_level": "HTML前段WebFetch、后段本地HTML转写Read，包括合并现金流购建现金原列；非PDF"
+    },
+    {
+      "id": "S5",
+      "title": "2025年第三季度报告：完整HTML公告正文已读，非PDF",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=11551919&stockid=603986",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2025-10-29",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "2025年1-9月",
+      "read_level": "完整HTML公告正文WebFetch"
+    },
+    {
+      "id": "S6",
+      "title": "2026Q3公告中财网转写全文已读；与S2同一披露，非独立审计",
+      "url": "https://www.cfi.net.cn/p20261029006013.html",
+      "publisher": "中财网",
+      "published_at": "2026-10-29",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026年1-9月及2026-09-30",
+      "read_level": "完整公告HTML转写WebFetch；与S2为同一财报，非独立审计"
+    },
+    {
+      "id": "S7",
+      "title": "三季报核心盈利、现金及说明会安排：媒体全文已读",
+      "url": "https://www.cnstock.com/commonDetail/818624",
+      "publisher": "上海证券报·中国证券网",
+      "published_at": "2026-10-29",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026Q3/9M2026",
+      "read_level": "媒体全文WebFetch"
+    },
+    {
+      "id": "S8",
+      "title": "公允价值变动与Q3利润背离：财联社全文已读；舍入环比不直接采用",
+      "url": "https://finance.sina.com.cn/roll/2026-10-30/doc-iniwxzqa5665965.shtml",
+      "publisher": "财联社／新浪转载",
+      "published_at": "2026-10-30",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026Q3/9M2026",
+      "read_level": "财联社媒体全文WebFetch"
+    },
+    {
+      "id": "S9",
+      "title": "三季报资产、经营及产品证据：每经全文已读",
+      "url": "https://finance.sina.cn/2026-10-30/detail-iniwxksr5114396.d.html?vt=4&cid=76568&node_id=76568",
+      "publisher": "每日经济新闻／新浪转载",
+      "published_at": "2026-10-30",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026Q3/9M2026",
+      "read_level": "每经媒体全文WebFetch"
+    },
+    {
+      "id": "S10",
+      "title": "利润表数据库HTML已读；万元单位；页面无独立更新日期，日期字段记录访问日",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vFD_ProfitStatement/stockid/603986/ctrl/part/displaytype/4.phtml",
+      "publisher": "新浪财经数据库",
+      "published_at": "2026-10-31",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026Q3/H1/Q1及FY2025/9M2025",
+      "read_level": "数据库HTML已读，万元单位，四舍五入与原公告元级数核对"
+    },
+    {
+      "id": "S11",
+      "title": "2023期权第三行权期结果暨股份上市：发行人HTML全文已读",
+      "url": "https://www.cnfin.com/announ/detail/index.html?dannoun=lcdetail&id=841089344780",
+      "publisher": "兆易创新／新华财经公告载体",
+      "published_at": "2026-08-27",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "2026-09-01行权股份上市后",
+      "read_level": "发行人公告全文HTML WebFetch"
+    },
+    {
+      "id": "S12",
+      "title": "H股报价实际CLI已取：10/30收盘315港元；URL经搜索取得仅作报价溯源",
+      "url": "https://gu.qq.com/hk03986/gp/notice/nokHKEX-EPS-20260818-12289053",
+      "publisher": "Westock／腾讯证券",
+      "published_at": "2026-10-30",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026-10-30收盘",
+      "read_level": "实际CLI quote hk03986，价格315HKD、总股703971427、H股33253100；URL经搜索实取，非港股总市值原样相加"
+    },
+    {
+      "id": "S13",
+      "title": "10/30港元对人民币0.85594中间价：媒体全文已读，非收盘可成交汇率",
+      "url": "https://www.zhonghongwang.com/show-257-476559-1.html",
+      "publisher": "中宏网",
+      "published_at": "2026-10-30",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026-10-30汇率中间价",
+      "read_level": "媒体全文WebFetch，1HKD=0.85594CNY；中国货币网页搜索相同值，WebFetch动态数未返回，不能声称已读该动态原表"
+    },
+    {
+      "id": "S14",
+      "title": "慕尼黑展产品、服务器固件及车规认证：官网全文已读",
+      "url": "https://www.gigadevice.com.cn/about/news-and-event/news/2026-electronica-china-shanghai",
+      "publisher": "兆易创新官网",
+      "published_at": "2026-07-01",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "详见报告对应数据块",
+      "read_level": "慕尼黑展产品、服务器固件及车规认证：官网全文已读"
+    },
+    {
+      "id": "S15",
+      "title": "STMicroelectronics Q3 2026 Financial Results：IR原文与GAAP表已读",
+      "url": "https://investors.st.com/news-releases/news-release-details/stmicroelectronics-reports-q3-2026-financial-results",
+      "publisher": "STMicroelectronics IR",
+      "published_at": "2026-10-29",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "详见报告对应数据块",
+      "read_level": "STMicroelectronics Q3 2026 Financial Results：IR原文与GAAP表已读"
+    },
+    {
+      "id": "S16",
+      "title": "旺宏Q3财务及法说：MoneyDJ媒体正文已读，需核发行人原表",
+      "url": "https://wwwuat.moneydj.com/kmdj/news/newsviewer.aspx?a=b14f4509-7680-413f-a14f-ac6f90cc071e",
+      "publisher": "MoneyDJ",
+      "published_at": "2026-10-27",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "详见报告对应数据块",
+      "read_level": "旺宏Q3财务及法说：MoneyDJ媒体正文已读，需核发行人原表"
+    },
+    {
+      "id": "S17",
+      "title": "旺宏Q3及NOR投资策略：中时媒体全文已读，管理层展望非已实现产能",
+      "url": "https://www.chinatimes.com/realtimenews/20261027004036-260410",
+      "publisher": "中时新闻网",
+      "published_at": "2026-10-27",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "详见报告对应数据块",
+      "read_level": "旺宏Q3及NOR投资策略：中时媒体全文已读，管理层展望非已实现产能"
+    },
+    {
+      "id": "S18",
+      "title": "华邦月报累计Q3及未交割收购：媒体全文已读，需核发行人原表",
+      "url": "https://m.cnyes.com/news/id/6622630",
+      "publisher": "钜亨网／优分析",
+      "published_at": "2026-10-06",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "详见报告对应数据块",
+      "read_level": "华邦月报累计Q3及未交割收购：媒体全文已读，需核发行人原表"
+    },
+    {
+      "id": "S19",
+      "title": "TrendForce Q4价格与需求反例：环球网媒体转述全文已读，预测非实现值",
+      "url": "https://news.qq.com/rain/a/20261001A06EEZ00",
+      "publisher": "环球网／腾讯新闻",
+      "published_at": "2026-10-01",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "详见报告对应数据块",
+      "read_level": "TrendForce Q4价格与需求反例：环球网媒体转述全文已读，预测非实现值"
+    },
+    {
+      "id": "S20",
+      "title": "财通证券8/23单家预测摘要已读；不是市场一致预期或当前修订序列",
+      "url": "https://vip.stock.finance.sina.com.cn/q/go.php/vReport_Show/kind/lastest/rptid/840833024749/index.phtml",
+      "publisher": "财通证券／新浪研报摘要",
+      "published_at": "2026-08-23",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "预测CY2026-2028",
+      "read_level": "财通证券单家研报摘要全文WebFetch，非一致预期"
+    },
+    {
+      "id": "S21",
+      "title": "DRAM采购代工额度及实际发生额：发行人公告HTML全文已读",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=80390363&gather=1&id=12623788",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2026-09-29",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "2026全年预计、1-8月实际及2027年1-4月预计",
+      "read_level": "发行人公告HTML全文WebFetch，非PDF"
+    },
+    {
+      "id": "S22",
+      "title": "第四次临时股东会决议：关联交易额度议案获批，HTML已读",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?CompanyCode=80390363&gather=1&id=12650684",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2026-10-21",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "截至2026-10-21议案批准状态",
+      "read_level": "股东会决议HTML全文WebFetch"
+    },
+    {
+      "id": "S23",
+      "title": "界面H1产品构成及存储毛利互证：全文已读，错误扣非增速与投资口径剔除",
+      "url": "https://www.163.com/dy/article/L4ORTNEK0534A4SC.html",
+      "publisher": "界面新闻／网易转载",
+      "published_at": "2026-08-20",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "2026H1",
+      "read_level": "界面新闻转载全文WebFetch；只交叉收入和存储毛利，不用错误扣非增速及混合投资收益"
+    },
+    {
+      "id": "S24",
+      "title": "研究者Decimal情景、反推及压力假设；链接仅锚定业务，不是公司预测公告",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12502918&stockid=603986",
+      "publisher": "本报告研究者模型",
+      "published_at": "2026-10-31",
+      "accessed_at": "2026-10-31",
+      "kind": "assumption",
+      "period": "详见报告对应数据块",
+      "read_level": "研究者Decimal情景、反推及压力假设；链接仅锚定业务，不是公司预测公告"
+    },
+    {
+      "id": "S25",
+      "title": "Q1利润与扣非：中证网媒体全文已读",
+      "url": "https://newzzbcx.cs.com.cn/cxnews.html?name=new20260502131022hfosdxwu",
+      "publisher": "中国证券报",
+      "published_at": "2026-05-02",
+      "accessed_at": "2026-10-31",
+      "kind": "secondary",
+      "period": "详见报告对应数据块",
+      "read_level": "Q1利润与扣非：中证网媒体全文已读"
+    },
+    {
+      "id": "S26",
+      "title": "2026Q1公告HTML三表正文已读，非PDF",
+      "url": "https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12278530&stockid=603986",
+      "publisher": "兆易创新／新浪公告载体",
+      "published_at": "2026-04-30",
+      "accessed_at": "2026-10-31",
+      "kind": "primary",
+      "period": "详见报告对应数据块",
+      "read_level": "2026Q1公告HTML三表正文已读，非PDF"
+    }
+  ],
+  "raw_periods": {
+    "FY2023": {
+      "revenue": "5760823414.65",
+      "parent_np": "161141224.88",
+      "core_np": "27400630.30",
+      "cfo": "1186749309.93",
+      "sources": [
+        "S4"
+      ]
+    },
+    "FY2024": {
+      "revenue": "7355977677.11",
+      "cost": "4560624797.99",
+      "parent_np": "1102542801.68",
+      "core_np": "1030479348.71",
+      "cfo": "2032230237.01",
+      "cash_capex": "499017219.78",
+      "sources": [
+        "S4"
+      ]
+    },
+    "FY2025": {
+      "revenue": "9203463124.58",
+      "cost": "5502180091.92",
+      "parent_np": "1648022651.70",
+      "core_np": "1469196552.72",
+      "cfo": "2128504212.49",
+      "cash_capex": "1048563639.29",
+      "sources": [
+        "S4",
+        "S10"
+      ]
+    },
+    "9M2025": {
+      "revenue": "6831634443.78",
+      "cost": "4195422101.55",
+      "parent_np": "1083227880.04",
+      "core_np": "1042132191.94",
+      "cfo": "1795645619.05",
+      "cash_capex": "714995741.42",
+      "sources": [
+        "S2",
+        "S5"
+      ]
+    },
+    "H12026": {
+      "revenue": "11565760432.15",
+      "cost": "4264243719.27",
+      "parent_np": "6856786413.68",
+      "core_np": "4883033478.93",
+      "cfo": "6048341057.06",
+      "cash_capex": "945105427.08",
+      "fv_profit": "2227945059.17",
+      "sources": [
+        "S3",
+        "S10"
+      ]
+    },
+    "Q12026": {
+      "revenue": "4188075574.04",
+      "cost": "1797659470.90",
+      "parent_np": "1461248353.08",
+      "core_np": "1410064284.20",
+      "sources": [
+        "S26",
+        "S10",
+        "S25"
+      ],
+      "cfo": "1783057278.72",
+      "cash_capex": "327042913.51"
+    },
+    "9M2026": {
+      "revenue": "20297371376.50",
+      "cost": "6855493449.93",
+      "parent_np": "11065687391.96",
+      "core_np": "9433960921.89",
+      "cfo": "10124072228.88",
+      "cash_capex": "1404275936.57",
+      "net_profit": "11121465089.95",
+      "fv_profit": "1877893903.42",
+      "non_recurring": "1631726470.07",
+      "oci_equity_fv": "43000905435.24",
+      "sources": [
+        "S2",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S10"
+      ]
+    },
+    "Q32026": {
+      "revenue": "8731610944.35",
+      "parent_np": "4208900978.28",
+      "core_np": "4550927442.96",
+      "cfo": "4075731171.82",
+      "non_recurring": "-342026464.68",
+      "fv_and_disposal_nonrec": "-352572394.08",
+      "sources": [
+        "S2",
+        "S6",
+        "S7",
+        "S8"
+      ]
+    }
+  },
+  "raw_balance_20260930": {
+    "assets": "87654926728.13",
+    "liabilities": "10537547812.63",
+    "total_equity": "77117378915.50",
+    "parent_equity": "76828535308.48",
+    "minority_equity": "288843607.02",
+    "cash_funds": "18860394865.64",
+    "cash_equivalents": "14962439626.46",
+    "inventory": "6291974702.44",
+    "accounts_receivable": "599663920.58",
+    "accounts_payable": "1814292666.42",
+    "contract_liabilities": "1236173215.75",
+    "equity_investment_fvoci": "51764683980.73",
+    "other_noncurrent_financial": "2782331751.53",
+    "lease_liabilities": "37398274.11",
+    "noncurrent_due_one_year": "51993401.38",
+    "deferred_tax_liabilities": "5047091705.75",
+    "treasury_stock_amount": "948012371.70",
+    "sources": [
+      "S2",
+      "S6",
+      "S9"
+    ],
+    "short_term_debt_status": "原表2026列空白，偿还2亿元且2025余额2.001387亿元；合并科目空白不机械补零，保守债务代理仅租赁加一年内非流动债务全额，非精确有息债務"
+  },
+  "raw_products_h12026": {
+    "存储": {
+      "revenue": "9827480589.64",
+      "cost": "3186960655.16"
+    },
+    "MCU": {
+      "revenue": "1429762296.93",
+      "cost": "879515137.48"
+    },
+    "传感器": {
+      "revenue": "100250611.33",
+      "cost": "80605934.03"
+    },
+    "模拟": {
+      "revenue": "190640846.62",
+      "cost": "113432093.44"
+    },
+    "技术服务及其他": {
+      "revenue": "17626087.63",
+      "cost": "3729899.16"
+    }
+  },
+  "quote": {
+    "a_price": "257.80",
+    "total_shares": "703971427",
+    "a_shares": "670718327",
+    "h_shares": "33253100",
+    "h_price_hkd": "315.00",
+    "hkd_cny_mid": "0.85594",
+    "vendor_market_cap": "181484000000",
+    "sources": [
+      "S1",
+      "S11",
+      "S12",
+      "S13"
+    ],
+    "treasury_share_count_1030": "未完整核验，股数按用户冻结已发行股份总数；不声称剔除库存股的精确经济市值"
+  },
+  "scenario_assumptions": {
+    "anchor": "2026H1分产品收入乘2，明确为规模锚，不是2026全年预测，也不是TTM",
+    "currency": "CNY",
+    "net_margin_basis": "正常化归母净利率，保留正常研发和股份支付费用；不预测公允价值损益，不额外加净现金或金融投资价值以免重复",
+    "share_basis": "冻结总股数703971427不变；潜在期权、回购注销未纳入，列为敏感性缺口",
+    "bear": {
+      "storage_volume_2027": "1.10",
+      "storage_asp_2027": "0.75",
+      "storage_mix_2027": "1.00",
+      "mcu_volume_2027": "1.12",
+      "mcu_asp_mix_2027": "1.00",
+      "other_growth_2027": "1.10",
+      "revenue_growth_2028": "1.00",
+      "revenue_growth_2029": "1.05",
+      "margins": [
+        "0.20",
+        "0.20",
+        "0.21"
+      ],
+      "pes": [
+        "20",
+        "20",
+        "20"
+      ]
+    },
+    "base": {
+      "storage_volume_2027": "1.25",
+      "storage_asp_2027": "1.10",
+      "storage_mix_2027": "1.05",
+      "mcu_volume_2027": "1.25",
+      "mcu_asp_mix_2027": "1.02",
+      "other_growth_2027": "1.25",
+      "revenue_growth_2028": "1.15",
+      "revenue_growth_2029": "1.12",
+      "margins": [
+        "0.35",
+        "0.33",
+        "0.31"
+      ],
+      "pes": [
+        "25",
+        "24",
+        "23"
+      ]
+    },
+    "bull": {
+      "storage_volume_2027": "1.40",
+      "storage_asp_2027": "1.20",
+      "storage_mix_2027": "1.08",
+      "mcu_volume_2027": "1.40",
+      "mcu_asp_mix_2027": "1.04",
+      "other_growth_2027": "1.40",
+      "revenue_growth_2028": "1.22",
+      "revenue_growth_2029": "1.18",
+      "margins": [
+        "0.45",
+        "0.43",
+        "0.40"
+      ],
+      "pes": [
+        "30",
+        "28",
+        "26"
+      ]
+    }
+  },
+  "exclusions": [
+    "domain_search资产771.17亿元实为总权益，剔除错误资产，绝不调平字段名",
+    "不采用domain_search无原表来源的行业大数、份额扩张与合成目标价",
+    "旧CLI财务仅到FY2025，接口FCFF/FCFE不替代现金CFO减capex",
+    "报价两地全股本proxy不相加",
+    "不把全部投资现金流当capex",
+    "不引用后续11月公告及原PDF",
+    "现存报告与底稿一律不作为本次来源"
+  ],
+  "calculations": {
+    "formula_contract": "市值=P×总股；TTM=FY2025+9M2026−9M2025；单季累计差分；现金FCF=CFO−现金购建长期资产；情景=量×ASP×结构分部相加×净利率×PE，不额外加现金资产；中间数40位，展示四舍五入",
+    "results": {
+      "cap_a_same_price_proxy": "181483833880.60",
+      "cap_vendor_rounding_difference": "166119.40",
+      "classified_share_check": "0",
+      "cap_a_class": "172911184700.60",
+      "cap_h_class_cny_mid": "8965737400.4100000",
+      "cap_ah_classified_mid_proxy": "181876922101.0100000",
+      "balance_check": "0.00",
+      "equity_check": "0.00",
+      "cash_fund_minus_equivalents": "3897955239.18",
+      "liability_ratio_pct": "12.02162640020588425592977509021971980854",
+      "conservative_debt_proxy": "89391675.49",
+      "cash_bridge_ev_proxy": "166899629536.65",
+      "ttm_revenue": "22669200057.30",
+      "ttm_parent_np": "11630482163.62",
+      "ttm_core_np": "9861025282.67",
+      "ttm_cfo": "10456930822.32",
+      "ttm_cash_capex": "1737843834.44",
+      "ttm_fcf": "8719086987.88",
+      "pe_ttm_parent": "15.60415392306598601054912160596205065555",
+      "pe_ttm_core": "18.40415460647322336047357680311469092347",
+      "ps_ttm": "8.005744950058705837066864094721855529637",
+      "pb_parent": "2.362193072559702992863040024928360447197",
+      "FY2024": {
+        "gross_margin_pct": "38.00110606396282547241940049161379013602",
+        "parent_net_margin_pct": "14.98839243505106096750657435329439442794",
+        "core_net_margin_pct": "14.00873403839436899582323452590045756907",
+        "fcf": "1533213017.23"
+      },
+      "FY2025": {
+        "gross_margin_pct": "40.21619886513000002087307760129333843477",
+        "parent_net_margin_pct": "17.90654919123400634696608106046230875135",
+        "core_net_margin_pct": "15.96351865414842718074587161622525282610",
+        "fcf": "1079940573.20"
+      },
+      "9M2025": {
+        "gross_margin_pct": "38.58831095141797203710450082275552596605",
+        "parent_net_margin_pct": "15.85605741867887517666912104743571765832",
+        "core_net_margin_pct": "15.25450754890479202296718413890776684400",
+        "fcf": "1080649877.63"
+      },
+      "H12026": {
+        "gross_margin_pct": "63.13045091772400913606796715894398571839",
+        "parent_net_margin_pct": "59.28521910777091713616728685406812747407",
+        "core_net_margin_pct": "42.21973563758380289908830696460830462023",
+        "fcf": "5103235629.98"
+      },
+      "9M2026": {
+        "gross_margin_pct": "66.22472278421633381695345263763593235449",
+        "parent_net_margin_pct": "54.51783478116625078641497851691042097931",
+        "core_net_margin_pct": "46.47873237818618281219287814216833202062",
+        "fcf": "8719796292.31",
+        "revenue_yoy_pct": "197.1085696041619005153132895167200670103",
+        "parent_np_yoy_pct": "921.5475059182728012532959250918358591330",
+        "core_np_yoy_pct": "805.2556858768597958756959575360107074134"
+      },
+      "Q22026": {
+        "revenue": "7377684858.11",
+        "cost": "2466584248.37",
+        "parent_np": "5395538060.60",
+        "core_np": "3472969194.73",
+        "gross_margin_pct": "66.56696110218667655087843080914142410649"
+      },
+      "Q32026": {
+        "revenue": "8731610944.35",
+        "cost": "2591249730.66",
+        "parent_np": "4208900978.28",
+        "core_np": "4550927442.96",
+        "cfo": "4075731171.82",
+        "cash_capex": "459170509.49",
+        "gross_margin_pct": "70.32334872482229871857105449251909899659",
+        "revenue_qoq_pct": "18.35163892574893712248716071636336249720",
+        "parent_np_qoq_pct": "-21.99293321615532076708338658994650258218",
+        "core_np_qoq_pct": "31.03852029167808396836444806745785171820"
+      },
+      "core_np_bridge_9m": "9433960921.89",
+      "core_np_bridge_q3": "4550927442.96",
+      "cfo_parent_conversion_pct": "91.49067627046694245262650536460275419776",
+      "cfo_core_conversion_pct": "107.3151808948954505642204418240926277817",
+      "product_checks": {
+        "revenue_residual": "0.00",
+        "cost_residual": "0.00"
+      },
+      "products": {
+        "存储": {
+          "share_pct": "84.97046646688267060155613634880160723250",
+          "margin_pct": "67.57092902814123334230170624058476153618"
+        },
+        "MCU": {
+          "share_pct": "12.36202587212172130172147264521013719569",
+          "margin_pct": "38.48521958031039433026938155658951238169"
+        },
+        "传感器": {
+          "share_pct": "0.8667878944762481153066791088712391664096",
+          "margin_pct": "19.59556858494819913832838669034777645580"
+        },
+        "模拟": {
+          "share_pct": "1.648320901495286294961336534084955661814",
+          "margin_pct": "40.49958576500576810122015392883592514126"
+        },
+        "技术服务及其他": {
+          "share_pct": "0.1523988650240736864543753630320607435823",
+          "margin_pct": "78.83875742424185372100070513492619008385"
+        }
+      },
+      "scenario_anchors": {
+        "storage": "19654961179.28",
+        "mcu": "2859524593.86",
+        "other": "617035091.16"
+      },
+      "scenarios": {
+        "bear": {
+          "storage2027": "16215342972.90600000",
+          "mcu2027": "3202667545.123200",
+          "other2027": "678738600.2760",
+          "years": [
+            {
+              "year": 2027,
+              "revenue": "20096749118.30520000",
+              "normal_parent_np": "4019349823.6610400000",
+              "net_margin": "0.20",
+              "pe": "20",
+              "equity_value": "80386996473.2208000000",
+              "per_share_a_same_price_proxy": "114.1907091539111572492842099399582591297"
+            },
+            {
+              "year": 2028,
+              "revenue": "20096749118.3052000000",
+              "normal_parent_np": "4019349823.661040000000",
+              "net_margin": "0.20",
+              "pe": "20",
+              "equity_value": "80386996473.220800000000",
+              "per_share_a_same_price_proxy": "114.1907091539111572492842099399582591297"
+            },
+            {
+              "year": 2029,
+              "revenue": "21101586574.220460000000",
+              "normal_parent_np": "4431333180.58629660000000",
+              "net_margin": "0.21",
+              "pe": "20",
+              "equity_value": "88626663611.72593200000000",
+              "per_share_a_same_price_proxy": "125.8952568421870508673358414588039806905"
+            }
+          ]
+        },
+        "base": {
+          "storage2027": "28376850202.58550000",
+          "mcu2027": "3645893857.171500",
+          "other2027": "771293863.9500",
+          "years": [
+            {
+              "year": 2027,
+              "revenue": "32794037923.70700000",
+              "normal_parent_np": "11477913273.2974500000",
+              "net_margin": "0.35",
+              "pe": "25",
+              "equity_value": "286947831832.4362500000",
+              "per_share_a_same_price_proxy": "407.6128956757164662593614044508655888956"
+            },
+            {
+              "year": 2028,
+              "revenue": "37713143612.2630500000",
+              "normal_parent_np": "12445337392.046806500000",
+              "net_margin": "0.33",
+              "pe": "24",
+              "equity_value": "298688097409.123356000000",
+              "per_share_a_same_price_proxy": "424.2900861502200656788872767701124324184"
+            },
+            {
+              "year": 2029,
+              "revenue": "42238720845.734616000000",
+              "normal_parent_np": "13094003462.17773096000000",
+              "net_margin": "0.31",
+              "pe": "23",
+              "equity_value": "301162079630.08781208000000",
+              "per_share_a_same_price_proxy": "427.8044080759087571319851309817436667071"
+            }
+          ]
+        },
+        "bull": {
+          "storage2027": "35661961563.68563200",
+          "mcu2027": "4163467808.660160",
+          "other2027": "863849127.6240",
+          "years": [
+            {
+              "year": 2027,
+              "revenue": "40689278499.96979200",
+              "normal_parent_np": "18310175324.9864064000",
+              "net_margin": "0.45",
+              "pe": "30",
+              "equity_value": "549305259749.5921920000",
+              "per_share_a_same_price_proxy": "780.2948226044864630564047026300685354379"
+            },
+            {
+              "year": 2028,
+              "revenue": "49640919769.9631462400",
+              "normal_parent_np": "21345595501.084152883200",
+              "net_margin": "0.43",
+              "pe": "28",
+              "equity_value": "597676674030.356280729600",
+              "per_share_a_same_price_proxy": "849.0070066868726487809568441475963483955"
+            },
+            {
+              "year": 2029,
+              "revenue": "58576285328.556512563200",
+              "normal_parent_np": "23430514131.42260502528000",
+              "net_margin": "0.40",
+              "pe": "26",
+              "equity_value": "609193367416.98773065728000",
+              "per_share_a_same_price_proxy": "865.3666101379818227441779394833307630822"
+            }
+          ]
+        }
+      },
+      "reverse_valuation": [
+        {
+          "pe": 15,
+          "required_np": "12098922258.70666666666666666666666666667",
+          "required_revenue_25pct": "48395689034.82666666666666666666666666668",
+          "required_revenue_35pct": "34568349310.59047619047619047619047619049",
+          "required_revenue_45pct": "26886493908.23703703703703703703703703704"
+        },
+        {
+          "pe": 20,
+          "required_np": "9074191694.03",
+          "required_revenue_25pct": "36296766776.12",
+          "required_revenue_35pct": "25926261982.94285714285714285714285714286",
+          "required_revenue_45pct": "20164870431.17777777777777777777777777778"
+        },
+        {
+          "pe": 25,
+          "required_np": "7259353355.224",
+          "required_revenue_25pct": "29037413420.896",
+          "required_revenue_35pct": "20741009586.35428571428571428571428571429",
+          "required_revenue_45pct": "16131896344.94222222222222222222222222222"
+        },
+        {
+          "pe": 30,
+          "required_np": "6049461129.353333333333333333333333333333",
+          "required_revenue_25pct": "24197844517.41333333333333333333333333333",
+          "required_revenue_35pct": "17284174655.29523809523809523809523809524",
+          "required_revenue_45pct": "13443246954.11851851851851851851851851852"
+        }
+      ],
+      "sensitivity_margin_pe": [
+        {
+          "margin": "0.25",
+          "pe": 20,
+          "revenue": "32794037923.70700000",
+          "equity_value": "163970189618.5350000000",
+          "price": "232.9216546718379807196350882576374793689"
+        },
+        {
+          "margin": "0.25",
+          "pe": 25,
+          "revenue": "32794037923.70700000",
+          "equity_value": "204962737023.1687500000",
+          "price": "291.1520683397974758995438603220468492111"
+        },
+        {
+          "margin": "0.25",
+          "pe": 30,
+          "revenue": "32794037923.70700000",
+          "equity_value": "245955284427.8025000000",
+          "price": "349.3824820077569710794526323864562190533"
+        },
+        {
+          "margin": "0.35",
+          "pe": 20,
+          "revenue": "32794037923.70700000",
+          "equity_value": "229558265465.9490000000",
+          "price": "326.0903165405731730074891235606924711164"
+        },
+        {
+          "margin": "0.35",
+          "pe": 25,
+          "revenue": "32794037923.70700000",
+          "equity_value": "286947831832.4362500000",
+          "price": "407.6128956757164662593614044508655888956"
+        },
+        {
+          "margin": "0.35",
+          "pe": 30,
+          "revenue": "32794037923.70700000",
+          "equity_value": "344337398198.9235000000",
+          "price": "489.1354748108597595112336853410387066747"
+        },
+        {
+          "margin": "0.45",
+          "pe": 20,
+          "revenue": "32794037923.70700000",
+          "equity_value": "295146341313.3630000000",
+          "price": "419.2589784093083652953431588637474628640"
+        },
+        {
+          "margin": "0.45",
+          "pe": 25,
+          "revenue": "32794037923.70700000",
+          "equity_value": "368932926641.7037500000",
+          "price": "524.0737230116354566191789485796843285800"
+        },
+        {
+          "margin": "0.45",
+          "pe": 30,
+          "revenue": "32794037923.70700000",
+          "equity_value": "442719511970.0445000000",
+          "price": "628.8884676139625479430147382956211942960"
+        }
+      ],
+      "pressure_9m": {
+        "revenue_anchor": "20297371376.50",
+        "gross_margin_minus5pct_pretax_loss": "1014868568.8250",
+        "gross_margin_minus10pct_pretax_loss": "2029737137.6500",
+        "inventory_write_down20pct": "1258394940.4880",
+        "receivable_plus_one_month": "2255263486.277777777777777777777777777778",
+        "cash_equity_investment_haircut30pct": "15529405194.2190"
+      }
+    }
+  },
+  "raw_quarters_FY2025": {
+    "revenue": [
+      "1909062290.61",
+      "2241246342.27",
+      "2681325810.90",
+      "2371828680.80"
+    ],
+    "parent_np": [
+      "234630087.42",
+      "340845518.40",
+      "507752274.22",
+      "564794771.66"
+    ],
+    "core_np": [
+      "223856594.91",
+      "320575670.11",
+      "497699926.92",
+      "427064360.78"
+    ],
+    "cfo": [
+      "335849288.78",
+      "621971642.69",
+      "837824687.58",
+      "332858593.44"
+    ],
+    "sources": [
+      "S4"
+    ]
+  },
+  "cash_bridge_H12026": {
+    "net_profit": "6884999018.91",
+    "fv_gain_subtracted": "2227945059.17",
+    "inventory_increase": "1203189964.34",
+    "operating_receivable_increase": "130666393.00",
+    "operating_payable_increase": "1946431361.60",
+    "cfo": "6048341057.06",
+    "sources": [
+      "S3"
+    ],
+    "level": "已Read合并补充现金流附注，剩余调节项目见原文，不把此桥冒充Q3"
+  },
+  "quality_checks": {
+    "body_chinese_characters": 7392,
+    "count_method": "仅六章正文、表格与图注的汉字，不含首屏/来源重复标签/原数表重复显示/免责声明",
+    "tables": 15,
+    "numeric_charts": 8,
+    "sections": 6,
+    "all_publication_dates_within_asof": true,
+    "all_access_dates": "2026-10-31",
+    "decimal_balance_and_share_residual": "0.00",
+    "no_original_pdf_read": true,
+    "no_skill_or_html_manual_changes": true,
+    "validation": "已通过validate_report.py及--html确定性离线资产/内容一致性校验，exit=0",
+    "inline_js_check": "实际HTML提取脚本经node --check stdin通过",
+    "svg_count": 8,
+    "warnings": [
+      "自动验证不证明数据事实正确，保留正文列示缺口",
+      "2023现金capex未核，null显示缺数据",
+      "10个primary含发行人HTML镜像及官网IR，不是10个独立审计"
+    ]
+  }
+}
