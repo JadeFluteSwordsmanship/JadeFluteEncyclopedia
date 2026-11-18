@@ -1,0 +1,44 @@
+{
+  "as_of": "2026-11-18 Beijing; no ANT print; S-1/A-3 filed 2026-11-17; range 70-78; midpoint 74",
+  "formulas": {
+    "legal_economic_shares": "Class A 7427991791 + Class N 5658680800 = 13086672591",
+    "accounting_outstanding": "Class A 7427991791 + Class N accounting outstanding 4811839840 = 12239831631",
+    "public_benefit_shares_in_legal_not_accounting": 846840960,
+    "series_h1_common_equivalent": "589.0095 / conversion 10 = 58.90095",
+    "amazon_incremental_if_full_conversion_ignores_cap": "3484128662 - 1920511218 = 1563617444",
+    "tsm_options": "1774342693 - (1774342693 * 2.91 / price)",
+    "rsu": "1026660010 + 47041287 = 1073701297",
+    "acq": "561963 + 848882 = 1410845",
+    "cash_at_price": "212.684 + (price-74)*0.793  # billion USD, prospectus sensitivity",
+    "ev": "diluted_shares * price - cash; residual Amazon notes captured as shares, not added again as debt",
+    "q3_annualized_gaap": "16.956 * 4 = 67.824",
+    "rrr": "company approximately 81 billion as of 2026-10-31; not GAAP"
+  },
+  "results_billion_usd": {
+    "70": {
+      "eq_legal": 916.1,
+      "eq_diluted": 1219.8,
+      "cash": 209.5,
+      "ev": 1010.3,
+      "ev_to_rrr81": 12.47,
+      "ev_to_q3x4": 14.9
+    },
+    "74": {
+      "eq_legal": 968.4,
+      "eq_diluted": 1289.8,
+      "cash": 212.7,
+      "ev": 1077.1,
+      "ev_to_rrr81": 13.3,
+      "ev_to_q3x4": 15.88,
+      "diluted_shares_billion": 17.43
+    },
+    "78": {
+      "eq_legal": 1020.8,
+      "eq_diluted": 1359.8,
+      "cash": 215.9,
+      "ev": 1144.0,
+      "ev_to_rrr81": 14.12,
+      "ev_to_q3x4": 16.87
+    }
+  }
+}
